@@ -5,7 +5,7 @@ import { SliderCaptcha } from '@/baseui/captcha'
 import { AuthTitle } from '@/layouts/authentication'
 import { useKingForm } from '@/components'
 import { $t } from '@/locales'
-import { isEmpty, isString, localCache, zodValidator } from '@/utils'
+import { isEmpty, localCache, zodValidator } from '@/utils'
 import { z } from 'zod'
 
 defineOptions({ name: 'Login' })

@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { $t } from '@/locales'
 import { useKingForm } from '@/components'
 import { AuthTitle } from '@/layouts/authentication'
-import { cn, z, zodValidator } from '@/utils'
+import { z, zodValidator } from '@/utils'
 const router = useRouter()
 
 defineOptions({ name: 'ForgetPassword' })
