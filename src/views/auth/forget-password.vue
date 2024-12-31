@@ -4,7 +4,6 @@ import { $t } from '@/locales'
 import { useKingForm } from '@/components'
 import { AuthTitle } from '@/layouts/authentication'
 import { cn, z, zodValidator } from '@/utils'
-import { array } from 'zod'
 const router = useRouter()
 
 defineOptions({ name: 'ForgetPassword' })
@@ -45,26 +44,8 @@ const [Form, formApi] = useKingForm({
 })
 
 async function handleResetLink() {
-  // const result = await formApi.validate()
-  // console.log(`result:`, result)
-  console.log(
-    'merge ===> ',
-    cn(
-      'class-name',
-      {
-        'user-class': false,
-        'set-class': true
-      },
-      [
-        'element-block',
-        'set-class',
-        {
-          'show-name': true,
-          'show-password': false
-        }
-      ]
-    )
-  )
+  const result = await formApi.validate()
+  console.log(`result:`, result)
 }
 </script>
 

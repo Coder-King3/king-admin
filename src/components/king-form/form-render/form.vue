@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
-import { type ElForm } from 'element-plus'
 import type { FormApiInstance } from '../form-api'
 import FormField from './form-field.vue'
 import { useFormHelper } from './helper'
