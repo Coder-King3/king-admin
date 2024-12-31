@@ -1,0 +1,77 @@
+/* float */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.animate-float {
+  animation: float 5s linear 0ms infinite;
+}
+
+/* enter */
+$max-child: 5;
+$base-delay: 0.1s;
+
+@keyframes enter-x-animation {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes enter-y-animation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin enter-x($i) {
+  $delay: $base-delay * $i;
+  .enter-x:nth-child(#{$i}) {
+    opacity: 0;
+    transform: translateX(50px);
+    animation: enter-x-animation 0.3s ease-in-out #{$delay} forwards;
+  }
+}
+
+@mixin enter-y($i) {
+  $delay: $base-delay * $i;
+  .enter-y:nth-child(#{$i}) {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: enter-y-animation 0.3s ease-in-out #{$delay} forwards;
+  }
+}
+
+@mixin enter-x-negative($i) {
+  $delay: $base-delay * $i;
+  .-enter-x:nth-child(#{$i}) {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: enter-x-animation 0.3s ease-in-out #{$delay} forwards;
+  }
+}
+
+@mixin enter-y-negative($i) {
+  $delay: $base-delay * $i;
+  .-enter-y:nth-child(#{$i}) {
+    opacity: 0;
+    transform: translateY(-50px);
+    animation: enter-y-animation 0.3s ease-in-out #{$delay} forwards;
+  }
+}
+
+// 为每个子元素生成动画
+@for $i from 1 through $max-child {
+  @include enter-x($i);
+  @include enter-y($i);
+  @include enter-x-negative($i);
+  @include enter-y-negative($i);
+}

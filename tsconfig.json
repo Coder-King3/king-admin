@@ -1,0 +1,9 @@
+// @see: https://www.typescriptlang.org/zh/tsconfig/
+
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.app.json" }
+  ]
+}

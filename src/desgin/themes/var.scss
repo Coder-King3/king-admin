@@ -1,0 +1,39 @@
+// CSS3 var
+@use './default.scss' as light;
+@use './dark.scss' as dark;
+@use '../utils/mixin.scss' as *;
+
+// default
+:root {
+  /* common */
+  // Transition ---#{$type}
+  @include set-theme-css-var('transition', light.$transition);
+
+  /* light */
+  // Background --king-bg-color-#{$type}
+  @include set-theme-css-var('bg-color', light.$bg-color);
+
+  // Border --king-border-color-#{$type}
+  @include set-theme-css-var('border-color', light.$border-color);
+
+  // Text --king-text-color-#{$type}
+  @include set-theme-css-var('text-color', light.$text-color);
+
+  // Scrollbar --king-scrollbar-#{$type}
+  @include set-theme-css-var('scrollbar', light.$scrollbar);
+}
+
+// dark
+html.dark {
+  // Background --king-bg-color-#{$type}
+  @include set-theme-css-var('bg-color', dark.$bg-color);
+
+  // Border --king-border-color-#{$type}
+  @include set-theme-css-var('border-color', dark.$border-color);
+
+  // Text --king-text-color-#{$type}
+  @include set-theme-css-var('text-color', dark.$text-color);
+
+  // Scrollbar --king-scrollbar-#{$type}
+  @include set-theme-css-var('scrollbar', dark.$scrollbar);
+}

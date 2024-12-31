@@ -1,0 +1,48 @@
+{
+  //! ========== Editor [ 编辑器 ] ==========
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit",
+    "source.organizeImports": "never"
+  },
+
+  //! ========== Extension [ 扩展 ]  ==========
+  //& prettier
+  "prettier.enable": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  //& stylelint
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.snippet": ["css", "less", "postcss", "sass", "scss"],
+  "stylelint.validate": ["css", "less", "postcss", "sass", "scss"],
+
+  //& i18n
+  "i18n-ally.localesPaths": ["src/locales/langs"],
+  "i18n-ally.pathMatcher": "{locale}/{namespaces}.{ext}",
+  "i18n-ally.enabledParsers": ["json"],
+  "i18n-ally.displayLanguage": "zh-CN",
+  "i18n-ally.sourceLanguage": "en-US",
+  "i18n-ally.enabledFrameworks": ["vue", "react"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.namespace": true,
+
+  // cSpell 词汇校验忽略
+  "cSpell.words": [
+    "baseui",
+    "desgin",
+    "Evenex",
+    "iconify",
+    "pinia",
+    "unocss",
+    "unplugin",
+    "unref",
+    "vueuse"
+  ]
+}

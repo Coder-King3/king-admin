@@ -1,0 +1,26 @@
+/** 暗黑主题(css-var) */
+@forward 'element-plus/theme-chalk/src/dark/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #006be6
+    ),
+    'success': (
+      'base': #07c160
+    ),
+    'warning': (
+      'base': #faad14
+    ),
+    'danger': (
+      'base': #ff4d4f
+    ),
+    'error': (
+      'base': #ff4d4f
+    ),
+    'info': (
+      'base': #909298
+    )
+  )
+);
+
+// use dark css-vars
+@use 'element-plus/theme-chalk/src/dark/css-vars' as *;

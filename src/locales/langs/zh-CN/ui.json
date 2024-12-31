@@ -1,0 +1,7 @@
+{
+  "captcha": {
+    "title": "请完成安全验证",
+    "sliderSuccessText": "验证通过",
+    "sliderDefaultText": "请按住滑块拖动"
+  }
+}

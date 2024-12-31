@@ -1,0 +1,7 @@
+{
+  "captcha": {
+    "title": "Please complete the security verification",
+    "sliderSuccessText": "Passed",
+    "sliderDefaultText": "Slider and drag"
+  }
+}

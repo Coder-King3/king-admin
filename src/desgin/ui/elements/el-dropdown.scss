@@ -1,0 +1,42 @@
+@use '@/desgin/utils/function.scss' as *;
+
+// @forward 'element-plus/theme-chalk/src/dropdown.scss' with (
+//   $dropdown-item-padding: (
+//     'large': 7px 20px,
+//     'default': 5px 16px,
+//     'small': 2px 12px
+//   )
+// );
+
+/* Dropdown */
+.el-dropdown > .el-tooltip__trigger {
+  outline: none;
+}
+.el-dropdown__popper {
+  .el-dropdown-menu {
+    padding: 4px;
+  }
+  .el-dropdown-menu__item {
+    border-radius: getElVar('border-radius', 'small');
+    transition: all getCssVar('transition');
+    & + .el-dropdown-menu__item {
+      margin-top: 4px;
+    }
+    &:not(.is-disabled):hover,
+    &:not(.is-disabled):focus {
+      color: getElVar('text-color', 'primary');
+      background: getElVar('fill-color', 'light');
+    }
+    &:not(.is-disabled).is-active,
+    &:not(.is-disabled)[active=''],
+    &:not(.is-disabled)[active='true'] {
+      font-weight: bold;
+      color: getElVar('color-primary');
+      background: getElVar('color-primary', 'light-9');
+      &:hover,
+      &:focus {
+        background: getElVar('color-primary', 'light-8');
+      }
+    }
+  }
+}

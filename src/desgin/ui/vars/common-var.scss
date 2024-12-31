@@ -1,0 +1,41 @@
+/** ElementPlus样式变量修改(影响所有scss) */
+// 自定义预设颜色：#006be6 #7166f0 #e84a6c #efbd48 #4e69fd #0bd092 #3f3f46
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #006be6
+    ),
+    'success': (
+      'base': #07c160 // #57d188 #49aa19 #67c23a #07c160 #0bd092 #51d490
+    ),
+    'warning': (
+      'base': #faad14
+    ),
+    'danger': (
+      'base': #ff4d4f
+    ),
+    'error': (
+      'base': #ff4d4f
+    ),
+    'info': (
+      'base': #909298
+    )
+  ),
+  // Border
+  $border-radius:
+    (
+      'base': 6px,
+      'small': 4px
+    ),
+  $popper: (
+    'border-radius': 8px
+  ),
+  // Select
+  $select-option:
+    (
+      'height': 32px
+    )
+);
+
+// use common css-vars
+// @use 'element-plus/theme-chalk/src/index.scss' as *;

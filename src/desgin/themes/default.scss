@@ -1,0 +1,58 @@
+/** 默认主题 */
+@use 'sass:map';
+
+/* 样式变量 */
+// Transition
+$transition: () !default;
+$transition: map.merge(
+  (
+    '': 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    'duration': 150ms,
+    'function': cubic-bezier(0.4, 0, 0.2, 1)
+  ),
+  $transition
+);
+
+// Border
+$border-color: () !default;
+$border-color: map.merge(
+  (
+    '': #e4e4e7
+  ),
+  $border-color
+);
+
+// Background
+$bg-color: () !default;
+$bg-color: map.merge(
+  (
+    '': #f0f2f4,
+    'block': #f1f3f5,
+    'section': #ffffff,
+    'heavy': #e2e6e7,
+    'accent': #f4f4f5
+  ),
+  $bg-color
+);
+
+// Text
+$text-color: () !default;
+$text-color: map.merge(
+  (
+    'muted': #71717a
+  ),
+  $text-color
+);
+
+// Scrollbar
+$scrollbar: () !default;
+$scrollbar: map.merge(
+  (
+    'size': 8px,
+    'radius': 6px,
+    'padding': 0px,
+    'color': #d1d3d6,
+    'hover-color': #c4c7ca
+  ),
+  $scrollbar
+);

@@ -1,0 +1,12 @@
+@use 'function' as *;
+
+/* 生成主题 css 变量 */
+@mixin set-theme-css-var($name, $variables) {
+  @each $attribute, $value in $variables {
+    @if $attribute == 'default' {
+      #{getCssVarName($name)}: #{$value};
+    } @else {
+      #{getCssVarName($name, $attribute)}: #{$value};
+    }
+  }
+}
