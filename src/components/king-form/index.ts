@@ -1,7 +1,8 @@
 export type {
   BaseFormComponentType,
-  FormSchema as KingFormSchema,
-  KingFormProps
+  KingFormProps,
+  FormRuleType as KingFormRuleType,
+  FormSchema as KingFormSchema
 } from './types'
 
 export * from './use-king-form'

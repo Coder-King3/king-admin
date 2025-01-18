@@ -1,17 +1,20 @@
+/* eslint-disable perfectionist/sort-imports */
 // @see: https://cn.vite.dev/config/
 
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
-import type { ConfigEnv, UserConfig, PluginOption, ESBuildOptions } from 'vite'
+import type { ConfigEnv, ESBuildOptions, PluginOption, UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 // 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-// 手动导入组件时自动导入样式
-import AutoElementPlusStyle from 'unplugin-element-plus/vite'
+import {
+  createStyleImportPlugin,
+  ElementPlusResolve
+} from 'vite-plugin-style-import'
 // Icons 配置
 import Icons from 'unplugin-icons/vite'
 // mock配置
@@ -19,7 +22,6 @@ import { viteMockServe } from 'vite-plugin-mock'
 // gzip压缩
 import viteCompression from 'vite-plugin-compression'
 // 图片优化压缩
-// @ts-ignore
 import imagemin from 'unplugin-imagemin/vite'
 // VueDevTools开发工具
 import VueDevTools from 'vite-plugin-vue-devtools'
@@ -27,12 +29,18 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   // 在配置中使用环境变量
-  const env = loadEnv(mode, process.cwd(), '')
+  const {
+    VITE_PORT = '3306',
+    VITE_BASE_API_URL,
+    VITE_MOCK_SERVER,
+    VITE_COMPRESS,
+    VITE_DEVTOOLS
+  } = loadEnv(mode, process.cwd(), '') as ImportMetaEnv
 
   const isBuild = mode !== 'development'
-  const isMock = env.VITE_MOCK_SERVER === 'true'
-  const isCompress = env.VITE_COMPRESS !== 'none'
-  const isDevTools = env.VITE_DEVTOOLS === 'true'
+  const isMock = VITE_MOCK_SERVER === 'true'
+  const isCompress = VITE_COMPRESS !== 'none'
+  const isDevTools = VITE_DEVTOOLS === 'true'
   const dropConsoleConfig: ESBuildOptions = isBuild
     ? {
         // 打包构建时移除 console.log
@@ -50,10 +58,10 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     mock: fileURLToPath(new URL('./mock', import.meta.url)),
     svgIcons: fileURLToPath(new URL('./src/assets/svg', import.meta.url)),
     autoImports: fileURLToPath(
-      new URL('./src/typings/auto/auto-imports.d.ts', import.meta.url)
+      new URL('./src/types/auto/auto-imports.d.ts', import.meta.url)
     ),
     components: fileURLToPath(
-      new URL('./src/typings/auto/components.d.ts', import.meta.url)
+      new URL('./src/types/auto/components.d.ts', import.meta.url)
     )
   }
 
@@ -65,23 +73,30 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
       // imports: ["vue", "vue-router", "pinia"],
 
-      resolvers: [
-        // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
-        ElementPlusResolver()
-      ],
+      resolvers: [ElementPlusResolver()],
       dts: paths.autoImports
     }),
     Components({
-      // dirs: [],
+      // 自动导入 Element Plus 组件
       resolvers: [
-        // 自动导入 Element Plus 组件
         ElementPlusResolver({
           importStyle: 'sass'
         })
       ],
       dts: paths.components
     }),
-    // AutoElementPlusStyle({ useSource: false }),
+    createStyleImportPlugin({
+      resolves: [ElementPlusResolve()],
+      libs: [
+        {
+          libraryName: 'element-plus',
+          esModule: true,
+          resolveStyle: (name: string) => {
+            return `element-plus/theme-chalk/${name}.css`
+          }
+        }
+      ]
+    }),
     // 自动下载 iconify 图标库
     Icons({
       compiler: 'vue3',
@@ -99,7 +114,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         enable: true, // 是否启用 mock 功能
         watchFiles: !isBuild, // 监视文件更改 更改mock的时候，不需要重新启动编译
         logger: !isBuild, //  是否在控制台显示请求日志
-        // @ts-ignore
+        // @ts-ignore production-mock
         injectCode: `
           import { setupProdMockServer } from './mock/_createProductionServer';
           setupProdMockServer();
@@ -109,7 +124,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   }
   // vite-plugin-compression
   if (isCompress) {
-    switch (env.VITE_COMPRESS) {
+    switch (VITE_COMPRESS) {
       case 'gzip': {
         plugins.push(
           viteCompression({
@@ -154,17 +169,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     },
     server: {
       host: '0.0.0.0',
-      port: parseInt(env.VITE_PORT),
+      port: parseInt(VITE_PORT),
       hmr: true,
       proxy: {
-        [env.VITE_BASE_API_URL]: {
+        [VITE_BASE_API_URL]: {
           // mock代理目标地址
           target: isMock
-            ? `http://localhost:${env.VITE_PORT}/${env.VITE_BASE_API_URL}`
-            : env.VITE_BASE_API_URL,
-          //重写路径
+            ? `http://localhost:${VITE_PORT}/${VITE_BASE_API_URL}`
+            : VITE_BASE_API_URL,
+          // 重写路径
           rewrite: (path) =>
-            path.replace(new RegExp('^' + env.VITE_BASE_API_URL), ''),
+            path.replace(new RegExp(`^${VITE_BASE_API_URL}`), ''),
           // 允许跨域
           changeOrigin: true
         }

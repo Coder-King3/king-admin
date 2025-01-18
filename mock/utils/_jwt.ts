@@ -1,32 +1,31 @@
-import type { UserInfo } from '../db/_user'
-import { ref, type Ref } from './_reactive'
+import { MOCK_USERS, type UserInfo } from './_mock-data'
+import { jwt, requestParams, TokenPayload } from './_util'
 
-// 定义secretKey秘钥
-const secretKey: string = 'king-3 <^_^> ck-admin-account:'
+const ACCESS_TOKEN_SECRET = 'king-3 <^_^> king-admin'
 
-let token: Ref<string | null>
-let loaded = false
-if (!loaded) {
-  token = ref(null)
-  loaded = true
+export function generateAccessToken(user: UserInfo) {
+  return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: '7d' })
 }
 
-// 创建token函数
-function generateToken(user: UserInfo) {
-  token.value = secretKey + user.username
+export function verifyAccessToken(
+  request: requestParams
+): null | Omit<UserInfo, 'password'> {
+  const authHeader = request?.headers?.authorization
+  if (!authHeader?.startsWith('Bearer')) {
+    return null
+  }
 
-  return token.value
+  const token = authHeader.split(' ')[1]
+  try {
+    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as TokenPayload
+
+    const username = decoded.username
+    const user = MOCK_USERS.find((item) => item.username === username)
+    if (!user) return null
+
+    const { password: _pwd, ...userinfo } = user
+    return userinfo
+  } catch {
+    return null
+  }
 }
-
-// 校验token函数
-function verifyToken(userToken: string) {
-  const isValid = userToken.includes(token.value as string)
-
-  return isValid
-}
-
-function clearToken() {
-  token.value = null
-}
-
-export { generateToken, verifyToken, clearToken }

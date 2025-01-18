@@ -1,6 +1,5 @@
-// @see: https://www.typescriptlang.org/zh/tsconfig/
-
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "files": [],
   "references": [
     { "path": "./tsconfig.node.json" },

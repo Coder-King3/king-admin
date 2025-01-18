@@ -1,18 +1,19 @@
-import { createApp } from 'vue'
 import App from './App.vue'
+import { createApp } from 'vue'
 
-import { router } from './router'
-import { initStores } from './store'
-import { setupI18n } from '@/locales'
 import { registerBaseUI } from '@/baseui'
-// import { registerComponents } from '@/components'
+// import { registerComponents } from "@/components";
 // import { registerDirectives } from "@/directives";
+import '@/desgin'
+import { setupI18n } from '@/locales'
+import { router } from '@/router'
+import { initStores } from '@/store'
 
-import '@unocss/reset/sanitize/sanitize.css'
-import '@unocss/reset/sanitize/assets.css'
-import '@/desgin/index.scss'
-import 'animate.css'
 import 'default-passive-events'
+
+import '@unocss/reset/sanitize/assets.css'
+import '@unocss/reset/sanitize/sanitize.css'
+import 'nprogress/nprogress.css'
 import 'virtual:uno.css'
 
 /**

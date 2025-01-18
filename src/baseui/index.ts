@@ -1,11 +1,11 @@
 import type { App } from 'vue'
 
-import { SvgIcon, IconButton } from './svg-icon'
-import { Select } from './select'
-import { InputPassword } from './input-password'
 import { SliderCaptcha } from './captcha'
-import { SpineText } from './spine-text'
+import { InputPassword } from './input-password'
 import { RenderContent } from './render-content'
+import { Select } from './select'
+import { SpineText } from './spine-text'
+import { IconButton, SvgIcon } from './svg-icon'
 
 // 注册公共组件
 const BaseUI: any[] = [SvgIcon, InputPassword, IconButton]
@@ -20,14 +20,14 @@ const registerBaseUI = (app: App) => {
 }
 
 export {
-  //导出组件注册函数
-  registerBaseUI,
-  // 导出组件
-  SvgIcon,
   IconButton,
   InputPassword,
+  // 导出组件注册函数
+  registerBaseUI,
+  RenderContent,
+  Select,
   SliderCaptcha,
   SpineText,
-  Select,
-  RenderContent
+  // 导出组件
+  SvgIcon
 }

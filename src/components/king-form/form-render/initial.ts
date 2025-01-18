@@ -1,5 +1,6 @@
-import { computed, useSlots } from 'vue'
 import type { KingFormProps } from '../types'
+
+import { computed, useSlots } from 'vue'
 
 // 表单模式(默认垂直)：水平表单(horizontal)|垂直表单(vertical)
 export const computedLayoutMode = (options: KingFormProps) => {

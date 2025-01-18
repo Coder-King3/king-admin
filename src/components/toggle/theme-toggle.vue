@@ -1,21 +1,35 @@
 <script setup lang="ts">
 import { nextTick } from 'vue'
-import { useGlobalStore, storeToRefs } from '@/store'
+
+import { storeToRefs, useAppStore } from '@/store'
+
+interface Props {
+  /**
+   * 类型
+   */
+  type?: 'icon' | 'normal'
+}
 
 defineOptions({ name: 'ThemeButton' })
 
-const globalStore = useGlobalStore()
-const { isDark } = storeToRefs(globalStore)
-const { switchDark } = globalStore
+const props = withDefaults(defineProps<Props>(), {
+  type: 'icon'
+})
+
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
+const { switchDark } = appStore
 
 /* 切换暗黑模式逻辑 */
-const handleToggle = async (event: MouseEvent) => {
-  const isAppearanceTransition = document.startViewTransition
+const toggleTheme = async (event: MouseEvent) => {
+  const isAppearanceTransition =
+    // @ts-expect-error
+    document.startViewTransition &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (!isAppearanceTransition || !event) {
-    switchDark()
+    switchDark(!isDark.value)
     return
   }
-  // 以event的x/y坐标为中心画圆
   const x = event.clientX
   const y = event.clientY
   const endRadius = Math.hypot(
@@ -27,11 +41,11 @@ const handleToggle = async (event: MouseEvent) => {
     `circle(${endRadius}px at ${x}px ${y}px)`
   ]
 
-  // 改变isDark状态后开启动画
   const transition = document.startViewTransition(async () => {
-    switchDark()
+    switchDark(!isDark.value)
     await nextTick()
   })
+
   await transition.ready
 
   document.documentElement.animate(
@@ -50,49 +64,42 @@ const handleToggle = async (event: MouseEvent) => {
 </script>
 
 <template>
-  <IconButton @click.st="(e: MouseEvent) => handleToggle(e)">
-    <Transition :name="isDark ? 'moon-fade-scale' : 'fade-scale'" mode="out-in">
+  <IconButton @click.stop="toggleTheme" :type="props.type">
+    <Transition
+      :name="isDark ? 'moon-fade-scale' : 'sun-fade-scale'"
+      mode="out-in"
+    >
       <template v-if="!isDark">
-        <SvgIcon icon="solar:moon-stars-bold" class="text-base"></SvgIcon>
+        <SvgIcon icon="solar:moon-stars-bold" class="text-base" />
       </template>
       <template v-else>
-        <SvgIcon icon="solar:sun-2-bold" class="text-base"></SvgIcon>
+        <SvgIcon icon="solar:sun-2-bold" class="text-base" />
       </template>
     </Transition>
   </IconButton>
 </template>
 
 <style lang="scss" scoped>
-// moon-fade-scale
+// fade-scale
 .moon-fade-scale-leave-active,
 .moon-fade-scale-enter-active {
-  transition: all 0.448s;
+  transition: all 448ms;
 }
-.moon-fade-scale-enter-from {
+
+.sun-fade-scale-leave-active,
+.sun-fade-scale-enter-active {
+  transition: all 268ms;
+}
+
+.moon-fade-scale-enter-from,
+.sun-fade-scale-enter-from {
   opacity: 0;
   transform: scale(1.2);
 }
-.moon-fade-scale-leave-to {
+
+.moon-fade-scale-leave-to,
+.sun-fade-scale-leave-to {
   opacity: 0;
   transform: scale(0.8);
-}
-</style>
-<style lang="scss">
-/* view-transition */
-::view-transition-new(root),
-::view-transition-old(root) {
-  @apply animate-none mix-blend-normal;
-}
-::view-transition-old(root) {
-  @apply z-[1];
-}
-::view-transition-new(root) {
-  @apply z-[9999];
-}
-.dark::view-transition-old(root) {
-  @apply z-[9999];
-}
-.dark::view-transition-new(root) {
-  @apply z-[1];
 }
 </style>

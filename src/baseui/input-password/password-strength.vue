@@ -52,9 +52,7 @@ function checkPasswordStrength(password: string) {
 <template>
   <div class="relative mt-2 flex items-center justify-between">
     <template v-for="index in 5" :key="index">
-      <div
-        class="bg-$king-bg-color-heavy relative mr-1 h-1.5 w-1/5 rounded-sm last:mr-0"
-      >
+      <div class="relative mr-1 h-1.5 w-1/5 rounded-sm bg-heavy last:mr-0">
         <span
           :style="{
             backgroundColor: currentColor,

@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue'
 import type { FormApiInstance } from '../form-api'
+import type { BaseFormApiFnType } from '../types'
+
+import type { Recordable } from '@/types'
+
 import FormField from './form-field.vue'
+import { computed, useTemplateRef } from 'vue'
+
+import { Form } from '@/baseui/ep'
+import { isFunction } from '@/utils'
+
 import { useFormHelper } from './helper'
 import { useFormInitial } from './initial'
 
@@ -11,55 +19,72 @@ interface Props {
 
 const { formApi } = defineProps<Props>()
 const options = formApi.getOptions()
+const state = formApi.getState()
 
 const formRef = useTemplateRef('formRef') as never
 
-const state = formApi.getState()
-
 const { delegatedSlots, isHorizontal } = useFormInitial(options.value)
-
-const { componentContent, componentField } = useFormHelper(formApi)
+const { componentContent, componentField, getItemApiConfig } =
+  useFormHelper(formApi)
 
 formApi?.mount?.(formRef)
+
+const formProps = computed<Recordable>(() => ({
+  ...options.value.formProps,
+  model: state,
+  rules: options.value.rules || {},
+  inline: isHorizontal.value
+}))
+
+const getSchemaItemConfig = (schemaItem?: Recordable | BaseFormApiFnType) =>
+  isFunction(schemaItem)
+    ? getItemApiConfig(schemaItem as BaseFormApiFnType).value
+    : schemaItem || {}
 
 const computedSchema = computed(() => {
   return (options.value.schema || []).map((schema) => {
     const commonConfig = options.value?.commonConfig || {}
-    const hideLabel = schema.hideLabel ? true : commonConfig?.hideLabel
-    const disabled = schema.hideLabel ? true : commonConfig?.disabled
+    const hideLabel =
+      schema.hideLabel !== undefined
+        ? schema.hideLabel
+        : commonConfig?.hideLabel
+    const disabled =
+      schema.hideLabel !== undefined ? schema.hideLabel : commonConfig?.disabled
+
     const formItemProps = {
       ...(commonConfig?.formItemProps || {}),
       ...(schema?.formItemProps || {})
     }
+
+    const schemaProps = schema?.componentProps
+    const resolvedItemProps = getSchemaItemConfig(schemaProps)
     const componentProps = {
       ...(commonConfig?.componentProps || {}),
-      ...(schema?.componentProps || {})
+      ...resolvedItemProps
     }
+
+    const schemaRules = schema?.rules
+    const resolvedItemRules = getSchemaItemConfig(schemaRules)
 
     return {
       ...schema,
-      formItemProps,
+      rules: resolvedItemRules,
       componentProps,
-      hideLabel,
-      disabled
+      disabled,
+      formItemProps,
+      hideLabel
     }
   })
 })
 </script>
 
 <template>
-  <ElForm
-    ref="formRef"
-    v-bind="options.formProps"
-    :model="state"
-    :rules="options.rules"
-    :inline="isHorizontal"
-  >
+  <Form ref="formRef" v-bind="formProps">
     <template v-for="cSchema in computedSchema" :key="cSchema.fieldName">
       <FormField
         v-bind="cSchema"
-        :componentField="componentField"
-        :componentContent="componentContent"
+        :component-field="componentField"
+        :component-content="componentContent"
       >
         <template
           v-for="slotName in delegatedSlots"
@@ -70,7 +95,7 @@ const computedSchema = computed(() => {
         </template>
       </FormField>
     </template>
-  </ElForm>
+  </Form>
 </template>
 
 <style lang="scss" scoped></style>

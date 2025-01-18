@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { SUPPORT_LANGUAGES } from '@/constants'
-import { storeToRefs, useGlobalStore } from '@/store'
 import { loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
+import { storeToRefs, useAppStore } from '@/store'
+
+interface Props {
+  /**
+   * 类型
+   */
+  type?: 'icon' | 'normal'
+}
 
 defineOptions({ name: 'LanguageToggle' })
 
-const globalStore = useGlobalStore()
-const { locale } = storeToRefs(globalStore)
-const { setGlobalState } = globalStore
+const props = withDefaults(defineProps<Props>(), {
+  type: 'icon'
+})
+
+const appStore = useAppStore()
+const { locale } = storeToRefs(appStore)
+const { setAppState } = appStore
 
 async function handleUpdate(value: SupportedLanguagesType) {
   const locale = value as SupportedLanguagesType
-  console.log(`locale:`, locale)
-  setGlobalState('locale', locale)
+
+  setAppState('locale', locale)
 
   await loadLocaleMessages(locale)
 }
@@ -20,8 +31,8 @@ async function handleUpdate(value: SupportedLanguagesType) {
 
 <template>
   <ElDropdown trigger="click" @command="handleUpdate">
-    <IconButton>
-      <SvgIcon icon="lucide:languages"></SvgIcon>
+    <IconButton :type="props.type">
+      <SvgIcon icon="lucide:languages" />
     </IconButton>
     <template #dropdown>
       <ElDropdownMenu>

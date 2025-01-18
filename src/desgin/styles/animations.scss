@@ -3,13 +3,16 @@
   0% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-20px);
   }
+
   100% {
     transform: translateY(0);
   }
 }
+
 .animate-float {
   animation: float 5s linear 0ms infinite;
 }

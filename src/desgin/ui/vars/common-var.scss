@@ -1,5 +1,8 @@
 /** ElementPlus样式变量修改(影响所有scss) */
 // 自定义预设颜色：#006be6 #7166f0 #e84a6c #efbd48 #4e69fd #0bd092 #3f3f46
+// 'base': hsl(var(--primary))
+// 'base': #006be6
+
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
@@ -21,20 +24,36 @@
       'base': #909298
     )
   ),
-  // Border
-  $border-radius:
-    (
-      'base': 6px,
-      'small': 4px
-    ),
+  $box-shadow: (
+    // '': (
+    //   0 2px 10px 2px rgba(0, 0, 0, 0.1)
+    // ),
+    // 'light': (
+    //   0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    //   0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    //   0 9px 28px 8px rgba(0, 0, 0, 0.05)
+    // ),
+    // 'lighter': (
+    //   0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    //   0 1px 6px -1px rgba(0, 0, 0, 0.02),
+    //   0 2px 4px 0 rgba(0, 0, 0, 0.02)
+    // ),
+    // 'dark': (
+    //   0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    //   0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    //   0 9px 28px 8px rgba(0, 0, 0, 0.05)
+    // )
+  ),
+  $border-radius: (
+    'base': 6px,
+    'small': 4px
+  ),
   $popper: (
     'border-radius': 8px
   ),
-  // Select
-  $select-option:
-    (
-      'height': 32px
-    )
+  $select-option: (
+    'height': 32px
+  )
 );
 
 // use common css-vars

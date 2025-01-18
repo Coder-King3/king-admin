@@ -1,0 +1,102 @@
+:root {
+  /* 基本字体 */
+  --font-family: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto,
+    'Helvetica Neue', arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  /* 基本文字大小 */
+  --font-size-base: 16px;
+
+  /* 基本圆角大小 ( <input/>, <button/>... ) */
+  --radius: 0.5rem;
+
+  /* ============= color ============= */
+
+  /* ui color */
+
+  /* 背景颜色 ( <body /> ) */
+  --background: 0deg 0% 100%; /* #ffffff */
+  --background-deep: 216deg 20.11% 95.47%; /* #f1f3f6 */
+
+  /* 前景颜色 */
+  --foreground: 210deg 6% 21%; /* #323639 */
+
+  /* 次要颜色 */
+  --secondary: 240deg 5% 96%; /* #f4f4f5 */
+  --secondary-foreground: 240deg 6% 10%; /* #18181b */
+
+  /* 强调颜色 用于点缀效果，hover等... ( <DropdownMenuItem>, <SelectItem>... ) */
+  --accent: 240deg 5% 96%; /* #f4f4f5 */
+  --accent-foreground: 240deg 6% 10%; /* #18181b */
+  --accent-hover: 200deg 10% 90%; /* #e3e6e8 */
+  --accent-lighter: 240deg 0% 98%; /* #fafafa */
+
+  /* --accent-dark: 216deg 14% 93%; /* #ebedf0 */
+
+  /* --accent-darker: 216deg 11% 91%; /* #e6e8eb */
+
+  /* 柔和颜色 ( <TabsList />, <Skeleton />, <Switch />... ) */
+  --muted: 240deg 4.8% 95.9%; /* #f4f4f5 */
+  --muted-foreground: 240deg 3.8% 46.1%; /* #71717a */
+
+  /* 深层颜色 用于较深颜色对比的元素 */
+  --heavy: 192deg 9.43% 89.61%; /* #e2e6e7 */
+  --heavy-foreground: var(--accent-foreground); /* #18181b */
+
+  /* 聚焦颜色 用于 focus 等... */
+  --ring: 222.2deg 84% 4.9%; /* #020817 */
+
+  /* 主题颜色 */
+
+  /* primary “主要” */
+  --primary: 212.09deg 100% 45.1%; /* #006be6 */
+
+  /* success "成功" ( <message> ) */
+  --success: 148.71deg 93% 39.22%; /* #07c160 */
+
+  /* --success: 144deg 57% 58%; /* #57d188 */
+
+  /* --success-foreground: 0deg 0% 98%; /* #fafafa */
+
+  /* warning "警告" ( <message> ) */
+  --warning: 39.91deg 95.83% 52.94%; /* #faad14 */
+
+  /* --warning: 42deg 84% 61%; /* #efbd48 */
+
+  /* --warning-foreground: 0deg 0% 98%; /* #fafafa */
+
+  /* destructive “破坏” */
+  --destructive: 5.22deg 100% 59.41%; /* #ff4230 */
+
+  /* --destructive: 359.21deg 68.47% 56.47%; /* #dc4446 */
+
+  /* info "信息" ( <message> ) */
+  --info: 220deg 4% 58%; /* ##909298 */
+
+  /* --info: 180deg 1.54% 12.75%; /* #202121 */
+
+  /* --info-foreground: 220deg 4% 58%; /* #909298 */
+
+  /* ============= element ============= */
+
+  /* 滚动条颜色 */
+  --scrollbar: #d1d3d6;
+  --scrollbar-hover: #c4c7ca;
+
+  /* 默认边框色 */
+  --border: 240deg 5.9% 90%; /* #e4e4e7 */
+
+  /* 卡片背景色 ( <Card /> ) */
+  --card: 0deg 0% 100%; /* #ffffff */
+  --card-foreground: 222.2deg 84% 4.9%; /* #020817 */
+
+  /* menu */
+  --sidebar: 0deg 0% 100%; /* #ffffff */
+  --sidebar-deep: 0deg 0% 100%; /* #ffffff */
+  --menu: var(--sidebar); /* #ffffff */
+
+  /* header */
+  --header: 0deg 0% 100%; /* #ffffff */
+
+  color-scheme: light;
+}

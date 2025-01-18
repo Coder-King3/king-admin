@@ -3,10 +3,8 @@ defineOptions({ name: 'AuthenticationFormView' })
 </script>
 
 <template>
-  <div class="login-form-bg flex-col-center relative lg:flex-initial">
-    <div
-      class="flex-col-center size-full px-6 py-10 bl-1-$king-border-color lg:px-8"
-    >
+  <div class="login-form-bg relative flex-col-center lg:flex-initial">
+    <div class="size-full flex-col-center px-6 py-10 bl-1-$H:border lg:px-8">
       <!-- Router View with Transition and KeepAlive -->
       <RouterView v-slot="{ Component, route }">
         <Transition appear mode="out-in" name="slide-right">
@@ -27,17 +25,18 @@ defineOptions({ name: 'AuthenticationFormView' })
 .login-form-bg {
   background: linear-gradient(
     130deg,
-    rgba(#ffffff, 0.3),
-    rgba(#ffffff, 0.5),
-    rgba(#ffffff, 0.7),
-    rgba(#ffffff, 0.8),
-    rgba(#ffffff, 0.89),
-    rgba(#ffffff, 0.9),
-    rgba(#ffffff, 0.95),
-    rgba(#ffffff, 1)
+    rgba(#fff, 0.3),
+    rgba(#fff, 0.5),
+    rgba(#fff, 0.7),
+    rgba(#fff, 0.8),
+    rgba(#fff, 0.89),
+    rgba(#fff, 0.9),
+    rgba(#fff, 0.95),
+    rgba(#fff, 1)
   );
 }
+
 .dark .login-form-bg {
-  background: var(--el-bg-color);
+  background: hsl(var(--background-deep));
 }
 </style>

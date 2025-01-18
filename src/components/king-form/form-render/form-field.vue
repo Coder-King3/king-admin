@@ -1,38 +1,51 @@
 <script setup lang="ts">
-import { computed, type ComputedRef } from 'vue'
 import type { FormSchema, RenderComponentContentType } from '../types'
+
+import type { Recordable } from '@/types'
+
+import FormLabel from './form-label.vue'
+import { computed, type ComputedRef } from 'vue'
+
 import { RenderContent } from '@/baseui'
-import { componentMap } from '../config'
+import { FormItem } from '@/baseui/ep'
 import { isString } from '@/utils'
 
+import { componentMap } from '../config'
+
 interface Props extends FormSchema {
-  componentField: {
-    fieldValue: (fieldName: string) => ComputedRef<any>
-    setFieldValue: (filed: string, value: any) => void
-  }
   componentContent: {
     customContentRender: (
       renderComponentContent?: RenderComponentContentType
-    ) => ComputedRef<Record<string, any>>
+    ) => ComputedRef<Recordable>
     renderContentKey: (
-      customContentRender: ComputedRef<Record<string, any>>
+      customContentRender: ComputedRef<Recordable>
     ) => ComputedRef<string[]>
+  }
+  componentField: {
+    fieldValue: (fieldName: string) => ComputedRef<any>
+    setFieldValue: (filed: string, value: any) => void
   }
 }
 
 const {
   component,
-  componentProps,
-  componentField,
   componentContent,
-  renderComponentContent,
-  fieldName,
-  label,
-  rules,
-  hideLabel,
+  componentField,
+  componentProps,
   disabled,
-  formItemProps
+  fieldName,
+  formItemProps,
+  hideLabel,
+  label,
+  renderComponentContent,
+  rules
 } = defineProps<Props>()
+
+const fieldProps = computed<Recordable>(() => ({
+  ...formItemProps,
+  prop: fieldName,
+  rules
+}))
 
 const fieldValue = componentField.fieldValue(fieldName)
 const getComponentModel = computed({
@@ -60,18 +73,55 @@ const FieldComponent = computed(() => {
   }
   return finalComponent
 })
+
+const fieldComponentAttrs = computed(() => {
+  const eventHandlers: Recordable = {}
+  const otherProps: Recordable = {}
+  for (const [key, value] of Object.entries(componentProps || {})) {
+    if (key.startsWith('on')) {
+      const eventName = key
+        .slice(2)
+        .replace(/^[A-Z]/, (match) => match.toLowerCase())
+      eventHandlers[eventName] = value
+      // eventHandlers[key] = value
+    } else {
+      otherProps[key] = value
+    }
+  }
+
+  return {
+    handlers: eventHandlers,
+    props: {
+      ...otherProps,
+      disabled
+    }
+  }
+})
+
+// const fieldComponentProps = computed(() => {
+//   console.log(`componentProps:`, componentProps)
+//   return {
+//     ...componentProps,
+//     disabled
+//   }
+// })
 </script>
 
 <template>
-  <ElFormItem v-bind="formItemProps" :prop="fieldName" :rules="rules">
+  <FormItem v-bind="fieldProps">
+    <!-- Label -->
     <template v-if="!hideLabel" #label>
-      {{ label }}
+      <FormLabel>
+        {{ label }}
+      </FormLabel>
     </template>
+
+    <!-- Controls -->
     <component
       :is="FieldComponent"
       v-model="getComponentModel"
-      v-bind="componentProps"
-      :disabled="disabled"
+      v-bind="fieldComponentAttrs.props"
+      v-on="fieldComponentAttrs.handlers"
     >
       <template
         v-for="name in renderContentKey"
@@ -84,5 +134,12 @@ const FieldComponent = computed(() => {
         />
       </template>
     </component>
-  </ElFormItem>
+
+    <!-- Error message -->
+    <template #error="{ error }">
+      <Transition name="slide-up">
+        <FormMessage :error="error" />
+      </Transition>
+    </template>
+  </FormItem>
 </template>

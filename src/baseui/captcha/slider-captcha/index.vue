@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { reactive, unref, useTemplateRef, watch, watchEffect } from 'vue'
-import { useTimeoutFn } from '@vueuse/core'
-import { $t } from '@/locales'
-import SliderCaptchaAction from './slider-captcha-action.vue'
-import SliderCaptchaBar from './slider-captcha-bar.vue'
-import SliderCaptchaContent from './slider-captcha-content.vue'
 import type {
   CaptchaVerifyPassingData,
   SliderCaptchaProps,
   SliderRotateVerifyPassingData
 } from '../types'
+
+import SliderCaptchaAction from './slider-captcha-action.vue'
+import SliderCaptchaBar from './slider-captcha-bar.vue'
+import SliderCaptchaContent from './slider-captcha-content.vue'
+import { useTimeoutFn } from '@vueuse/core'
+import { reactive, unref, useTemplateRef, watch, watchEffect } from 'vue'
+
+import { $t } from '@/locales'
 import { cn } from '@/utils'
 
 defineOptions({ name: 'SliderCaptcha' })
@@ -67,6 +69,16 @@ watchEffect(() => {
   state.isPassing = !!modelValue.value
 })
 
+function checkPass() {
+  if (props.isSlot) {
+    resume()
+    return
+  }
+  state.endTime = Date.now()
+  state.isPassing = true
+  state.isMoving = false
+}
+
 function getEventPageX(e: MouseEvent | TouchEvent): number {
   if ('pageX' in e) {
     return e.pageX
@@ -74,23 +86,6 @@ function getEventPageX(e: MouseEvent | TouchEvent): number {
     return e.touches[0].pageX
   }
   return 0
-}
-
-function handleDragStart(e: MouseEvent | TouchEvent) {
-  if (state.isPassing) {
-    return
-  }
-  if (!actionRef.value) return
-  emit('start', e)
-
-  state.moveDistance =
-    getEventPageX(e) -
-    Number.parseInt(
-      actionRef.value.getStyle().left.replace('px', '') || '0',
-      10
-    )
-  state.startTime = Date.now()
-  state.isMoving = true
 }
 
 function getOffset(actionEl: HTMLDivElement) {
@@ -160,14 +155,21 @@ function handleDragOver(e: MouseEvent | TouchEvent) {
   }
 }
 
-function checkPass() {
-  if (props.isSlot) {
-    resume()
+function handleDragStart(e: MouseEvent | TouchEvent) {
+  if (state.isPassing) {
     return
   }
-  state.endTime = Date.now()
-  state.isPassing = true
-  state.isMoving = false
+  if (!actionRef.value) return
+  emit('start', e)
+
+  state.moveDistance =
+    getEventPageX(e) -
+    Number.parseInt(
+      actionRef.value.getStyle().left.replace('px', '') || '0',
+      10
+    )
+  state.startTime = Date.now()
+  state.isMoving = true
 }
 
 function resume() {
@@ -196,10 +198,10 @@ function resume() {
   <!-- :class="props.class" -->
   <div
     ref="wrapperRef"
-    class="slider-captcha b-1-$el-border-color hover:b-1-$el-border-color-hover bg-$king-bg-color dark:bg-$el-bg-color relative flex h-10 w-full items-center overflow-hidden rounded-$el-border-radius-base text-center"
+    class="relative h-10 w-full flex items-center overflow-hidden rounded-$el-border-radius-base bg-background-deep text-center transition-all b-1-$el-border-color dark:bg-$el-bg-color hover:b-1-$el-border-color-hover"
     :class="
       cn(props.class || '', {
-        'slider-captcha-error': !modelValue
+        'is-captcha_error': !modelValue
       })
     "
     :style="wrapperStyle"
@@ -243,14 +245,12 @@ function resume() {
 
 <style lang="scss" scoped>
 .el-form-item.is-error {
-  .slider-captcha-error {
+  .is-captcha_error {
     &,
     &:hover {
-      border-color: var(--el-color-danger);
+      // border-color: var(--el-color-danger);
+      @apply b-destructive;
     }
   }
-}
-.slider-captcha {
-  transition: var(--king-transition);
 }
 </style>

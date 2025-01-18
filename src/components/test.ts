@@ -1,30 +1,30 @@
 export type BaseFormComponentType =
+  | 'Cascader'
+  | 'CheckboxGroup'
+  | 'DatePicker'
+  | 'Divider'
   | 'Input'
+  | 'Input'
+  | 'InputNumber'
   | 'PrimaryButton'
+  | 'RadioGroup'
+  | 'Rate'
+  | 'Select'
+  | 'Slider'
+  | 'Switch'
+  | 'TimePicker'
+  | 'TimeSelect'
+  | 'Upload'
   | 'VbenCheckbox'
   | 'VbenInput'
   | 'VbenInputPassword'
   | 'VbenPinInput'
   | 'VbenSelect'
-  | 'Input'
-  | 'InputNumber'
-  | 'Select'
-  | 'RadioGroup'
-  | 'CheckboxGroup'
-  | 'Cascader'
-  | 'DatePicker'
-  | 'TimePicker'
-  | 'TimeSelect'
-  | 'Switch'
-  | 'Upload'
-  | 'Slider'
-  | 'Rate'
-  | 'Divider'
 
 interface PeopleInfo {
   name: string
-  sex: '男' | '女'
-  role: '朋友' | '恋人'
+  role: '恋人' | '朋友'
+  sex: '女' | '男'
 }
 
 class People {
@@ -40,24 +40,24 @@ class People {
   }
 }
 
-const LiuYiFei = new People({ name: '刘亦菲', sex: '女', role: '恋人' })
+const LiuYiFei = new People({ name: '刘亦菲', role: '恋人', sex: '女' })
 LiuYiFei.hello('King')
 
 export {
+  ElAvatar as Avatar,
+  ElBadge as Badge,
   ElButton as Button,
+  ElCard as Card,
+  ElCheckbox as Checkbox,
   ElForm as Form,
+  ElImage as Image,
   ElInput as Input,
-  ElSelect as Select,
+  ElLink as Link,
   ElOption as Option,
   ElPagination as Pagination,
-  ElTooltip as Tooltip,
-  ElSwitch as Switch,
-  ElCheckbox as Checkbox,
   ElRadio as Radio,
-  ElImage as Image,
-  ElAvatar as Avatar,
-  ElCard as Card,
-  ElBadge as Badge,
+  ElSelect as Select,
+  ElSwitch as Switch,
   ElTabs as Tabs,
-  ElLink as Link
+  ElTooltip as Tooltip
 } from 'element-plus'

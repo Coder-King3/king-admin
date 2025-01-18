@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import PasswordStrength from './password-strength.vue'
 import { ref, useSlots } from 'vue'
 
-import PasswordStrength from './password-strength.vue'
+import { Input } from '@/baseui/ep'
 
 defineOptions({ name: 'InputPassword', inheritAttrs: false })
 
@@ -24,7 +25,7 @@ const show = ref(false)
 
 <template>
   <div class="relative w-full">
-    <ElInput
+    <Input
       v-bind="$attrs"
       v-model="modelValue"
       :class="props.class"
@@ -32,15 +33,12 @@ const show = ref(false)
     />
     <template v-if="passwordStrength">
       <PasswordStrength :password="modelValue" />
-      <p
-        v-if="slots.strengthText"
-        class="text-$king-text-color-muted mt-1.5 text-xs"
-      >
+      <p v-if="slots.strengthText" class="mt-1.5 text-xs text-muted-foreground">
         <slot name="strengthText"> </slot>
       </p>
     </template>
     <div
-      class="text-$el-text-color-secondary absolute inset-y-0 right-0 flex cursor-pointer pr-3 text-lg leading-5"
+      class="absolute inset-y-0 right-0 flex cursor-pointer pr-3 text-lg text-foreground/60 hover:text-foreground"
       :class="{
         'top-3': !!passwordStrength,
         'top-1/2 -translate-y-1/2 items-center': !passwordStrength

@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { AuthTitle } from '@/layouts/authentication'
-import { useKingForm } from '@/components'
-import { $t } from '@/locales'
 import { h } from 'vue'
-import { z, zodParse, zodValidator, callbackReturn } from '@/utils'
+import { useRouter } from 'vue-router'
+
+import { type KingFormRuleType, useKingForm } from '@/components'
+import { AuthTitle } from '@/layouts/authentication'
+import { $t } from '@/locales'
+import { callbackReturn, ruleParse, validation } from '@/utils'
+
+import { z } from 'zod'
 
 defineOptions({ name: 'Register' })
 
 const router = useRouter()
 
 const [Form, formApi] = useKingForm({
+  commonConfig: {
+    componentProps: { class: 'h-10' },
+    formItemProps: { class: 'mb-6' },
+    hideLabel: true
+  },
   formProps: {
     showMessage: false
-  },
-  commonConfig: {
-    hideLabel: true,
-    formItemProps: { class: 'mb-6' },
-    componentProps: { class: 'h-10' }
   },
   schema: [
     {
@@ -29,7 +32,7 @@ const [Form, formApi] = useKingForm({
       label: $t('auth.username'),
       rules: {
         trigger: 'change',
-        validator: zodValidator(
+        validator: validation(
           z.string().min(1, { message: $t('auth.usernameTip') })
         )
       }
@@ -37,8 +40,8 @@ const [Form, formApi] = useKingForm({
     {
       component: 'InputPassword',
       componentProps: {
-        placeholder: $t('auth.password'),
-        passwordStrength: true
+        passwordStrength: true,
+        placeholder: $t('auth.password')
       },
       fieldName: 'password',
       label: $t('auth.password'),
@@ -49,7 +52,7 @@ const [Form, formApi] = useKingForm({
       },
       rules: {
         trigger: 'change',
-        validator: zodValidator(
+        validator: validation(
           z.string().min(1, { message: $t('auth.passwordTip') })
         )
       }
@@ -61,29 +64,34 @@ const [Form, formApi] = useKingForm({
       },
       fieldName: 'confirmPassword',
       label: $t('auth.confirmPassword'),
-      rules: {
-        trigger: 'change',
-        validator: (_, confirmPassword, callback) => {
-          const { password } = formApi.getValues(['password'])
+      rules: (_values, form) =>
+        ({
+          trigger: 'change',
+          validator: (_, confirmPassword, callback) => {
+            const { password } = form.getValues(['password'])
 
-          const { success, message } = zodParse(
-            z
-              .string({ required_error: $t('auth.passwordTip') })
-              .min(1, { message: $t('auth.passwordTip') })
-              .refine((value) => value === password, {
-                message: $t('auth.confirmPasswordTip')
-              }),
-            confirmPassword
-          )
+            const { message, success } = ruleParse(
+              z
+                .string({
+                  message: $t('auth.passwordTip', { code: true })
+                })
+                .min(1, { message: $t('auth.passwordTip', { code: true }) })
+                .refine((value) => value === password, {
+                  message: $t('auth.confirmPasswordTip', { code: true })
+                }),
+              confirmPassword
+            )
 
-          callbackReturn(callback, { success, message })
-        }
-      }
+            callbackReturn(callback, { message, success })
+          }
+        }) as KingFormRuleType
     },
     {
       component: 'Checkbox',
-      fieldName: 'agreePolicy',
+      componentProps: { class: 'h-8' },
       defaultValue: false,
+      fieldName: 'agreePolicy',
+      formItemProps: { class: 'mb-4 ' },
       renderComponentContent: () => ({
         default: () =>
           h('span', [
@@ -100,14 +108,12 @@ const [Form, formApi] = useKingForm({
       }),
       rules: {
         trigger: 'change',
-        validator: zodValidator(
+        validator: validation(
           z.boolean().refine((value) => !!value, {
-            message: $t('auth.agreeTip')
+            message: $t('auth.agreeTip', { code: true })
           })
         )
-      },
-      formItemProps: { class: 'mb-4 ' },
-      componentProps: { class: 'h-8' }
+      }
     }
   ]
 })
@@ -118,7 +124,12 @@ function handleGo(path: string) {
 
 async function handleRegister() {
   const valid = await formApi.validate()
-  console.log(`valid:`, valid)
+  if (!valid) return
+
+  // eslint-disable-next-line no-console
+  console.log(`register Account`)
+  // eslint-disable-next-line no-console
+  console.log(`Account Info`, formApi.getValues())
 }
 </script>
 ``
@@ -127,19 +138,17 @@ async function handleRegister() {
     <AuthTitle>
       {{ `${$t('auth.createAnAccount')} 🚀` }}
       <template #desc>
-        <span class="text-muted-foreground">{{
-          $t('auth.signUpSubtitle')
-        }}</span>
+        {{ $t('auth.signUpSubtitle') }}
       </template>
     </AuthTitle>
 
-    <Form></Form>
+    <Form />
 
-    <ElButton type="primary" class="w-full h-9" @click="handleRegister">
+    <ElButton type="primary" class="h-9 w-full" @click="handleRegister">
       {{ $t('auth.signUp') }}
     </ElButton>
 
-    <div class="mt-4 text-center text-sm flex-center">
+    <div class="mt-4 flex-center text-center text-sm">
       {{ $t('auth.alreadyHaveAccount') }}&nbsp;
       <ElLink
         @click="handleGo('/auth/login')"

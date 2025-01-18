@@ -1,10 +1,16 @@
-/dist/*
+dist
 .local
 .output.js
-/node_modules/**
+node_modules
+.nvmrc
+coverage
+CODEOWNERS
+.output
+
 
 **/*.svg
 **/*.sh
 
-/public/*
-stats.html
+public
+.npmrc
+*-lock.yaml

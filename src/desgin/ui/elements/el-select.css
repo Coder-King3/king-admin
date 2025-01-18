@@ -1,0 +1,55 @@
+/* Select */
+.el-select {
+  .el-select__wrapper {
+    @apply h-full;
+  }
+
+  &.el-select--large .el-select-dropdown__item {
+    @apply pl-3;
+  }
+
+  &.el-select--small .el-select-dropdown__item {
+    @apply pl-1.5;
+  }
+}
+
+.el-select__popper {
+  .el-select-dropdown__list {
+    @apply px-1 m-0;
+  }
+
+  .el-select-dropdown__item {
+    @apply flex items-center box-border pl-2 transition-colors rounded-sm;
+
+    /* item-margin */
+    & + .el-select-dropdown__item {
+      @apply mt-1;
+    }
+
+    /* selected */
+    &.selected,
+    &.is-selected {
+      @apply bg-$el-color-primary-light-9;
+
+      &:hover,
+      &.hover,
+      &.is-hovering {
+        @apply bg-$el-color-primary-light-8;
+      }
+    }
+  }
+}
+
+/* multiple tag */
+.el-select__selected-item .el-tag__content {
+  @apply inline-flex items-center;
+}
+
+.el-select .el-tag__content .el-select__tags-text {
+  line-height: 1;
+}
+
+/* 不能写死需要手动设置 */
+.el-select .el-select__selection.is-near {
+  /* margin-left: calc(0px - 12px); */
+}

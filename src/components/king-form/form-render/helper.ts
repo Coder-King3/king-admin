@@ -1,9 +1,19 @@
-import { computed, type ComputedRef } from 'vue'
-import type { RenderComponentContentType } from '../types'
 import type { FormApiInstance } from '../form-api'
+import type { BaseFormApiFnType, RenderComponentContentType } from '../types'
+
+import { computed, type ComputedRef } from 'vue'
+
 import { isFunction } from '@/utils'
 
 export const useFormHelper = (formApi: FormApiInstance) => {
+  const baseFormApiFn = (formApiFn?: any) =>
+    computed(() => {
+      if (!isFunction(formApiFn)) {
+        return {}
+      }
+      return formApiFn(formApi.getValues(), formApi)
+    })
+
   const componentField = {
     fieldValue: (fieldName: string) => formApi.getFieldValue(fieldName),
     setFieldValue: (filed: string, value: any) =>
@@ -14,12 +24,7 @@ export const useFormHelper = (formApi: FormApiInstance) => {
     customContentRender: (
       renderComponentContent?: RenderComponentContentType
     ) => {
-      return computed(() => {
-        if (!isFunction(renderComponentContent)) {
-          return {}
-        }
-        return renderComponentContent(formApi.getValues(), formApi)
-      })
+      return baseFormApiFn(renderComponentContent)
     },
     renderContentKey: (
       customContentRender: ComputedRef<Record<string, any>>
@@ -30,5 +35,8 @@ export const useFormHelper = (formApi: FormApiInstance) => {
     }
   }
 
-  return { componentField, componentContent }
+  const getItemApiConfig = (schemaItem?: BaseFormApiFnType) =>
+    baseFormApiFn(schemaItem)
+
+  return { componentContent, componentField, getItemApiConfig }
 }

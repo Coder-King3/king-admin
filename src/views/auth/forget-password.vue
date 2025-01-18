@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { $t } from '@/locales'
+
 import { useKingForm } from '@/components'
+import { LOGIN_PATH } from '@/constants'
 import { AuthTitle } from '@/layouts/authentication'
-import { z, zodValidator } from '@/utils'
-const router = useRouter()
+import { $t } from '@/locales'
+import { validation } from '@/utils'
+
+import { z } from 'zod'
 
 defineOptions({ name: 'ForgetPassword' })
 
+const router = useRouter()
+
 const [Form, formApi] = useKingForm({
-  formProps: {
-    showMessage: false
-  },
   commonConfig: {
-    hideLabel: true,
+    componentProps: {
+      class: 'h-10'
+    },
     formItemProps: {
       class: 'mb-6'
     },
-    componentProps: {
-      class: 'h-10'
-    }
+    hideLabel: true
+  },
+  formProps: {
+    showMessage: false
   },
   schema: [
     {
@@ -27,25 +32,37 @@ const [Form, formApi] = useKingForm({
       componentProps: {
         placeholder: 'example@example.com'
       },
-      fieldName: 'email',
       defaultValue: '',
+      fieldName: 'email',
       label: $t('auth.email'),
-      rules: {
-        trigger: 'change',
-        validator: zodValidator(
-          z
-            .string()
-            .min(1, { message: $t('auth.emailTip') })
-            .email($t('auth.emailValidErrorTip'))
-        )
+      rules() {
+        const ruleParams = { message: $t('auth.emailTip') }
+        return {
+          trigger: 'change',
+          validator: validation(
+            z
+              .string(ruleParams)
+              .min(1, ruleParams)
+              .email($t('auth.emailValidErrorTip'))
+          )
+        }
       }
     }
   ]
 })
 
+function goToLogin() {
+  router.push(LOGIN_PATH)
+}
+
 async function handleResetLink() {
-  const result = await formApi.validate()
-  console.log(`result:`, result)
+  const valid = await formApi.validate()
+  if (!valid) return
+
+  // eslint-disable-next-line no-console
+  console.log(`Send resetPassword link`)
+  // eslint-disable-next-line no-console
+  console.log(`Email Info`, formApi.getValues())
 }
 </script>
 
@@ -54,19 +71,17 @@ async function handleResetLink() {
     <AuthTitle>
       {{ `${$t('auth.forgetPassword')} 🤦🏻‍♂️ ` }}
       <template #desc>
-        <span class="text-muted-foreground">
-          {{ $t('auth.forgetPasswordSubtitle') }}
-        </span>
+        {{ $t('auth.forgetPasswordSubtitle') }}
       </template>
     </AuthTitle>
 
-    <Form></Form>
+    <Form />
 
-    <ElButton type="primary" class="w-full h-9 mb-4" @click="handleResetLink">
+    <ElButton type="primary" class="mb-4 h-9 w-full" @click="handleResetLink">
       {{ $t('auth.sendResetLink') }}
     </ElButton>
 
-    <ElButton text default class="w-full h-9" @click="() => router.go(-1)">
+    <ElButton text default class="h-9 w-full shadow-sm" @click="goToLogin">
       {{ $t('common.back') }}
     </ElButton>
   </div>

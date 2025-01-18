@@ -16,7 +16,7 @@ const style = computed(() => {
 })
 </script>
 <template>
-  <div :style="style" class="ck-spine-text !bg-clip-text text-transparent">
+  <div :style="style" class="ck-spine-text text-transparent !bg-clip-text">
     <slot></slot>
   </div>
 </template>
@@ -26,7 +26,6 @@ const style = computed(() => {
     radial-gradient(circle at center, rgb(255 255 255 / 80%), #f000) -200% 50% /
       200% 100% no-repeat,
     #000;
-
   animation: shine 3s linear infinite;
 }
 

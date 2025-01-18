@@ -1,25 +1,45 @@
-import { ref, unref, toRaw, type Ref, computed, watch } from 'vue'
 import type { ElForm } from 'element-plus'
+
 import type { FormSchema, KingFormProps } from './types'
+
+import type { Recordable } from '@/types'
+
 import {
-  bindMethods,
-  createMerge,
-  isObject,
-  mapArrayToObject,
-  StateHandler
-} from '@/utils'
+  computed,
+  type ComputedRef,
+  ref,
+  type Ref,
+  toRaw,
+  unref,
+  watch
+} from 'vue'
+
+import { bindMethods, createMerge, isObject, mapArrayToObject } from '@/utils'
+
+import { FormHandler } from './form-handler'
+
+type FilterCondition = (key: string) => boolean
+type FormInstance = InstanceType<typeof ElForm>
+type ValidateCallbackFn = (valid: boolean, fields?: Recordable) => void
 
 function getStateValues(schema: FormSchema[] = []) {
   return mapArrayToObject(schema, 'fieldName', 'defaultValue')
 }
 
-function getDefaultOptions(): KingFormProps {
-  return {
+function setDefaultOptions(options: KingFormProps) {
+  const defaultOptions: Partial<KingFormProps> = {
     commonConfig: {},
     handleReset: undefined,
     handleValuesChange: undefined,
     layout: 'vertical',
     schema: []
+  }
+
+  for (const key in defaultOptions) {
+    const typedKey = key as keyof KingFormProps // 将 key 显式断言为合法属性
+    if (!options?.[typedKey]) {
+      options[typedKey] = defaultOptions[typedKey] as any
+    }
   }
 }
 
@@ -33,58 +53,77 @@ const fieldMergeFn = createMerge((obj, key, value) => {
   return true
 })
 
-export type FormApiInstance = InstanceType<typeof FormApi>
-export type FormInstance = InstanceType<typeof ElForm>
-type ValidateCallbackFn = (valid: boolean, fields?: Recordable) => void
+class FormApi {
+  isMounted = false
+  formHandler: FormHandler
 
-export class FormApi {
   // Form Component Instance
   private form = {} as FormInstance
-  isMounted = false
+
+  // Form Options
+  private options: ComputedRef<KingFormProps>
 
   // Form Model
   private state: Ref<Recordable>
 
-  stateHandler: StateHandler
-
-  // Form Options
-  private options: Ref<KingFormProps>
-
   constructor(options: KingFormProps) {
-    const { ...userOptions } = options
-    const defaultOptions = getDefaultOptions()
+    setDefaultOptions(options)
 
-    this.options = ref({
-      ...defaultOptions,
-      ...userOptions
-    })
+    this.options = computed(() => options)
 
     this.state = ref(getStateValues(this.options.value?.schema))
     this.onStateChange()
 
-    this.stateHandler = new StateHandler()
+    this.formHandler = new FormHandler()
 
     bindMethods(this)
   }
 
-  getOptions() {
-    return computed(() => unref(this.options))
+  getFieldValue(field: string) {
+    return computed(() => this.state.value[field])
   }
 
   async getForm() {
     if (!this.isMounted) {
       // 等待form挂载
-      await this.stateHandler.waitForCondition()
+      await this.formHandler.waitForCondition()
     }
 
     return unref(this.form)
   }
 
+  getOptions() {
+    return this.options
+  }
   getState() {
     return computed(() => unref(this.state))
   }
-  setState(schema: FormSchema[] = []) {
-    this.state.value = getStateValues(schema)
+
+  getValues(fields?: string[], isExclude: boolean = false) {
+    const values = toRaw(unref(this.state))
+    if (!fields) return values
+
+    let filterFields = [] as Recordable
+
+    if (isExclude) {
+      filterFields = valuesFilterFn(
+        values,
+        Object.keys(values),
+        (field) => !fields.includes(field)
+      )
+    } else {
+      filterFields = valuesFilterFn(values, fields, (field) => field in values)
+    }
+
+    return filterFields
+  }
+
+  mount(formRef: FormInstance) {
+    if (!this.isMounted) {
+      this.form = formRef
+      this.formHandler.setConditionTrue()
+      this.isMounted = true
+    }
   }
 
   onStateChange() {
@@ -100,21 +139,22 @@ export class FormApi {
     }
   }
 
-  getValues(fields?: string[]) {
-    const values = toRaw(unref(this.state))
-    if (!fields) return values
+  /**
+   * 重置表单
+   */
+  async resetForm() {
+    const form = await this.getForm()
+    form?.resetFields?.()
+    this.state.value = getStateValues(this.options.value?.schema)
+    this.options.value?.handleReset?.(this.getValues())
+  }
 
-    const filterFields = fields.reduce(
-      (result, field) => {
-        if (field in values) {
-          result[field] = values[field]
-        }
-        return result
-      },
-      {} as Record<string, any>
-    )
+  setFieldValue(field: string, value: any) {
+    Reflect.set(this.state.value, field, value)
+  }
 
-    return filterFields
+  setState(schema: FormSchema[] = []) {
+    this.state.value = getStateValues(schema)
   }
 
   setValues(fields: Record<string, any>, filterFields: boolean = true) {
@@ -127,31 +167,20 @@ export class FormApi {
     this.state.value = filteredFields
   }
 
-  getFieldValue(field: string) {
-    return computed(() => this.state.value[field])
-  }
-
-  setFieldValue(field: string, value: any) {
-    Reflect.set(this.state.value, field, value)
-  }
-
-  /**
-   * 重置表单
-   */
-  async resetForm() {
-    const form = await this.getForm()
-    form?.resetFields?.()
-    this.state.value = getStateValues(this.options.value?.schema)
-    this.options.value?.handleReset?.(this.getValues())
+  unmount() {
+    this.form?.resetFields?.()
+    this.state.value = {}
+    this.isMounted = false
+    this.formHandler.reset()
   }
 
   /**
    * 表单校验
    */
-  async validate(validateCallback?: ValidateCallbackFn) {
+  async validate(validateCallback?: ValidateCallbackFn, field?: string) {
     const form = await this.getForm()
 
-    let defaultCallback = (valid: boolean, fields?: Recordable) => {
+    const defaultCallback = (valid: boolean, fields?: Recordable) => {
       // 通过校验就返回，不打印错误信息
       if (valid) return
 
@@ -165,23 +194,30 @@ export class FormApi {
       console.error('validate error', error)
     }
 
-    let callback = validateCallback ?? defaultCallback
+    const callback = validateCallback ?? defaultCallback
 
-    return form.validate(callback)
-  }
+    const validateResult = field
+      ? form.validateField(field, callback)
+      : form.validate(callback)
 
-  mount(formRef: FormInstance) {
-    if (!this.isMounted) {
-      this.form = formRef
-      this.stateHandler.setConditionTrue()
-      this.isMounted = true
-    }
-  }
-
-  unmount() {
-    this.form?.resetFields?.()
-    this.state.value = {}
-    this.isMounted = false
-    this.stateHandler.reset()
+    return validateResult
   }
 }
+
+type FormApiInstance = InstanceType<typeof FormApi>
+
+function valuesFilterFn(
+  values: Recordable,
+  filters: string[],
+  condition: FilterCondition
+) {
+  return filters.reduce((result, field) => {
+    if (condition(field)) {
+      result[field] = values[field]
+    }
+    return result
+  }, {} as Recordable)
+}
+
+export type { FormApiInstance, FormInstance }
+export { FormApi }

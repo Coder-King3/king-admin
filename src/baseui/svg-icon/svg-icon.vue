@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { type Component, computed } from 'vue'
+
 import { isFunction, isHttpUrl, isObject, isString } from '@/utils'
+
 import { IconifyIcon } from './iconify'
 
 defineOptions({ name: 'SvgIcon', inheritAttrs: false })
 
 interface Props {
-  icon?: Component | Function | string // icon name
-  prefix?: string // icon prefix
-  scale?: number // icon scale
-  defaultClass?: string // icon default class
+  defaultClass?: string
+  icon?: Component | Function | string
+  scale?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  defaultClass: 'svg-icon',
   icon: undefined,
-  prefix: '#icon-',
-  scale: 1.2,
-  defaultClass: 'king-icon'
+  scale: 1.2
 })
 
 const isRemoteIcon = computed(() => {
@@ -57,10 +57,7 @@ const componentIcon = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.king-icon {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: middle;
-  transition: var(--king-transition);
+.svg-icon {
+  @apply inline-block overflow-hidden vertical-middle transition-colors;
 }
 </style>

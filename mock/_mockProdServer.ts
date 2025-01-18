@@ -16,7 +16,7 @@ import { createProdMockServer } from 'vite-plugin-mock/client'
 //   return pre;
 // }, [] as any[]);
 
-// @ts-ignore
+// @ts-ignore vote glob function
 const modules = import.meta.glob('./**/*.ts', { eager: true })
 
 const mockModules: any[] = []

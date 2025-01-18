@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
 import type { CSSProperties } from 'vue'
+
 import { SpineText } from '@/baseui'
 
 defineOptions({ name: 'SliderCaptchaContent' })
@@ -32,14 +33,14 @@ defineExpose({
 <template>
   <div
     ref="contentRef"
-    class="absolute top-0 flex size-full select-none items-center justify-center text-xs"
+    class="absolute top-0 size-full flex select-none items-center justify-center text-xs"
     :class="{
       [$style.success]: isPassing
     }"
     :style="style"
   >
     <slot name="text">
-      <SpineText class="flex h-full items-center">
+      <SpineText class="h-full flex items-center">
         {{ isPassing ? successText : text }}
       </SpineText>
     </slot>

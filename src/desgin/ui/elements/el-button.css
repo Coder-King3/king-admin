@@ -1,0 +1,10 @@
+/* Button */
+.el-button {
+  /* text-default button */
+  &.is-text[default=''],
+  &.is-text[default='true'] {
+    @apply shadow-sm bg-background hover:bg-accent active:bg-accent text-foreground;
+
+    @apply b-1-$el-button-border-color;
+  }
+}

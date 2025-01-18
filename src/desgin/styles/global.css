@@ -1,0 +1,80 @@
+/*! Base */
+*,
+::after,
+::before {
+  @apply box-border break-words m-0 p-0;
+}
+
+html {
+  @apply text-foreground bg-background font-sans text-[100%];
+}
+
+#app,
+html,
+body {
+  @apply size-full;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* The `<a>` tag hyperlink */
+a {
+  @apply hover:text-primary;
+
+  /* color: var(--el-color-primary); */
+
+  /* text-decoration: none; */
+}
+
+a,
+a:active,
+a:hover,
+a:link,
+a:visited {
+  @apply no-underline;
+}
+
+/* View Transition Selector */
+::view-transition-old(root),
+::view-transition-new(root) {
+  @apply animate-none mix-blend-normal;
+}
+
+::view-transition-old(root) {
+  @apply z-1;
+}
+
+::view-transition-new(root) {
+  @apply z-9999;
+}
+
+.dark::view-transition-old(root) {
+  @apply z-9999;
+}
+
+.dark::view-transition-new(root) {
+  @apply z-1;
+}
+
+/* Scrollbar Selector */
+::-webkit-scrollbar {
+  @apply size-8px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-$scrollbar hover:bg-$scrollbar-hover b-0-transparent rounded-md;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  @apply bg-transparent;
+}
+
+/*! Components */
+.king-link {
+  @apply text-primary  cursor-pointer;
+
+  /* @apply text-primary hover:text-primary-hover active:text-primary-active cursor-pointer; */
+}

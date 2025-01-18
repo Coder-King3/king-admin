@@ -1,0 +1,84 @@
+/* Common */
+.el-input .el-input__wrapper,
+.el-select .el-select__wrapper {
+  @apply bg-background;
+}
+
+.el-link,
+.el-button {
+  @apply transition-colors;
+}
+
+.el-message,
+.el-notification {
+  @apply !rounded-2.5 !dark:b-1-$H:border !shadow-float;
+}
+
+/* Element */
+
+/* Button */
+.el-button {
+  & + & {
+    @apply !ml-0;
+  }
+}
+
+/* FormItem */
+.el-form-item {
+  .el-form-item__error {
+    @apply text-[0.8rem];
+  }
+
+  &,
+  .el-form-item__label {
+    @apply items-center;
+  }
+}
+
+/* CloseButton */
+[class*='el-icon'][class*='__closeBtn'] {
+  @apply w-5.5 h-5.5 line-height-5.5 !m-[0_-4px_0_8px] rounded-sm transition-colors hover:(bg-accent);
+}
+
+.el-notification__closeBtn {
+  @apply !top-4;
+}
+
+/* Custom */
+
+/* 表单组件宽度撑满 */
+.el-form {
+  &[fluid=''],
+  &[fluid='true'] {
+    &,
+    &.el-select,
+    &.el-input-number,
+    &.el-date-editor,
+    &.el-date-editor.el-input,
+    &.el-date-editor.el-input__wrapper,
+    &.el-date-editor > .el-input__wrapper,
+    .el-date-editor .el-input__wrapper {
+      @apply w-full box-border;
+    }
+
+    /* 日期选择 */
+    &.el-date-editor {
+      .el-range-input {
+        @apply flex-[1] w-full;
+      }
+
+      .el-range-separator {
+        @apply flex-[0];
+      }
+
+      & > .el-input__icon {
+        @apply flex-shrink-0;
+      }
+    }
+
+    /* 数字输入框 */
+    &.el-input-number.is-controls-right .el-input__inner {
+      @apply text-align-left;
+    }
+  }
+}

@@ -1,15 +1,12 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
-  "include": ["vite.config.ts"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "include": ["vite.config.ts", "env.d.ts"],
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "noEmit": true,
-
+    "composite": false,
     "lib": ["ESNext"],
+    "baseUrl": "./",
     "types": ["node"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "skipLibCheck": true
+    "noImplicitAny": true
   }
 }

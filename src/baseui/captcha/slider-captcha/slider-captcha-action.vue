@@ -44,7 +44,7 @@ defineExpose({
 <template>
   <div
     ref="actionRef"
-    class="bg-$el-bg-color dark:bg-$king-bg-color-block absolute left-0 top-0 flex h-full cursor-move items-center justify-center px-3.5 shadow-md"
+    class="absolute left-0 top-0 h-full flex cursor-move items-center justify-center bg-$el-bg-color px-3.5 shadow-md dark:bg-accent"
     :class="{
       'transition-left !left-0 duration-300': toLeft,
       'rounded-md': isDragging

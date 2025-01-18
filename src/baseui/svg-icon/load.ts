@@ -1,11 +1,40 @@
-import { addIcon } from './iconify'
 import type { IconifyIconStructure } from './iconify'
+
+import { addIcon } from './iconify'
 
 // 解析svg
 let loaded = false
 if (!loaded) {
   loadSvgIcons()
   loaded = true
+}
+
+/**
+ * 自定义的svg图片转化为组件
+ * @example assets/svg/avatar.svg
+ * <Icon icon="svg:avatar"></Icon>
+ */
+async function loadSvgIcons() {
+  // **/svg/*.svg => svg:****
+
+  const svgEagers = import.meta.glob('@/assets/svg/**', {
+    eager: true,
+    query: '?raw'
+  })
+
+  await Promise.all(
+    Object.entries(svgEagers).map((svg) => {
+      const [key, body] = svg as [string, string | { default: string }]
+
+      const start = key.lastIndexOf('/') + 1
+      const end = key.lastIndexOf('.')
+      const iconName = key.slice(start, end)
+
+      return addIcon(`svg:${iconName}`, {
+        ...parseSvg(typeof body === 'object' ? body.default : body)
+      })
+    })
+  )
 }
 
 function parseSvg(svgData: string): IconifyIconStructure {
@@ -31,32 +60,4 @@ function parseSvg(svgData: string): IconifyIconStructure {
     top,
     width
   }
-}
-
-/**
- * 自定义的svg图片转化为组件
- * @example assets/svg/avatar.svg
- * <Icon icon="svg:avatar"></Icon>
- */
-async function loadSvgIcons() {
-  // **/svg/*.svg => svg:****
-
-  const svgEagers = import.meta.glob('@/assets/svg/**', {
-    eager: true,
-    query: '?raw'
-  })
-
-  await Promise.all(
-    Object.entries(svgEagers).map((svg) => {
-      const [key, body] = svg as [string, { default: string } | string]
-
-      const start = key.lastIndexOf('/') + 1
-      const end = key.lastIndexOf('.')
-      const iconName = key.slice(start, end)
-
-      return addIcon(`svg:${iconName}`, {
-        ...parseSvg(typeof body === 'object' ? body.default : body)
-      })
-    })
-  )
 }

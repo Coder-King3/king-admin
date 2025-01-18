@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+
 import { BasicLayout } from '@/layouts'
 
 const routes: RouteRecordRaw[] = [
@@ -13,23 +14,23 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     children: [
       {
-        name: 'Analytics',
-        path: '/analytics',
         component: () => import('@/views/dashboard/analysis/index.vue'),
         meta: {
           affixTab: true,
           icon: 'lucide:area-chart'
           // title: $t('page.dashboard.analytics')
-        }
+        },
+        name: 'Analytics',
+        path: '/analytics'
       },
       {
-        name: 'Workspace',
-        path: '/workspace',
         component: () => import('@/views/dashboard/workspace/index.vue'),
         meta: {
           icon: 'carbon:workspace'
           // title: $t('page.dashboard.workspace')
-        }
+        },
+        name: 'Workspace',
+        path: '/workspace'
       }
     ]
   }

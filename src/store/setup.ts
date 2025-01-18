@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 
 let pinia: Pinia
 
-export interface InitStoreOptions {
+interface InitStoreOptions {
   /**
    *  应用名，应用名将被用于持久化的前缀
    */
@@ -16,7 +16,7 @@ export interface InitStoreOptions {
 /**
  *  初始化 pinia
  */
-export async function initStores(app: App, options: InitStoreOptions) {
+async function initStores(app: App, options: InitStoreOptions) {
   const { createPersistedState } = await import('pinia-plugin-persistedstate')
   pinia = createPinia()
   const { namespace } = options
@@ -31,7 +31,7 @@ export async function initStores(app: App, options: InitStoreOptions) {
   return pinia
 }
 
-export function resetAllStores() {
+function resetAllStores() {
   if (!pinia) {
     console.error('Pinia is not installed')
     return
@@ -41,3 +41,5 @@ export function resetAllStores() {
     store.$reset()
   }
 }
+
+export { type InitStoreOptions, initStores, resetAllStores }

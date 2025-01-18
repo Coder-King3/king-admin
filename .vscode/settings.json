@@ -1,5 +1,4 @@
 {
-  //! ========== Editor [ 编辑器 ] ==========
   "editor.codeActionsOnSave": {
     "source.fixAll": "never",
     "source.fixAll.eslint": "explicit",
@@ -7,22 +6,12 @@
     "source.organizeImports": "never"
   },
 
-  //! ========== Extension [ 扩展 ]  ==========
-  //& prettier
-  "prettier.enable": true,
-  "prettier.jsxSingleQuote": true,
-  "prettier.singleQuote": true,
-  "prettier.semi": false,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-
-  //& stylelint
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
   "stylelint.snippet": ["css", "less", "postcss", "sass", "scss"],
   "stylelint.validate": ["css", "less", "postcss", "sass", "scss"],
 
-  //& i18n
   "i18n-ally.localesPaths": ["src/locales/langs"],
   "i18n-ally.pathMatcher": "{locale}/{namespaces}.{ext}",
   "i18n-ally.enabledParsers": ["json"],
@@ -37,8 +26,10 @@
   "cSpell.words": [
     "baseui",
     "desgin",
+    "disableds",
     "Evenex",
     "iconify",
+    "nprogress",
     "pinia",
     "unocss",
     "unplugin",
