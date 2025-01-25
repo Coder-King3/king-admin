@@ -5,14 +5,15 @@ import type {
   SliderRotateVerifyPassingData
 } from '../types'
 
-import SliderCaptchaAction from './slider-captcha-action.vue'
-import SliderCaptchaBar from './slider-captcha-bar.vue'
-import SliderCaptchaContent from './slider-captcha-content.vue'
 import { useTimeoutFn } from '@vueuse/core'
 import { reactive, unref, useTemplateRef, watch, watchEffect } from 'vue'
 
 import { $t } from '@/locales'
 import { cn } from '@/utils'
+
+import SliderCaptchaAction from './slider-captcha-action.vue'
+import SliderCaptchaBar from './slider-captcha-bar.vue'
+import SliderCaptchaContent from './slider-captcha-content.vue'
 
 defineOptions({ name: 'SliderCaptcha' })
 

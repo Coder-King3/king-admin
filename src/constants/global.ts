@@ -4,6 +4,11 @@
 const APP_NAME: string = import.meta.env.VITE_APP_NAME
 
 /**
+ * 项目版本
+ */
+const APP_VERSION: string = import.meta.env.VITE_APP_VERSION
+
+/**
  * 命名空间
  */
 const APP_NAMESPACE: string = import.meta.env.VITE_APP_NAMESPACE
@@ -27,4 +32,10 @@ const SUPPORT_LANGUAGES: LanguageOption[] = [
   }
 ]
 
-export { APP_NAME, APP_NAMESPACE, type LanguageOption, SUPPORT_LANGUAGES }
+export {
+  APP_NAME,
+  APP_NAMESPACE,
+  APP_VERSION,
+  type LanguageOption,
+  SUPPORT_LANGUAGES
+}

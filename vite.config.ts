@@ -1,83 +1,103 @@
-/* eslint-disable perfectionist/sort-imports */
-// @see: https://cn.vite.dev/config/
+import type { ConfigEnv, PluginOption, UserConfig } from 'vite'
 
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig, loadEnv } from 'vite'
-import type { ConfigEnv, ESBuildOptions, PluginOption, UserConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import Vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
-// 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
+import UnpluginIcons from 'unplugin-icons/vite'
+import UnpluginImagemin from 'unplugin-imagemin/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig, loadEnv } from 'vite'
+import viteCompression from 'vite-plugin-compression'
+import { viteMockServe } from 'vite-plugin-mock'
 import {
   createStyleImportPlugin,
   ElementPlusResolve
 } from 'vite-plugin-style-import'
-// Icons 配置
-import Icons from 'unplugin-icons/vite'
-// mock配置
-import { viteMockServe } from 'vite-plugin-mock'
-// gzip压缩
-import viteCompression from 'vite-plugin-compression'
-// 图片优化压缩
-import imagemin from 'unplugin-imagemin/vite'
-// VueDevTools开发工具
 import VueDevTools from 'vite-plugin-vue-devtools'
 
-// https://vite.dev/config/
-export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
-  // 在配置中使用环境变量
-  const {
-    VITE_PORT = '3306',
-    VITE_BASE_API_URL,
-    VITE_MOCK_SERVER,
-    VITE_COMPRESS,
-    VITE_DEVTOOLS
-  } = loadEnv(mode, process.cwd(), '') as ImportMetaEnv
+const getPathURL = (url: string) => fileURLToPath(new URL(url, import.meta.url))
+const getBoolean = (value: string | undefined) => value === 'true'
+const getNumber = (value: string | undefined, fallback: number) =>
+  Number(value) || fallback
 
-  const isBuild = mode !== 'development'
-  const isMock = VITE_MOCK_SERVER === 'true'
-  const isCompress = VITE_COMPRESS !== 'none'
-  const isDevTools = VITE_DEVTOOLS === 'true'
-  const dropConsoleConfig: ESBuildOptions = isBuild
-    ? {
-        // 打包构建时移除 console.log
-        pure: ['console.log'],
-        // 打包构建时移除 debugger
-        drop: ['debugger'],
-        // 打包构建时移除所有注释
-        legalComments: 'none'
+/**
+ * 读取 package.json 文件
+ */
+async function readPackageJSON(root: string): Promise<PackageJson> {
+  const packagePath = resolve(root, 'package.json')
+  const content = await readFileSync(packagePath, { encoding: 'utf-8' })
+  return JSON.parse(content)
+}
+
+/**
+ * Vite 注入项目信息插件
+ */
+export async function viteMetadataPlugin(
+  root = process.cwd()
+): Promise<PluginOption> {
+  const { author, homepage, license, version } = await readPackageJSON(root)
+
+  return {
+    name: 'vite:inject-metadata',
+    enforce: 'post',
+    async config() {
+      const isAuthorObject = typeof author === 'object'
+      const authorName = isAuthorObject ? author?.name : author
+      const authorEmail = isAuthorObject ? author?.email : null
+      const authorUrl = isAuthorObject ? author?.url : null
+
+      const metadata = {
+        authorEmail,
+        authorName,
+        authorUrl,
+        homepage,
+        license,
+        version
       }
-    : {}
 
-  // 路径配置 paths
-  const paths = {
-    src: fileURLToPath(new URL('./src', import.meta.url)),
-    mock: fileURLToPath(new URL('./mock', import.meta.url)),
-    svgIcons: fileURLToPath(new URL('./src/assets/svg', import.meta.url)),
-    autoImports: fileURLToPath(
-      new URL('./src/types/auto/auto-imports.d.ts', import.meta.url)
-    ),
-    components: fileURLToPath(
-      new URL('./src/types/auto/components.d.ts', import.meta.url)
-    )
+      return {
+        define: {
+          __KING_ADMIN_METADATA__: JSON.stringify(metadata), // 注入到全局变量
+          'import.meta.env.VITE_APP_VERSION': JSON.stringify(version) // 注入版本信息
+        }
+      }
+    }
   }
+}
 
-  // vite plugins
-  const plugins: PluginOption[] = [
-    vue(),
+// 路径配置
+const paths = {
+  src: getPathURL('./src'),
+  mock: getPathURL('./mock'),
+  autoImports: getPathURL('./src/types/auto/auto-imports.d.ts'),
+  components: getPathURL('./src/types/auto/components.d.ts')
+}
+
+function loadConditionPlugins(conditionPlugins: ConditionPlugin[]) {
+  const plugins: PluginOption[] = []
+  for (const conditionPlugin of conditionPlugins) {
+    if (conditionPlugin.condition) {
+      const realPlugins = conditionPlugin.plugins()
+      plugins.push(...realPlugins)
+    }
+  }
+  return plugins.flat()
+}
+
+function loadCommonPlugins() {
+  const commonPlugins: ConditionPlugin[] = [
+    Vue(),
     UnoCSS(),
     AutoImport({
-      // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
-      // imports: ["vue", "vue-router", "pinia"],
-
       resolvers: [ElementPlusResolver()],
       dts: paths.autoImports
     }),
     Components({
-      // 自动导入 Element Plus 组件
       resolvers: [
         ElementPlusResolver({
           importStyle: 'sass'
@@ -96,99 +116,154 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           }
         }
       ]
-    }),
-    // 自动下载 iconify 图标库
-    Icons({
-      compiler: 'vue3',
-      autoInstall: true
-    }),
-    // Imagemin 图片压缩插件
-    imagemin()
-  ]
-  // vite-plugin-mock
-  if (isMock) {
-    plugins.push(
-      viteMockServe({
-        ignore: /^_/,
-        mockPath: 'mock',
-        enable: true, // 是否启用 mock 功能
-        watchFiles: !isBuild, // 监视文件更改 更改mock的时候，不需要重新启动编译
-        logger: !isBuild, //  是否在控制台显示请求日志
-        // @ts-ignore production-mock
-        injectCode: `
-          import { setupProdMockServer } from './mock/_createProductionServer';
-          setupProdMockServer();
-        `
-      })
-    )
-  }
-  // vite-plugin-compression
-  if (isCompress) {
-    switch (VITE_COMPRESS) {
-      case 'gzip': {
-        plugins.push(
-          viteCompression({
-            ext: '.gz'
-          })
-        )
-        break
-      }
-      case 'brotli': {
-        plugins.push(
-          viteCompression({
-            ext: '.br',
-            algorithm: 'brotliCompress'
-          })
-        )
-        break
-      }
-    }
-  }
-  // vite-plugin-vue-devtools
-  if (isDevTools) {
-    plugins.push(VueDevTools())
-  }
+    })
+  ].map((plugin) => ({ condition: true, plugins: () => [plugin] }))
 
-  // Vite UserConfig
-  const config: UserConfig = {
+  return commonPlugins
+}
+
+// 插件加载
+function loadApplicationPlugins(options: PluginOptions) {
+  const isBuild = options.isBuild
+  const env = options.env
+
+  const { mock, compress, devTools, imagemin, icons, injectMetadata } = options
+
+  const commonPlugins = loadCommonPlugins()
+
+  const plugins = loadConditionPlugins([
+    ...commonPlugins,
+    {
+      condition: injectMetadata,
+      plugins: () => [viteMetadataPlugin()]
+    },
+    {
+      condition: mock,
+      plugins: () => [
+        viteMockServe({
+          ignore: /^_/,
+          mockPath: paths.mock,
+          enable: mock, // 是否启用 mock 功能
+          watchFiles: !isBuild, // 监视文件更改 更改mock的时候，不需要重新启动编译
+          logger: !isBuild //  是否在控制台显示请求日志
+        })
+      ]
+    },
+    {
+      condition: compress,
+      plugins: () => {
+        const compressPlugins = []
+        switch (env.VITE_COMPRESS) {
+          case 'gzip': {
+            compressPlugins.push(
+              viteCompression({
+                ext: '.gz'
+              })
+            )
+            break
+          }
+          case 'brotli': {
+            compressPlugins.push(
+              viteCompression({
+                ext: '.br',
+                algorithm: 'brotliCompress'
+              })
+            )
+            break
+          }
+        }
+        return compressPlugins
+      }
+    },
+    {
+      condition: !isBuild && devTools,
+      plugins: () => [VueDevTools()]
+    },
+    {
+      condition: imagemin,
+      plugins: () => [UnpluginImagemin()]
+    },
+    {
+      condition: !isBuild && icons,
+      plugins: () => [UnpluginIcons()]
+    }
+  ])
+
+  return plugins
+}
+
+export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
+  const root = process.cwd()
+  const isBuild = command === 'build'
+  const env = loadEnv(mode, root) as ImportMetaEnv
+
+  const {
+    VITE_BASE_API_URL,
+    VITE_COMPRESS,
+    VITE_DEVTOOLS,
+    VITE_PORT,
+    VITE_MOCK_SERVER
+  } = env
+
+  const plugins = loadApplicationPlugins({
+    isBuild,
+    env,
+    injectMetadata: true,
+    mock: getBoolean(VITE_MOCK_SERVER),
+    compress: VITE_COMPRESS !== 'none',
+    devTools: getBoolean(VITE_DEVTOOLS),
+    imagemin: true,
+    icons: true
+  })
+
+  const applicationConfig: UserConfig = {
+    base: '/',
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: '[ext]/[name]-[hash].[ext]',
+          chunkFileNames: 'js/[name]-[hash].js',
+          entryFileNames: 'jse/index-[name]-[hash].js'
+        }
+      },
+      target: 'es2015' // esnext
+    },
+    esbuild: {
+      ...(isBuild
+        ? {
+            pure: ['console.log'],
+            drop: ['debugger']
+          }
+        : {}),
+      legalComments: 'none'
+    },
     resolve: {
       alias: {
         '@': paths.src
       }
     },
-    plugins,
     css: {
       preprocessorOptions: {
         scss: {
-          // 弃用旧版 [legacy api] 使用[modern api]
           api: 'modern-compiler',
-          // 引入 ui 组件库(element-plus) theme-var 配置
           additionalData: '@use "@/desgin/ui/vars/index.scss" as *;'
         }
       }
     },
+    plugins,
     server: {
       host: '0.0.0.0',
-      port: parseInt(VITE_PORT),
+      port: getNumber(VITE_PORT, 3060),
       hmr: true,
       proxy: {
         [VITE_BASE_API_URL]: {
-          // mock代理目标地址
-          target: isMock
-            ? `http://localhost:${VITE_PORT}/${VITE_BASE_API_URL}`
-            : VITE_BASE_API_URL,
-          // 重写路径
+          target: VITE_BASE_API_URL,
           rewrite: (path) =>
             path.replace(new RegExp(`^${VITE_BASE_API_URL}`), ''),
-          // 允许跨域
           changeOrigin: true
         }
       }
     },
-    // 混淆器
-    esbuild: { target: 'esnext', ...dropConsoleConfig },
-
-    // 预编译，增加访问速度，针对node_modules
     optimizeDeps: {
       include: [
         'vue',
@@ -204,5 +279,5 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     }
   }
 
-  return config
+  return applicationConfig
 })

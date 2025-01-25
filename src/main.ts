@@ -1,44 +1,23 @@
-import App from './App.vue'
-import { createApp } from 'vue'
+import { initPreferences } from '@/preferences'
 
-import { registerBaseUI } from '@/baseui'
-// import { registerComponents } from "@/components";
-// import { registerDirectives } from "@/directives";
-import '@/desgin'
-import { setupI18n } from '@/locales'
-import { router } from '@/router'
-import { initStores } from '@/store'
-
-import 'default-passive-events'
-
-import '@unocss/reset/sanitize/assets.css'
-import '@unocss/reset/sanitize/sanitize.css'
-import 'nprogress/nprogress.css'
-import 'virtual:uno.css'
+import { APP_NAMESPACE, APP_VERSION } from './constants'
+import { overridesPreferences } from './settings'
 
 /**
  * 应用初始化完成之后再进行页面加载渲染
  */
 async function initApplication() {
-  const app = createApp(App)
+  // 命名空间前缀 用于 cache 等
+  const env = import.meta.env.PROD ? 'prod' : 'dev'
+  const namespace = `${APP_NAMESPACE}-${APP_VERSION}-${env}`
 
-  // 配置 pinia-store
-  await initStores(app, { namespace: import.meta.env.VITE_APP_NAMESPACE })
+  // app偏好设置初始化
+  await initPreferences({ namespace, overrides: overridesPreferences })
 
-  // 国际化 i18n 配置
-  await setupI18n(app)
-
-  // 配置路由及路由守卫
-  app.use(router)
-
-  // 注册全局组件 [Base-ui/Components]
-  registerBaseUI(app)
-  // registerComponents(app)
-
-  // 注册全局指令 [Directives]
-  // registerDirectives(app)
-
-  app.mount('#app')
+  // 启动应用并挂载
+  // vue应用主要逻辑及视图
+  const { bootstrap } = await import('./bootstrap')
+  await bootstrap(namespace)
 }
 
 initApplication()

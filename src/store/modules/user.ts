@@ -21,6 +21,10 @@ interface AccessState {
 }
 
 const useUserStore = defineStore('user', {
+  persist: {
+    pick: ['userInfo', 'userRoles'],
+    storage: sessionStorage
+  },
   state: (): AccessState => ({
     userInfo: null,
     userRoles: []

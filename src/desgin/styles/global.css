@@ -78,3 +78,17 @@ a:visited {
 
   /* @apply text-primary hover:text-primary-hover active:text-primary-active cursor-pointer; */
 }
+
+/*! Other */
+
+/* 修复浏览器在自动填入密码时的样式覆盖  */
+
+/* chrome */
+input:-webkit-autofill {
+  box-shadow: 0 0 0 100px white inset !important;
+}
+
+/* firefox */
+input {
+  filter: none !important;
+}

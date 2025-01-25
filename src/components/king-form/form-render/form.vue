@@ -4,12 +4,12 @@ import type { BaseFormApiFnType } from '../types'
 
 import type { Recordable } from '@/types'
 
-import FormField from './form-field.vue'
 import { computed, useTemplateRef } from 'vue'
 
 import { Form } from '@/baseui/ep'
 import { isFunction } from '@/utils'
 
+import FormField from './form-field.vue'
 import { useFormHelper } from './helper'
 import { useFormInitial } from './initial'
 

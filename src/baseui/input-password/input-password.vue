@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import PasswordStrength from './password-strength.vue'
 import { ref, useSlots } from 'vue'
 
 import { Input } from '@/baseui/ep'
+
+import PasswordStrength from './password-strength.vue'
 
 defineOptions({ name: 'InputPassword', inheritAttrs: false })
 

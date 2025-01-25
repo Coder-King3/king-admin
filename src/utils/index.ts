@@ -1,6 +1,7 @@
 export * from './cache'
 export * from './date'
 export * from './emitter'
+export * from './helper'
 export * from './inference'
 export * from './merge'
 export * from './nprogress'

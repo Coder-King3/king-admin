@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import type { BasicOption } from '@/types'
 
-import { markRaw, ref } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 
 import { loginApi, logoutApi } from '@/api'
 import { SliderCaptcha } from '@/baseui'
 import { type KingFormProps, ThemeToggle, useKingForm } from '@/components'
 import { $t } from '@/locales'
+import { updatePreferences, usePreferences } from '@/preferences'
+import { cn } from '@/utils'
 
 import { ElMessage, ElNotification, ElRate as Rate } from 'element-plus'
 
@@ -16,7 +18,7 @@ defineOptions({ name: 'Test' })
 // api-Test
 const loginTest = async () => {
   console.log(`login test start~`)
-  const testFormData = { password: '123', username: 'admin' }
+  const testFormData = { password: '123456', username: 'admin' }
 
   try {
     const result = await loginApi(testFormData)
@@ -75,6 +77,7 @@ const formOptions: KingFormProps = {
           const findUser = MOCK_USER_OPTIONS.find(
             (item) => item.value === value
           )
+          console.log('formApi.values', formApi.getValues())
           if (findUser) {
             form.setValues({
               password: '123456',
@@ -131,10 +134,55 @@ const [Form, formApi] = useKingForm(formOptions)
 const logForm = async () => {
   console.log(`form-values:`, formApi.getValues())
 }
+
+const cnTest = () => {
+  const classNames = cn(
+    ['flex', 'gap', 'bg-primary', { 'flex-1': true }],
+    { 'text-accout': true },
+    'bg-primary'
+  )
+  console.log(`classNames:`, classNames)
+}
+
+/* preferences-doms */
+const {
+  locale,
+  isMobile,
+  preferences,
+  isDark: pIsDark,
+  theme
+} = usePreferences()
+
+const isDark = computed({
+  get() {
+    return pIsDark.value
+  },
+  set(value) {
+    console.log(`value:`, value)
+    updatePreferences({
+      theme: { mode: value ? 'dark' : 'light' }
+    })
+  }
+})
+
+function testPreferences() {
+  console.log('preferences', preferences)
+
+  // updatePreferences({ app: { locale: 'en-US' } })
+  console.log(`isDark:`, isDark.value)
+
+  updatePreferences({
+    theme: { mode: 'auto' }
+  })
+
+  console.log(`preferences:`, preferences.theme.mode)
+
+  // isDark.value = !isDark.value
+}
 </script>
 
 <template>
-  <div class="min-h-full">
+  <div class="min-h-full pb-6">
     <div class="icon-doms m-2">
       <h3>icon-doms</h3>
       <div class="mb-6">
@@ -181,6 +229,7 @@ const logForm = async () => {
           v-model="value2"
           :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
         />
+        <ElButton type="primary" @click="cnTest">Test Cn Function</ElButton>
       </div>
     </div>
 
@@ -209,6 +258,19 @@ const logForm = async () => {
       <Form />
 
       <ElButton type="primary" @click="logForm">log-form</ElButton>
+    </div>
+
+    <div class="preferences-doms m-2">
+      <h3>preferences-doms</h3>
+      <div>
+        <p>locale: {{ locale }}</p>
+        <p>isMobile: {{ isMobile }}</p>
+        <p>theme: {{ theme }}</p>
+
+        <ElButton class="mt-2" type="primary" @click="testPreferences">
+          test preferences
+        </ElButton>
+      </div>
     </div>
   </div>
 </template>

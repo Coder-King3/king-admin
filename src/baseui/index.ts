@@ -12,7 +12,7 @@ const BaseUI: any[] = [SvgIcon, InputPassword, IconButton]
 
 /* 使用组件前缀 */
 // const BaseUIPrefix = 'King'
-const registerBaseUI = (app: App) => {
+export const registerBaseUI = (app: App) => {
   for (const component of BaseUI) {
     app.component(component.name, component)
     // app.component(BaseUIPrefix + component.name, component)
@@ -22,12 +22,9 @@ const registerBaseUI = (app: App) => {
 export {
   IconButton,
   InputPassword,
-  // 导出组件注册函数
-  registerBaseUI,
   RenderContent,
   Select,
   SliderCaptcha,
   SpineText,
-  // 导出组件
   SvgIcon
 }

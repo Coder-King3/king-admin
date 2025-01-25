@@ -385,7 +385,7 @@ function perfectionist() {
               },
               value: {
                 src: ['^@/'],
-                vue: ['vue', 'vue-*', '@vue*']
+                vue: ['^vue', '^vue-*', '^@vue*']
               }
             },
             groups: [

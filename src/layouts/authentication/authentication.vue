@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import AuthenticationFormView from './form-view.vue'
-import Toolbar from './toolbar.vue'
 import { computed, ref } from 'vue'
 
 import { APP_NAME } from '@/constants'
 import { $t } from '@/locales'
+
+import AuthenticationFormView from './form-view.vue'
+import Toolbar from './toolbar.vue'
 
 defineOptions({ name: 'Authentication' })
 

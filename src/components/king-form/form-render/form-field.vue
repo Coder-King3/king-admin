@@ -3,7 +3,6 @@ import type { FormSchema, RenderComponentContentType } from '../types'
 
 import type { Recordable } from '@/types'
 
-import FormLabel from './form-label.vue'
 import { computed, type ComputedRef } from 'vue'
 
 import { RenderContent } from '@/baseui'
@@ -11,6 +10,7 @@ import { FormItem } from '@/baseui/ep'
 import { isString } from '@/utils'
 
 import { componentMap } from '../config'
+import FormLabel from './form-label.vue'
 
 interface Props extends FormSchema {
   componentContent: {

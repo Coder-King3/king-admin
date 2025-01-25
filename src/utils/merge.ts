@@ -2,39 +2,50 @@ import type { ClassType, Recordable } from '@/types'
 
 import { isObject, isString } from './inference'
 
-const joinTruthyKeys = (obj: Recordable) => {
-  return Object.entries(obj)
-    .filter(([_key, value]) => Boolean(value)) // 过滤值为假值的键
-    .map(([key]) => key) // 提取键
-    .join(' ') // 用空格拼接
+/**
+ * 过滤 ClassNames 假值
+ *
+ * @param {Recordable} obj
+ */
+const filterTruthyKeys = (obj: Recordable) => {
+  return Object.keys(obj).filter((key) => obj[key])
 }
 
+/**
+ * 去除 ClassNames 重复项
+ *
+ * @param {string} input
+ */
 const removeDuplicates = (input: string): string => {
-  return Array.from(new Set(input.split(' '))).join(' ')
+  return Array.from(new Set(input.split(/\s+/))).join(' ')
 }
 
-const mergeClassNames = (classNames: ClassType[]) => {
+/**
+ *  扁平化 ClassNames
+ *
+ * @param {ClassType[]} classNames
+ */
+const flattenClassNames = (classNames: ClassType[]) => {
   const resultNames: string = classNames
-    .map((item) => {
-      if (isString(item)) {
-        return item
-      } else if (Array.isArray(item)) {
-        return mergeClassNames(item)
-      } else if (isObject(item)) {
-        return joinTruthyKeys(item)
-      }
+    .flatMap((item) => {
+      if (Array.isArray(item)) return flattenClassNames(item)
+      if (isString(item)) return item
+      if (isObject(item)) return filterTruthyKeys(item)
       return ''
     })
     .filter(Boolean)
     .join(' ')
 
-  // 类名去重
-  const filterNames = removeDuplicates(resultNames)
-  return filterNames
+  return resultNames
 }
 
+/**
+ * 合并 className
+ *
+ * @param {ClassType[]} classNames
+ */
 const cn = (...classNames: ClassType[]) => {
-  return mergeClassNames(classNames)
+  return removeDuplicates(flattenClassNames(classNames))
 }
 
 export { createDefu as createMerge, defu as merge } from 'defu'

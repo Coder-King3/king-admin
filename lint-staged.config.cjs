@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   '*.{js,jsx,ts,tsx}': [
     'prettier --cache --ignore-unknown  --write',
     'eslint --cache --fix'

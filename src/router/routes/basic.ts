@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
 import { AuthPageLayout } from '@/layouts'
+import { $t } from '@/locales'
 import Login from '@/views/auth/login.vue'
 
 /** 基本路由，这些路由是必须存在的 */
@@ -27,7 +28,7 @@ const basicRoutes: RouteRecordRaw[] = [
       {
         component: Login,
         meta: {
-          title: 'login'
+          title: $t('page.auth.login')
         },
         name: 'Login',
         path: 'login'
@@ -35,7 +36,7 @@ const basicRoutes: RouteRecordRaw[] = [
       {
         component: () => import('@/views/auth/register.vue'),
         meta: {
-          title: 'register'
+          title: $t('page.auth.register')
         },
         name: 'Register',
         path: 'register'
@@ -43,7 +44,7 @@ const basicRoutes: RouteRecordRaw[] = [
       {
         component: () => import('@/views/auth/forget-password.vue'),
         meta: {
-          title: 'forgetPassword'
+          title: $t('page.auth.forgetPassword')
         },
         name: 'ForgetPassword',
         path: 'forgetPassword'
@@ -54,7 +55,7 @@ const basicRoutes: RouteRecordRaw[] = [
   {
     component: () => import('@/views/test.vue'),
     meta: {
-      title: 'test'
+      title: $t('page.test')
     },
     name: 'Test',
     path: '/test'

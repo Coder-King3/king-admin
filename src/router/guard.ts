@@ -1,10 +1,9 @@
 import type { Router } from 'vue-router'
 
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
-import { useAccessStore } from '@/store'
+import { useAccessStore, useAuthStore, useUserStore } from '@/store'
 import { startProgress, stopProgress } from '@/utils'
 
-import { isWhiteList, whiteListByName } from './config'
 import { basicRouteNames } from './routes'
 
 /**
@@ -23,14 +22,12 @@ function createRouterGuard(router: Router) {
  * @param router
  */
 function setupAccessGuard(router: Router) {
-  // 白名单
-  const whitelist = [...whiteListByName, ...basicRouteNames]
   router.beforeEach(async (to, _from) => {
     const accessStore = useAccessStore()
-    // const userStore = useUserStore()
-    // const authStore = useAuthStore()
-    // 白名单，这些路由无需权限拦截
-    if (isWhiteList(to, whitelist)) {
+    const userStore = useUserStore()
+    const authStore = useAuthStore()
+    // 基本路由，无需权限拦截
+    if (basicRouteNames.includes(to.name as string)) {
       if (to.path === LOGIN_PATH && accessStore.accessToken) {
         return decodeURIComponent(
           (to.query?.redirect as string) || DEFAULT_HOME_PATH
@@ -38,8 +35,6 @@ function setupAccessGuard(router: Router) {
       }
       return true
     }
-
-    // console.log(`accessStore.accessToken:`, accessStore.accessToken)
 
     // accessToken 检查
     if (!accessStore.accessToken) {
@@ -66,8 +61,8 @@ function setupAccessGuard(router: Router) {
     // 生成路由表
     // 当前登录用户拥有的角色标识列表
     // const userInfo = userStore.userInfo || (await authStore.fetchUserInfo())
-    // const userRoles = userInfo.roles ?? []
-    // // 生成菜单和路由
+    // const userRoles = userInfo?.roles ?? []
+    // 生成菜单和路由
     // const { accessibleMenus, accessibleRoutes } = await generateAccess({
     //   roles: userRoles,
     //   router,
@@ -92,21 +87,21 @@ function setupAccessGuard(router: Router) {
  */
 function setupCommonGuard(router: Router) {
   // 记录已经加载的页面
-  const loadedPaths = new Set<string>()
+  // const loadedPaths = new Set<string>()
 
-  router.beforeEach(async (to) => {
-    to.meta.loaded = loadedPaths.has(to.path)
+  router.beforeEach(async (_to) => {
+    // to.meta.loaded = loadedPaths.has(to.path)
 
     // 页面加载进度条
-    if (!to.meta.loaded) {
-      startProgress()
-    }
+    // if (!to.meta.loaded) {
+    startProgress()
+    // }
     return true
   })
 
-  router.afterEach((to) => {
+  router.afterEach((_to) => {
     // 记录页面是否加载,如果已经加载，后续的页面切换动画等效果不在重复执行
-    loadedPaths.add(to.path)
+    // loadedPaths.add(to.path)
 
     // 关闭页面加载进度条
     stopProgress()

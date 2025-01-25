@@ -1,5 +1,7 @@
-import { readdirSync } from 'fs'
-import { resolve } from 'path'
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const { readdirSync } = require('fs')
+const { resolve } = require('path')
 
 const scopes = readdirSync(resolve(process.cwd(), 'src'), {
   withFileTypes: true
@@ -97,4 +99,4 @@ const userConfig = {
   }
 }
 
-export default userConfig
+module.exports = userConfig

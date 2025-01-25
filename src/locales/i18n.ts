@@ -1,9 +1,11 @@
 import type { Language } from 'element-plus/es/locale'
 
-import type { ImportLocaleFn, SupportedLanguagesType } from './typing'
+import type { ImportLocaleFn, SupportedLanguagesType } from './types'
 
 import { type App, ref, unref } from 'vue'
 import { createI18n, type Locale } from 'vue-i18n'
+
+import { preferences } from '@/preferences'
 
 import dayjs from 'dayjs'
 import enLocale from 'element-plus/es/locale/lang/en'
@@ -167,7 +169,7 @@ function setI18nLanguage(locale: Locale) {
 
 async function setupI18n(app: App) {
   const missingWarn = !import.meta.env.PROD
-  const defaultLocale = 'zh-CN'
+  const defaultLocale = preferences.app.locale
 
   app.use(i18n)
   await loadLocaleMessages(defaultLocale)

@@ -7,6 +7,7 @@ import type { Recordable } from '@/types'
 import {
   computed,
   type ComputedRef,
+  readonly,
   ref,
   type Ref,
   toRaw,
@@ -53,6 +54,19 @@ const fieldMergeFn = createMerge((obj, key, value) => {
   return true
 })
 
+function valuesFilterFn(
+  values: Recordable,
+  filters: string[],
+  condition: FilterCondition
+) {
+  return filters.reduce((result, field) => {
+    if (condition(field)) {
+      result[field] = values[field]
+    }
+    return result
+  }, {} as Recordable)
+}
+
 class FormApi {
   isMounted = false
   formHandler: FormHandler
@@ -79,10 +93,6 @@ class FormApi {
     bindMethods(this)
   }
 
-  getFieldValue(field: string) {
-    return computed(() => this.state.value[field])
-  }
-
   async getForm() {
     if (!this.isMounted) {
       // 等待form挂载
@@ -93,10 +103,10 @@ class FormApi {
   }
 
   getOptions() {
-    return this.options
+    return computed(() => unref(this.options))
   }
   getState() {
-    return computed(() => unref(this.state))
+    return readonly(this.state)
   }
 
   getValues(fields?: string[], isExclude: boolean = false) {
@@ -118,12 +128,51 @@ class FormApi {
     return filterFields
   }
 
+  setValues(fields: Record<string, any>, filterFields: boolean = true) {
+    if (!filterFields) {
+      this.state.value = fields
+      return
+    }
+
+    const filteredFields = fieldMergeFn(fields, this.getValues())
+    this.state.value = filteredFields
+  }
+
+  /**
+   * 重置表单
+   */
+  async resetForm() {
+    const form = await this.getForm()
+    form?.resetFields?.()
+    this.state.value = getStateValues(this.options.value?.schema)
+    this.options.value?.handleReset?.(this.getValues())
+  }
+
+  getFieldValue(field: string) {
+    return computed(() => this.state.value[field])
+  }
+
+  setFieldValue(field: string, value: any) {
+    Reflect.set(this.state.value, field, value)
+  }
+
+  setState(schema: FormSchema[] = []) {
+    this.state.value = getStateValues(schema)
+  }
+
   mount(formRef: FormInstance) {
     if (!this.isMounted) {
       this.form = formRef
       this.formHandler.setConditionTrue()
       this.isMounted = true
     }
+  }
+
+  unmount() {
+    this.form?.resetFields?.()
+    this.state.value = {}
+    this.isMounted = false
+    this.formHandler.reset()
   }
 
   onStateChange() {
@@ -137,41 +186,6 @@ class FormApi {
         { deep: true }
       )
     }
-  }
-
-  /**
-   * 重置表单
-   */
-  async resetForm() {
-    const form = await this.getForm()
-    form?.resetFields?.()
-    this.state.value = getStateValues(this.options.value?.schema)
-    this.options.value?.handleReset?.(this.getValues())
-  }
-
-  setFieldValue(field: string, value: any) {
-    Reflect.set(this.state.value, field, value)
-  }
-
-  setState(schema: FormSchema[] = []) {
-    this.state.value = getStateValues(schema)
-  }
-
-  setValues(fields: Record<string, any>, filterFields: boolean = true) {
-    if (!filterFields) {
-      this.state.value = fields
-      return
-    }
-
-    const filteredFields = fieldMergeFn(fields, this.getValues())
-    this.state.value = filteredFields
-  }
-
-  unmount() {
-    this.form?.resetFields?.()
-    this.state.value = {}
-    this.isMounted = false
-    this.formHandler.reset()
   }
 
   /**
@@ -205,19 +219,6 @@ class FormApi {
 }
 
 type FormApiInstance = InstanceType<typeof FormApi>
-
-function valuesFilterFn(
-  values: Recordable,
-  filters: string[],
-  condition: FilterCondition
-) {
-  return filters.reduce((result, field) => {
-    if (condition(field)) {
-      result[field] = values[field]
-    }
-    return result
-  }, {} as Recordable)
-}
 
 export type { FormApiInstance, FormInstance }
 export { FormApi }

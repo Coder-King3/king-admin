@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SUPPORT_LANGUAGES } from '@/constants'
 import { loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
-import { storeToRefs, useAppStore } from '@/store'
+import { preferences, updatePreferences } from '@/preferences'
 
 interface Props {
   /**
@@ -16,14 +16,14 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'icon'
 })
 
-const appStore = useAppStore()
-const { locale } = storeToRefs(appStore)
-const { setAppState } = appStore
-
 async function handleUpdate(value: SupportedLanguagesType) {
   const locale = value as SupportedLanguagesType
 
-  setAppState('locale', locale)
+  updatePreferences({
+    app: {
+      locale
+    }
+  })
 
   await loadLocaleMessages(locale)
 }
@@ -40,7 +40,7 @@ async function handleUpdate(value: SupportedLanguagesType) {
           v-for="item in SUPPORT_LANGUAGES"
           :key="item.value"
           :command="item.value"
-          :active="item.value === locale"
+          :active="item.value === preferences.app.locale"
         >
           {{ item.label }}
         </ElDropdownItem>

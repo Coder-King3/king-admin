@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { nextTick } from 'vue'
+import { computed, nextTick } from 'vue'
 
-import { storeToRefs, useAppStore } from '@/store'
+import { preferences, updatePreferences } from '@/preferences'
 
 interface Props {
   /**
@@ -16,9 +16,16 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'icon'
 })
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const { switchDark } = appStore
+const isDark = computed({
+  get() {
+    return preferences.theme.mode === 'dark'
+  },
+  set(value) {
+    updatePreferences({
+      theme: { mode: value ? 'dark' : 'light' }
+    })
+  }
+})
 
 /* 切换暗黑模式逻辑 */
 const toggleTheme = async (event: MouseEvent) => {
@@ -27,7 +34,7 @@ const toggleTheme = async (event: MouseEvent) => {
     document.startViewTransition &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (!isAppearanceTransition || !event) {
-    switchDark(!isDark.value)
+    isDark.value = !isDark.value
     return
   }
   const x = event.clientX
@@ -42,7 +49,7 @@ const toggleTheme = async (event: MouseEvent) => {
   ]
 
   const transition = document.startViewTransition(async () => {
-    switchDark(!isDark.value)
+    isDark.value = !isDark.value
     await nextTick()
   })
 

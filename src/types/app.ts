@@ -1,4 +1,4 @@
-type ThemeModeType = 'dark' | 'light'
+type ThemeModeType = 'dark' | 'light' | 'auto'
 
 type ThemeSize = 'default' | 'large' | 'small'
 

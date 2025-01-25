@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.json",
-  "include": ["vite.config.ts", "env.d.ts"],
+  "include": ["vite.config.ts", "env.d.ts", "src/types/env.d.ts"],
   "compilerOptions": {
     "composite": false,
     "lib": ["ESNext"],

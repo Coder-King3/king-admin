@@ -1,48 +1,41 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-import { APP_NAME } from '@/constants'
-import { storeToRefs, useAppStore } from '@/store'
+import { APP_NAME, APP_VERSION } from '@/constants'
 
-import { loadLocaleMessages } from './locales'
-import { setThemeMode } from './utils'
-
-const { dimension, isDark, locale } = storeToRefs(useAppStore())
+declare global {
+  const __KING_ADMIN_METADATA__: {
+    authorEmail: string
+    authorName: string
+    authorUrl: string
+    homepage: string
+    license: string
+    version: string
+  }
+}
 
 // 打印项目信息
 const printProjectInfo = async () => {
-  const { version } = await import('../package.json')
-
   const createInfoStyle = (radius: string, background: string) =>
     `padding: 2px 1px; border-radius: ${radius}; color: #fff; background: ${background}; font-weight: bold;`
 
   // eslint-disable-next-line no-console
   console.log(
-    `%c ${APP_NAME} %c V${version} `,
+    `%c ${APP_NAME} %c V${APP_VERSION} `,
     createInfoStyle('3px 0 0 3px', '#6169FF'),
     createInfoStyle('0 3px 3px 0', '#42c02e')
   )
-}
 
-// 初始化语言配置
-const initThemeConfig = () => {
-  setThemeMode(isDark.value ? 'dark' : 'light')
-}
-
-// 初始化语言配置
-const initI18nConfig = async () => {
-  await loadLocaleMessages(locale.value)
+  console.log('KING_ADMIN_METADATA: ', __KING_ADMIN_METADATA__)
 }
 
 onMounted(() => {
   printProjectInfo()
-  initThemeConfig()
-  initI18nConfig()
 })
 </script>
 
 <template>
-  <ElConfigProvider :size="dimension">
+  <ElConfigProvider>
     <RouterView />
   </ElConfigProvider>
 </template>

@@ -1,6 +1,6 @@
 import type { RouteRecordNameGeneric, RouteRecordRaw } from 'vue-router'
 
-// import { mergeRouteModules } from '../helper'
+// import { mergeRouteModules } from '@/utils/helper'
 import { traverseTreeValues } from '@/utils'
 
 import { basicRoutes, fallbackRoutes } from './basic'
