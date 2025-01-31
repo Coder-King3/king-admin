@@ -1,4 +1,4 @@
-import type { ExRouteRecordRaw, MenuRecordRaw } from '@/types/menu-record'
+import type { MenuRecordRaw } from '@/types/menu-record'
 
 import type { Router, RouteRecordRaw } from 'vue-router'
 
@@ -18,7 +18,7 @@ async function generateMenus(
     router.getRoutes().map(({ name, path }) => [name, path])
   )
 
-  let menus = mapTree<ExRouteRecordRaw, MenuRecordRaw>(routes, (route) => {
+  let menus = mapTree(routes, (route: any) => {
     // 路由表的路径写法有多种，这里从router获取到最终的path并赋值
     const path = finalRoutesMap[route.name as string] ?? route.path
 
@@ -53,7 +53,7 @@ async function generateMenus(
     }
     // 隐藏子菜单
     const resultPath = hideChildrenInMenu ? redirect || path : link || path
-    return {
+    const menu = {
       activeIcon,
       badge,
       badgeType,
@@ -67,7 +67,9 @@ async function generateMenus(
       show: !route?.meta?.hideInMenu,
       children: resultChildren || []
     }
-  })
+
+    return menu
+  }) as unknown as MenuRecordRaw[]
 
   // 对菜单进行排序
   menus = menus.sort((a, b) => (a.order || 999) - (b.order || 999))
