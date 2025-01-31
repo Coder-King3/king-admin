@@ -1,8 +1,15 @@
+import type { ComponentRecordType } from '@/types'
+
+import { h } from 'vue'
 import type { Router } from 'vue-router'
 
+import { getAllMenusApi } from '@/api'
+import { SvgIcon } from '@/baseui'
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
-import { useAccessStore, useAuthStore, useUserStore } from '@/store'
-import { startProgress, stopProgress } from '@/utils'
+import { useAccessStore } from '@/store'
+import { generateAccessible, startProgress, stopProgress } from '@/utils'
+
+import { ElMessage } from 'element-plus'
 
 import { basicRouteNames } from './routes'
 
@@ -22,10 +29,8 @@ function createRouterGuard(router: Router) {
  * @param router
  */
 function setupAccessGuard(router: Router) {
-  router.beforeEach(async (to, _from) => {
+  router.beforeEach(async (to, from) => {
     const accessStore = useAccessStore()
-    const userStore = useUserStore()
-    const authStore = useAuthStore()
     // 基本路由，无需权限拦截
     if (basicRouteNames.includes(to.name as string)) {
       if (to.path === LOGIN_PATH && accessStore.accessToken) {
@@ -58,26 +63,42 @@ function setupAccessGuard(router: Router) {
     if (accessStore.isAccessChecked) {
       return true
     }
-    // 生成路由表
-    // 当前登录用户拥有的角色标识列表
-    // const userInfo = userStore.userInfo || (await authStore.fetchUserInfo())
-    // const userRoles = userInfo?.roles ?? []
+    /* 生成路由表 */
     // 生成菜单和路由
-    // const { accessibleMenus, accessibleRoutes } = await generateAccess({
-    //   roles: userRoles,
-    //   router,
-    //   // 则会在菜单中显示，但是访问会被重定向到403
-    //   routes: accessRoutes,
-    // });
-    // // 保存菜单信息和路由信息
-    // accessStore.setAccessMenus(accessibleMenus);
-    // accessStore.setAccessRoutes(accessibleRoutes);
-    // accessStore.setIsAccessChecked(true);
-    // const redirectPath = (from.query.redirect ?? to.fullPath) as string;
-    // return {
-    //   ...router.resolve(decodeURIComponent(redirectPath)),
-    //   replace: true,
-    // };
+    const pageMap: ComponentRecordType = import.meta.glob('../views/**/*.vue')
+    const layoutMap: ComponentRecordType = {
+      BasicLayout: () => import('@/layouts/basic/layout.vue')
+    }
+    const { accessibleMenus, accessibleRoutes } = await generateAccessible({
+      router,
+      fetchMenuListAsync: async () => {
+        const loading = ElMessage({
+          duration: 1500,
+          message: '正在加载数据...',
+          icon: h(SvgIcon, {
+            icon: 'line-md:loading-loop',
+            class: 'text-primary'
+          }),
+          customClass: '[&>.el-icon]:text-xl'
+        })
+
+        const menuList = await getAllMenusApi()
+        loading.close()
+
+        return menuList
+      },
+      layoutMap,
+      pageMap
+    })
+    // 保存菜单信息和路由信息
+    accessStore.setAccessMenus(accessibleMenus)
+    accessStore.setAccessRoutes(accessibleRoutes)
+    accessStore.setIsAccessChecked(true)
+    const redirectPath = (from.query.redirect ?? to.fullPath) as string
+    return {
+      ...router.resolve(decodeURIComponent(redirectPath)),
+      replace: true
+    }
   })
 }
 

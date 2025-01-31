@@ -1,4 +1,4 @@
-// !fade
+/*! fade */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 200ms ease-in-out;
@@ -95,7 +95,7 @@
   opacity: 0;
 }
 
-// !slow
+/*! slow */
 @keyframes fade {
   0% {
     opacity: 0;
@@ -174,7 +174,7 @@
   animation: fade-down 3s infinite;
 }
 
-// !zoom
+/*! zoom */
 
 /* zoom-fade */
 .zoom-fade-enter-active,
@@ -208,7 +208,7 @@
   transform: scale(0);
 }
 
-// !slide
+/*! slide */
 
 /* slide-up */
 .slide-up-enter-active,
@@ -274,7 +274,7 @@
   transform: translate(15px);
 }
 
-// !collapse
+/*! collapse */
 .collapse-transition {
   transition:
     200ms height ease-in-out,

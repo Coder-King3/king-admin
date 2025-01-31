@@ -26,15 +26,14 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
-    "build:test": "run-p type-check \"build-only {@}\" -- --mode test",
-    "build:prod": "run-p type-check \"build-only {@}\" -- --mode production",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,vue}\" --fix",
     "prettier": "prettier --write --loglevel warn \"src/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "stylelint": "stylelint --cache --fix \"src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
+    "commit": "czg",
     "lint-staged": "lint-staged",
-    "commit": "czg"
+    "commitlint": "commitlint --config commitlint.config.cjs -e -V"
   },
   "dependencies": {
     "@unocss/reset": "^0.64.1",

@@ -1,7 +1,7 @@
 // import './reset.css'
 import './global.css'
 import './nprogress.css'
-import './transition.scss'
+import './transition.css'
 import './animations.scss'
 
 export {}

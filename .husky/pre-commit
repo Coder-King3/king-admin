@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint:lint-staged
+# Format and submit code according to lintstagedrc.config.cjs configuration
+pnpm lint-staged
 
+echo Run pre-commit hook done.

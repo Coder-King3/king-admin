@@ -5,7 +5,7 @@ defineOptions({
 </script>
 
 <template>
-  <div class="">
+  <div class="relative min-h-full w-full flex">
     BasicLayout
     <RouterView />
   </div>

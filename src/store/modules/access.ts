@@ -1,4 +1,4 @@
-// import type { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
 import { defineStore } from 'pinia'
 
@@ -20,7 +20,7 @@ interface AccessState {
   /**
    * 可访问的路由列表
    */
-  // accessRoutes: RouteRecordRaw[]
+  accessRoutes: RouteRecordRaw[]
   /**
    * 是否已经检查过权限
    */
@@ -35,10 +35,9 @@ const useAccessStore = defineStore('access', {
   state: (): AccessState => ({
     accessToken: null,
     accessCodes: [],
+    accessRoutes: [],
     accessMenus: [],
     isAccessChecked: false
-    // loginExpired: false
-    // accessRoutes: [],
   }),
   actions: {
     setAccessCodes(codes: string[]) {
@@ -50,15 +49,12 @@ const useAccessStore = defineStore('access', {
     setAccessToken(token: AccessToken) {
       this.accessToken = token
     },
-    // setAccessRoutes(routes: RouteRecordRaw[]) {
-    //   this.accessRoutes = routes;
-    // },
+    setAccessRoutes(routes: RouteRecordRaw[]) {
+      this.accessRoutes = routes
+    },
     setIsAccessChecked(isAccessChecked: boolean) {
       this.isAccessChecked = isAccessChecked
     }
-    // setLoginExpired(loginExpired: boolean) {
-    //   this.loginExpired = loginExpired
-    // }
   }
 })
 

@@ -78,3 +78,15 @@ $base-delay: 0.1s;
   @include enter-x-negative($i);
   @include enter-y-negative($i);
 }
+
+/* loading */
+.loading-spin {
+  display: inline-block;
+  animation: loading-circle 1s infinite linear;
+}
+
+@keyframes loading-circle {
+  100% {
+    transform: rotate(360deg);
+  }
+}

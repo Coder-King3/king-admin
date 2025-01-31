@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 
 import { APP_NAME, APP_VERSION } from '@/constants'
 
+/*
 declare global {
   const __KING_ADMIN_METADATA__: {
     authorEmail: string
@@ -13,6 +14,7 @@ declare global {
     version: string
   }
 }
+*/
 
 // 打印项目信息
 const printProjectInfo = async () => {
@@ -25,8 +27,6 @@ const printProjectInfo = async () => {
     createInfoStyle('3px 0 0 3px', '#6169FF'),
     createInfoStyle('0 3px 3px 0', '#42c02e')
   )
-
-  console.log('KING_ADMIN_METADATA: ', __KING_ADMIN_METADATA__)
 }
 
 onMounted(() => {

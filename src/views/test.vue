@@ -4,7 +4,7 @@ import type { BasicOption } from '@/types'
 import { computed, markRaw, ref } from 'vue'
 
 import { loginApi, logoutApi } from '@/api'
-import { SliderCaptcha } from '@/baseui'
+import { SliderCaptcha, SvgIcon } from '@/baseui'
 import { type KingFormProps, ThemeToggle, useKingForm } from '@/components'
 import { $t } from '@/locales'
 import { updatePreferences, usePreferences } from '@/preferences'
@@ -77,7 +77,7 @@ const formOptions: KingFormProps = {
           const findUser = MOCK_USER_OPTIONS.find(
             (item) => item.value === value
           )
-          console.log('formApi.values', formApi.getValues())
+          // console.log('formApi.values', formApi.getValues())
           if (findUser) {
             form.setValues({
               password: '123456',

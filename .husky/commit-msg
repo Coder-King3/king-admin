@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx --no-install commitlint --edit $1
+# Check whether the git commit information is standardized
+pnpm commitlint
+
+echo Run commit-msg hook done.
