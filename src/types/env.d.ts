@@ -22,7 +22,6 @@ interface PluginOptions {
   mock: boolean
   compress: boolean
   devTools: boolean
-  imagemin: boolean
   icons: boolean
   injectMetadata: boolean
 }
