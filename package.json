@@ -32,7 +32,7 @@
     "prettier": "prettier --write --loglevel warn \"src/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "stylelint": "stylelint --cache --fix \"src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "commit": "czg",
-    "lint-staged": "lint-staged",
+    "lint-staged": "lint-staged --config lint-staged.config.cjs",
     "commitlint": "commitlint --config commitlint.config.cjs -e -V"
   },
   "dependencies": {
