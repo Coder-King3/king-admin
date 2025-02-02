@@ -8,11 +8,11 @@ import Vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import UnpluginIcons from 'unplugin-icons/vite'
-import UnpluginImagemin from 'unplugin-imagemin/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, loadEnv } from 'vite'
 import viteCompression from 'vite-plugin-compression'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import { viteMockServe } from 'vite-plugin-mock'
 import {
   createStyleImportPlugin,
@@ -116,8 +116,7 @@ function loadCommonPlugins() {
           }
         }
       ]
-    }),
-    UnpluginImagemin()
+    })
   ].map((plugin) => ({ condition: true, plugins: () => [plugin] }))
 
   return commonPlugins
@@ -128,7 +127,8 @@ function loadApplicationPlugins(options: PluginOptions) {
   const isBuild = options.isBuild
   const env = options.env
 
-  const { mock, compress, devTools, icons, injectMetadata } = options
+  const { mock, compress, devTools, icons, injectMetadata, imageOptimizer } =
+    options
 
   const commonPlugins = loadCommonPlugins()
 
@@ -183,6 +183,10 @@ function loadApplicationPlugins(options: PluginOptions) {
     {
       condition: !isBuild && icons,
       plugins: () => [UnpluginIcons()]
+    },
+    {
+      condition: imageOptimizer,
+      plugins: () => [ViteImageOptimizer()]
     }
   ])
 
@@ -209,6 +213,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     mock: getBoolean(VITE_MOCK_SERVER),
     compress: VITE_COMPRESS !== 'none',
     devTools: getBoolean(VITE_DEVTOOLS),
+    imageOptimizer: true,
     icons: true
   })
 

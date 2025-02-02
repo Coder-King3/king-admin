@@ -1,6 +1,6 @@
 import type { Recordable } from '@/types'
 
-function bindMethods<T extends object>(instance: T): void {
+export function bindMethods<T extends object>(instance: T): void {
   const prototype = Object.getPrototypeOf(instance)
   const propertyNames = Object.getOwnPropertyNames(prototype)
 
@@ -20,18 +20,7 @@ function bindMethods<T extends object>(instance: T): void {
   })
 }
 
-/**
- * Get assets static resources
- *
- * @param {string} name
- * @param {string} [suffix='png']
- * @param {string} [folder='images']
- */
-function getAssetsUrl(name: string, suffix = 'png', folder = 'images') {
-  return new URL(`../assets/${folder}/${name}.${suffix}`, import.meta.url).href
-}
-
-function mapArrayToObject<T extends Recordable>(
+export function mapArrayToObject<T extends Recordable>(
   lists: T[],
   key: keyof T,
   valueKey: keyof T
@@ -44,5 +33,3 @@ function mapArrayToObject<T extends Recordable>(
     return result
   }, {})
 }
-
-export { bindMethods, getAssetsUrl, mapArrayToObject }

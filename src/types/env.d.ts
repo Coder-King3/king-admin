@@ -24,6 +24,7 @@ interface PluginOptions {
   devTools: boolean
   icons: boolean
   injectMetadata: boolean
+  imageOptimizer: boolean
 }
 
 interface CommonConfigOptions {
