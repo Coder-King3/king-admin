@@ -35,6 +35,13 @@
   }
 }
 
+/* Scrollbar */
+.el-scrollbar {
+  .el-scrollbar__thumb {
+    @apply !bg-$scrollbar !hover:bg-$scrollbar-hover rounded-md !opacity-100;
+  }
+}
+
 /* CloseButton */
 [class*='el-icon'][class*='__closeBtn'] {
   @apply w-5.5 h-5.5 line-height-5.5 !m-[0_-4px_0_8px] rounded-sm transition-colors hover:(bg-accent);

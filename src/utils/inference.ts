@@ -17,7 +17,7 @@ const isFunction = (val: unknown): val is Function => typeof val === 'function'
 const isString = (val: unknown): val is string => typeof val === 'string'
 
 const isEmpty = (val: unknown): boolean =>
-  val && isString(val) ? val.trim() !== '' : false
+  isString(val) ? val.trim() === '' : false
 
 const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object'

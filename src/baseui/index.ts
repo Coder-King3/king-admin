@@ -3,6 +3,7 @@ import type { App } from 'vue'
 import { SliderCaptcha } from './captcha'
 import { InputPassword } from './input-password'
 import { RenderContent } from './render-content'
+import { KingScrollbar } from './scrollbar'
 import { Select } from './select'
 import { SpineText } from './spine-text'
 import { IconButton, SvgIcon } from './svg-icon'
@@ -22,6 +23,7 @@ export const registerBaseUI = (app: App) => {
 export {
   IconButton,
   InputPassword,
+  KingScrollbar,
   RenderContent,
   Select,
   SliderCaptcha,

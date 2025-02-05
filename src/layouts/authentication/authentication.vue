@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 
 import { APP_NAME } from '@/constants'
 import { $t } from '@/locales'
+import { preferences } from '@/preferences'
 
 import AuthenticationFormView from './form-view.vue'
 import Toolbar from './toolbar.vue'
@@ -10,7 +11,7 @@ import Toolbar from './toolbar.vue'
 defineOptions({ name: 'Authentication' })
 
 const appName = ref(APP_NAME)
-const logo = ref('svg:logo')
+const logo = computed(() => preferences.logo.source)
 const pageTitle = computed(() =>
   $t('auth.systemWelcome', { params: [APP_NAME] })
 )

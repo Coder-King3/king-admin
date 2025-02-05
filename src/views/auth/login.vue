@@ -154,7 +154,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div @keydown.enter.prevent="handleSubmit">
     <AuthTitle>
       {{ `${$t('auth.welcome')} 👋🏻` }}
       <template #desc>

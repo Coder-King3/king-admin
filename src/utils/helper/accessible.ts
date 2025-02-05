@@ -1,5 +1,6 @@
 import type { GenerateMenuAndRoutesOptions } from '@/types'
 
+import { generateMenus } from './generate-menus'
 import { generateRoutes } from './generate-routes'
 
 async function generateAccessible(options: GenerateMenuAndRoutesOptions) {
@@ -14,8 +15,8 @@ async function generateAccessible(options: GenerateMenuAndRoutesOptions) {
   })
 
   // 生成菜单
-  // const accessibleMenus = await generateMenus(accessibleRoutes, options.router)
-  const accessibleMenus = [] as any
+  const accessibleMenus = await generateMenus(accessibleRoutes, options.router)
+  // const accessibleMenus = [] as any
 
   return { accessibleMenus, accessibleRoutes }
 }

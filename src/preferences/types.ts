@@ -19,11 +19,20 @@ interface ThemePreferences {
   mode: ThemeModeType
 }
 
+interface LogoPreferences {
+  /** logo是否可见 */
+  enable: boolean
+  /** logo 地址 */
+  source: string
+}
+
 interface Preferences {
   /** 全局配置 */
   app: AppPreferences
   /** 主题配置 */
   theme: ThemePreferences
+  /** logo配置 */
+  logo: LogoPreferences
 }
 
 type PreferencesKeys = keyof Preferences
