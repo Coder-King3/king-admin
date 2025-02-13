@@ -8,16 +8,20 @@ import { cn } from '@/utils'
 
 defineOptions({ name: 'KingMenu' })
 
-interface Props extends MenuProps {}
+interface Props extends MenuProps {
+  popperOffset?: number
+}
 
 const props = withDefaults(defineProps<Props>(), {
   accordion: true,
   mode: 'vertical',
   rounded: true,
-  theme: 'light'
+  theme: 'light',
+  popperOffset: 12
 })
 
-const { rounded, mode, collapse, theme, collapseShowTitle } = toRefs(props)
+const { rounded, mode, collapse, theme, collapseShowTitle, popperOffset } =
+  toRefs(props)
 
 const is = (name: string, condition?: boolean) => {
   return name && condition ? `is-${name}` : ''
@@ -28,16 +32,19 @@ const isStateClassNames = computed(() => [
   is(theme.value, true)
 ])
 const menuClassName = 'king-menu'
-const menuClassNames = computed(() =>
-  cn(menuClassName, 'b-0', [
+const menuClassNames = computed(() => {
+  const classNames = cn(menuClassName, 'b-0', [
     is('vertical', mode.value === 'vertical'),
     is('collapse', collapse.value),
     is('collapse-show-title', collapseShowTitle.value),
     ...isStateClassNames.value
   ])
-)
+
+  return classNames
+})
 
 const menuPopperClassNames = computed(() =>
+  // cn(menuClassName, `${menuClassName}__popup`, [...menuClassNames.value])
   cn(menuClassName, `${menuClassName}__popup`, [...isStateClassNames.value])
 )
 </script>
@@ -47,6 +54,7 @@ const menuPopperClassNames = computed(() =>
     :class="menuClassNames"
     :collapse-transition="false"
     :popper-class="menuPopperClassNames"
+    :popper-offset="popperOffset"
     :mode="mode"
     :unique-opened="accordion"
     :collapse="collapse"
@@ -61,7 +69,9 @@ $namespace: king;
 
 @mixin menu-vars {
   --menu-margin: 6px;
+  --menu-radius: 8px;
   --menu-title-width: 140px;
+  --menu-item-gap: 4px;
   --menu-content-height: 42px;
   --menu-content-margin: 0px;
   --menu-content-icon-size: 16px;
@@ -100,7 +110,7 @@ $namespace: king;
 
   &.is-rounded {
     --menu-content-margin: var(--menu-margin);
-    --menu-content-radius: 8px;
+    --menu-content-radius: var(--menu-radius);
   }
 }
 
@@ -114,7 +124,7 @@ $namespace: king;
     var(--menu-content-indent) + var(--el-menu-level) *
       var(--menu-content-indent)
   ) !important;
-  margin-bottom: calc(var(--menu-margin) - 2px);
+  margin-bottom: var(--menu-item-gap);
   font-size: var(--menu-font-size);
   color: var(--menu-content-color);
   text-decoration: none;
@@ -206,11 +216,21 @@ $namespace: king;
     .#{$namespace}-menu-item.is-active {
       background: var(--menu-item-active-background-color) !important;
     }
+
+    &.is-collapse-show-title {
+      .#{$namespace}-menu-content__title {
+        display: inline-flex !important;
+      }
+
+      #{$sub-menu-title-selector} {
+        height: calc(
+          var(--menu-content-height) + (var(--menu-content-height) / 2)
+        ) !important;
+      }
+    }
   }
 
   &__popup {
-    // padding: 10px 0;
-    // border-radius: var(--menu-item-radius);
     $popup-menu-selector: '.el-menu--vertical > .el-menu';
 
     .#{$namespace}-sub-menu > .el-sub-menu__title,
@@ -225,20 +245,9 @@ $namespace: king;
 
     & > #{$popup-menu-selector} {
       padding-bottom: calc(
-        var(--menu-content-margin) - (var(--menu-margin) - 2px)
+        var(--menu-content-margin) - var(--menu-item-gap)
       ) !important;
-    }
-  }
-
-  &.is-collapse-show-title {
-    .#{$namespace}-menu-content__title {
-      display: inline-flex !important;
-    }
-
-    #{$sub-menu-title-selector} {
-      height: calc(
-        var(--menu-content-height) + (var(--menu-content-height) / 2)
-      ) !important;
+      border-radius: var(--menu-radius);
     }
   }
 }

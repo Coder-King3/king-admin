@@ -42,8 +42,6 @@ interface SidebarPreferences {
   enable: boolean
   /** 菜单自动展开状态 */
   expandOnHover: boolean
-  /** 侧边栏扩展区域是否折叠 */
-  extraCollapse: boolean
   /** 侧边栏是否隐藏 - css */
   hidden: boolean
   /** 侧边栏宽度 */

@@ -1,1 +1,1 @@
-export * from './useCrackAntiHotlink'
+export * from './use-is-mobile'

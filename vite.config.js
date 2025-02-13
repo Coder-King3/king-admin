@@ -185,11 +185,10 @@ export default defineConfig(({ mode, command }) => {
         esbuild: {
             ...(isBuild
                 ? {
-                    pure: ['console.log'],
-                    drop: ['debugger']
+                    pure: [],
+                    drop: []
                 }
-                : {}),
-            legalComments: 'none'
+                : {})
         },
         resolve: {
             alias: {

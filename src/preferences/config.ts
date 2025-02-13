@@ -23,10 +23,9 @@ const defaultPreferences: Preferences = {
   },
   sidebar: {
     collapsed: false,
-    collapsedShowTitle: true,
+    collapsedShowTitle: false,
     enable: true,
     expandOnHover: true,
-    extraCollapse: true,
     hidden: false,
     width: 224
   }

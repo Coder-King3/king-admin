@@ -3,6 +3,8 @@ import type { MenuProps } from './types'
 
 import type { MenuRecordRaw } from '@/types'
 
+import { computed } from 'vue'
+
 import { Menu } from './components'
 import SubMenu from './sub-menu.vue'
 
@@ -12,7 +14,19 @@ interface Props extends MenuProps {
   menus: MenuRecordRaw[]
 }
 
-const { menus, ...menuProps } = defineProps<Props>()
+const props = defineProps<Props>()
+
+const menus = computed(() => props.menus)
+
+const menuProps = computed(() => ({
+  accordion: props.accordion,
+  collapse: props.collapse,
+  collapseShowTitle: props.collapseShowTitle,
+  defaultActive: props.defaultActive,
+  mode: props.mode,
+  rounded: props.rounded,
+  theme: props.theme
+}))
 </script>
 
 <template>
