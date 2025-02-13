@@ -4,7 +4,7 @@ import type { BasicOption } from '@/types'
 import { computed, markRaw, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { SliderCaptcha } from '@/baseui'
+import { KingSliderCaptcha } from '@/baseui'
 import { type KingFormSchema, useKingForm } from '@/components'
 import { AuthTitle } from '@/layouts'
 import { $t } from '@/locales'
@@ -22,7 +22,7 @@ const { authLogin } = authStore
 
 const REMEMBER_ME_KEY = `_REMEMBER_ME_USERNAME_${location.hostname}`
 const localUsername = localCache.getItem(REMEMBER_ME_KEY) || ''
-const rememberMe = ref(isEmpty(localUsername))
+const rememberMe = ref(!isEmpty(localUsername))
 
 const MOCK_USER_OPTIONS: BasicOption[] = [
   {
@@ -68,14 +68,11 @@ const formSchema = computed<KingFormSchema[]>(() => [
     defaultValue: 'king',
     fieldName: 'username',
     label: $t('auth.username'),
-    rules: {
-      trigger: 'change',
-      validator: validation(
-        z
-          .string({ message: $t('auth.usernameTip', { code: true }) })
-          .min(1, { message: $t('auth.usernameTip', { code: true }) })
-      )
-    }
+    rules: validation(
+      z
+        .string({ message: $t('auth.usernameTip', { code: true }) })
+        .min(1, { message: $t('auth.usernameTip', { code: true }) })
+    )
   },
   {
     component: 'InputPassword',
@@ -85,15 +82,12 @@ const formSchema = computed<KingFormSchema[]>(() => [
     defaultValue: '123456',
     fieldName: 'password',
     label: $t('auth.password'),
-    rules: {
-      trigger: 'change',
-      validator: validation(
-        z.string().min(1, { message: $t('auth.passwordTip', { code: true }) })
-      )
-    }
+    rules: validation(
+      z.string().min(1, { message: $t('auth.passwordTip', { code: true }) })
+    )
   },
   {
-    component: markRaw(SliderCaptcha),
+    component: markRaw(KingSliderCaptcha),
     componentProps: (_values, form) => ({
       onSuccess: async ({ isPassing }: { isPassing: boolean }) => {
         if (isPassing) await form.validate(undefined, 'captcha')
@@ -101,14 +95,11 @@ const formSchema = computed<KingFormSchema[]>(() => [
     }),
     defaultValue: false,
     fieldName: 'captcha',
-    rules: {
-      trigger: 'change',
-      validator: validation(
-        z.boolean().refine((value) => !!value, {
-          message: $t('auth.verifyRequiredTip', { code: true })
-        })
-      )
-    }
+    rules: validation(
+      z.boolean().refine((value) => !!value, {
+        message: $t('auth.verifyRequiredTip', { code: true })
+      })
+    )
   }
 ])
 

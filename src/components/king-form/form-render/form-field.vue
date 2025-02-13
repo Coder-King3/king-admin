@@ -5,7 +5,7 @@ import type { Recordable } from '@/types'
 
 import { computed, type ComputedRef } from 'vue'
 
-import { RenderContent } from '@/baseui'
+import { KingRenderContent } from '@/baseui'
 import { FormItem } from '@/baseui/ep'
 import { isString } from '@/utils'
 
@@ -128,7 +128,7 @@ const fieldComponentAttrs = computed(() => {
         :key="name"
         #[name]="slotProps"
       >
-        <RenderContent
+        <KingRenderContent
           :content="customContentRender[name]"
           v-bind="slotProps"
         />

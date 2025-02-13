@@ -2,7 +2,7 @@
 import { computed, useTemplateRef } from 'vue'
 import type { CSSProperties } from 'vue'
 
-import { SpineText } from '@/baseui'
+import { KingSpineText } from '@/baseui'
 
 defineOptions({ name: 'SliderCaptchaContent' })
 
@@ -40,9 +40,9 @@ defineExpose({
     :style="style"
   >
     <slot name="text">
-      <SpineText class="h-full flex items-center">
+      <KingSpineText class="h-full flex items-center">
         {{ isPassing ? successText : text }}
-      </SpineText>
+      </KingSpineText>
     </slot>
   </div>
 </template>

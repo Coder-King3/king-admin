@@ -1,98 +1,123 @@
 <script setup lang="ts">
-import type { LayoutProps } from './layout'
+import type { MenuRecordRaw } from '@/types'
 
 import { computed } from 'vue'
 
-import { LayoutContent } from './content'
-import { LayoutFooter } from './footer'
-import { LayoutHeader } from './header'
-import { LayoutSidebar } from './sidebar'
-import { LayoutTabbar } from './tabbar'
+import { KingLogo } from '@/baseui'
+import { KingAdminLayout } from '@/components/king-layout'
+import { $t } from '@/locales'
+import { preferences, updatePreferences, usePreferences } from '@/preferences'
+import { cloneDeep, mapTree } from '@/utils'
+
+import { LayoutMenu, useMenu } from './menu'
 
 defineOptions({
   name: 'BasicLayout'
 })
 
-interface Props extends LayoutProps {}
+const {
+  // isDark,
+  isMobile
+  //   theme,
+} = usePreferences()
 
-const props = withDefaults(defineProps<Props>(), {
-  headerHeight: 50,
-  headerHidden: false,
-  sidebarHidden: false,
-  sidebarTheme: 'dark',
-  sidebarWidth: 224,
-  sideCollapseWidth: 60
+const sidebarCollapsed = computed({
+  get: () => preferences.sidebar.collapsed,
+  set(value: boolean) {
+    updatePreferences({ sidebar: { collapsed: value } })
+  }
 })
 
-/**
- * 动态获取侧边宽度
- */
-const getSidebarWidth = computed(() => {
-  const { sidebarHidden, sidebarWidth } = props
+const sidebarExpandOnHover = computed({
+  get: () => preferences.sidebar.expandOnHover,
+  set(value: boolean) {
+    updatePreferences({ sidebar: { expandOnHover: value } })
+  }
+})
 
-  let width = 0
+// const sidebarTheme = computed(() => {
+//   const dark = isDark.value
+//   // const dark = isDark.value || preferences.theme.semiDarkSidebar;
+//   return dark ? 'dark' : 'light'
+// })
 
-  if (sidebarHidden) {
-    return width
+// const headerTheme = computed(() => {
+//   const dark = isDark.value
+//   // const dark = isDark.value || preferences.theme.semiDarkHeader;
+//   return dark ? 'dark' : 'light'
+// })
+
+const isMenuRounded = computed(() => {
+  // return false
+  return preferences.navigation.styleType === 'rounded'
+})
+
+const logoCollapsed = computed(() => {
+  if (isMobile.value && sidebarCollapsed.value) {
+    return true
   }
 
-  width = sidebarWidth
-
-  return width
+  return sidebarCollapsed.value
 })
+
+const { sidebarMenus, sidebarActive, sidebarVisible } = useMenu()
+
+/**
+ * 包装菜单，翻译菜单名称
+ * @param menus 原始菜单数据
+ * @param deep 是否深度包装
+ */
+function wrapperMenus(menus: MenuRecordRaw[], deep: boolean = true) {
+  return deep
+    ? mapTree(menus, (item) => {
+        return { ...cloneDeep(item), name: $t(item.name) }
+      })
+    : menus.map((item) => {
+        return { ...cloneDeep(item), name: $t(item.name) }
+      })
+}
+
+function toggleSidebar() {
+  updatePreferences({
+    sidebar: {
+      hidden: !preferences.sidebar.hidden
+    }
+  })
+}
 </script>
 
 <template>
-  <div class="relative min-h-full w-full flex">
-    <LayoutSidebar
-      :collapse-width="sideCollapseWidth"
-      :header-height="headerHeight"
-      :width="getSidebarWidth"
-    >
-      <template #menu>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-sub-menu index="1">
-            <template #title>
-              <SvgIcon icon="ep:location" />
-              <span>Navigator One</span>
-            </template>
-            <el-menu-item-group>
-              <template #title><span>Group One</span></template>
-              <el-menu-item index="1-1">item one</el-menu-item>
-              <el-menu-item index="1-2">item two</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group Two">
-              <el-menu-item index="1-3">item three</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="1-4">
-              <template #title><span>item four</span></template>
-              <el-menu-item index="1-4-1">item one</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
-          <el-menu-item index="2">
-            <SvgIcon icon="ep:menu" />
-            <template #title>Navigator Two</template>
-          </el-menu-item>
-          <el-menu-item index="3" disabled>
-            <SvgIcon icon="ep:document" />
-
-            <template #title>Navigator Three</template>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <SvgIcon icon="ep:setting" />
-            <template #title>Navigator Four</template>
-          </el-menu-item>
-        </el-menu>
-      </template>
-    </LayoutSidebar>
-    <div class="flex flex-1 flex-col transition-all duration-300 ease-in">
-      <div class="overflow-hidden transition-all duration-200">
-        <LayoutHeader />
-        <LayoutTabbar />
-      </div>
-
-      <LayoutContent />
-      <LayoutFooter />
-    </div>
-  </div>
+  <KingAdminLayout
+    v-model:sidebar-expand-on-hover="sidebarExpandOnHover"
+    v-model:sidebar-collapse="sidebarCollapsed"
+    :sidebar-collapse-show-title="preferences.sidebar.collapsedShowTitle"
+    :sidebar-enable="sidebarVisible"
+    :sidebar-width="preferences.sidebar.width"
+    :sidebar-hidden="preferences.sidebar.hidden"
+    :is-mobile="isMobile"
+    @toggle-sidebar="toggleSidebar"
+  >
+    <!-- logo -->
+    <template #logo>
+      <KingLogo
+        v-if="preferences.logo.enable"
+        :collapsed="logoCollapsed"
+        :src="preferences.logo.source"
+        :text="preferences.app.name"
+      />
+    </template>
+    <!-- 侧边菜单区域 -->
+    <template #menu>
+      <LayoutMenu
+        :menus="wrapperMenus(sidebarMenus)"
+        :theme="preferences.theme.mode"
+        :rounded="isMenuRounded"
+        :accordion="preferences.navigation.accordion"
+        :collapse="preferences.sidebar.collapsed"
+        :collapse-show-title="preferences.sidebar.collapsedShowTitle"
+        :default-active="sidebarActive"
+        mode="vertical"
+      />
+    </template>
+  </KingAdminLayout>
 </template>

@@ -10,29 +10,10 @@ type ExRouteRecordRaw = {
   path?: any
 } & RouteRecordRaw
 
-interface MenuRecordBadgeRaw {
-  /**
-   * 徽标
-   */
-  badge?: string
-  /**
-   * 徽标类型
-   */
-  badgeType?: 'dot' | 'normal'
-  /**
-   * 徽标颜色
-   */
-  badgeVariants?: 'destructive' | 'primary' | string
-}
-
 /**
  * 菜单原始对象
  */
-interface MenuRecordRaw extends MenuRecordBadgeRaw {
-  /**
-   * 激活时的图标名
-   */
-  activeIcon?: string
+interface MenuRecordRaw {
   /**
    * 子菜单
    */
@@ -73,4 +54,4 @@ interface MenuRecordRaw extends MenuRecordBadgeRaw {
   show?: boolean
 }
 
-export type { ExRouteRecordRaw, MenuRecordBadgeRaw, MenuRecordRaw }
+export type { ExRouteRecordRaw, MenuRecordRaw }

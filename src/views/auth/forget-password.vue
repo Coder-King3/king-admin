@@ -37,15 +37,12 @@ const [Form, formApi] = useKingForm({
       label: $t('auth.email'),
       rules() {
         const ruleParams = { message: $t('auth.emailTip') }
-        return {
-          trigger: 'change',
-          validator: validation(
-            z
-              .string(ruleParams)
-              .min(1, ruleParams)
-              .email($t('auth.emailValidErrorTip'))
-          )
-        }
+        return validation(
+          z
+            .string(ruleParams)
+            .min(1, ruleParams)
+            .email($t('auth.emailValidErrorTip'))
+        )
       }
     }
   ]

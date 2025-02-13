@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick } from 'vue'
 
+import { KingIcon, KingIconButton } from '@/baseui'
 import { preferences, updatePreferences } from '@/preferences'
 
 interface Props {
@@ -71,19 +72,19 @@ const toggleTheme = async (event: MouseEvent) => {
 </script>
 
 <template>
-  <IconButton @click.stop="toggleTheme" :type="props.type">
+  <KingIconButton @click.stop="toggleTheme" :type="props.type">
     <Transition
       :name="isDark ? 'moon-fade-scale' : 'sun-fade-scale'"
       mode="out-in"
     >
       <template v-if="!isDark">
-        <SvgIcon icon="solar:moon-stars-bold" class="text-base" />
+        <KingIcon icon="solar:moon-stars-bold" class="text-base" />
       </template>
       <template v-else>
-        <SvgIcon icon="solar:sun-2-bold" class="text-base" />
+        <KingIcon icon="solar:sun-2-bold" class="text-base" />
       </template>
     </Transition>
-  </IconButton>
+  </KingIconButton>
 </template>
 
 <style lang="scss" scoped>

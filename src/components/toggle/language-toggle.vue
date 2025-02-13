@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { KingIcon, KingIconButton } from '@/baseui'
 import { SUPPORT_LANGUAGES } from '@/constants'
 import { loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
 import { preferences, updatePreferences } from '@/preferences'
@@ -31,9 +32,9 @@ async function handleUpdate(value: SupportedLanguagesType) {
 
 <template>
   <ElDropdown trigger="click" @command="handleUpdate">
-    <IconButton :type="props.type">
-      <SvgIcon icon="lucide:languages" />
-    </IconButton>
+    <KingIconButton :type="props.type">
+      <KingIcon icon="lucide:languages" />
+    </KingIconButton>
     <template #dropdown>
       <ElDropdownMenu>
         <ElDropdownItem

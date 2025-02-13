@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+import { KingIcon } from '@/baseui'
 import { APP_NAME } from '@/constants'
 import { $t } from '@/locales'
 import { preferences } from '@/preferences'
@@ -24,10 +25,8 @@ const pageDescribe = computed(() => $t('auth.description'))
     <div class="absolute left-0 top-0 z-10">
       <!--  -->
       <div class="ml-4 mt-3.5 flex items-center text-foreground">
-        <!-- 使用 SvgIcon svg方案 -->
-        <SvgIcon :icon="logo" class="mr-2 size-42px" />
-        <!-- unocss icon 动态绑定/动态icon有概率显示不出来 -->
-        <!-- <div :class="`icon-${logo}`" class="mr-2 size-42"></div> -->
+        <KingIcon :icon="logo" class="mr-2 size-42px" />
+        <!-- <SvgLogo class="mr-2 size-42px" /> -->
         <p class="text-xl font-medium">{{ appName }}</p>
       </div>
     </div>
@@ -40,7 +39,11 @@ const pageDescribe = computed(() => $t('auth.description'))
       <div class="absolute inset-0 size-full">
         <div class="login-background absolute left-0 top-0 size-full"></div>
         <div class="-enter-x z-10 mr-20 min-h-full flex-center flex-col pb-6">
-          <div icon-svg:chart-data-disk class="animate-float size-320px"></div>
+          <!-- <div icon-svg:chart-data-disk class="animate-float size-320px"></div> -->
+          <KingIcon
+            icon="svg:chart-data-disk"
+            class="animate-float size-320px"
+          />
           <div class="mt-10 text-2xl text-$el-text-color-primary font-sans">
             {{ pageTitle }}
           </div>

@@ -5,7 +5,7 @@ import type { BasicOption } from '@/types'
 import { computed, markRaw, ref } from 'vue'
 
 import { loginApi, logoutApi } from '@/api'
-import { SliderCaptcha, SvgIcon } from '@/baseui'
+import { KingIcon, KingSliderCaptcha } from '@/baseui'
 import { type KingFormProps, ThemeToggle, useKingForm } from '@/components'
 import { $t } from '@/locales'
 import { updatePreferences, usePreferences } from '@/preferences'
@@ -124,7 +124,7 @@ const formOptions: KingFormProps = {
       label: $t('auth.password')
     },
     {
-      component: markRaw(SliderCaptcha),
+      component: markRaw(KingSliderCaptcha),
       fieldName: 'captcha'
     }
   ]
@@ -192,10 +192,10 @@ function testPreferences() {
         <div icon-svg:vue-logo></div>
         <div icon-svg:logo></div>
         <div icon-svg:logo class="h-1.8em w-1.8em"></div>
-        <SvgIcon icon="mdi:account-box-multiple-outline" />
-        <SvgIcon icon="svg:logo" />
-        <SvgIcon icon="svg:vue-logo" />
-        <SvgIcon icon="solar:moon-bold" />
+        <KingIcon icon="mdi:account-box-multiple-outline" />
+        <KingIcon icon="svg:logo" />
+        <KingIcon icon="svg:vue-logo" />
+        <KingIcon icon="solar:moon-bold" />
         <ElButton type="primary" round>Login</ElButton>
         <div>
           logo
@@ -204,9 +204,9 @@ function testPreferences() {
             class="h-3em w-3em text-blue dark:text-orange"
           ></div>
         </div>
-        <!-- <IconButton>
-          <SvgIcon icon="solar:sun-2-bold"></SvgIcon>
-        </IconButton> -->
+        <!-- <KingIconButton>
+          <KingIcon icon="solar:sun-2-bold"></KingIcon>
+        </KingIconButton> -->
         <ThemeToggle />
       </div>
     </div>

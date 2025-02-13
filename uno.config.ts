@@ -70,7 +70,7 @@ const themeColors = {
   }
 }
 
-const colorPattern = `(?:\\$(H:)?[a-zA-Z-_][\\w-]*|rgba?\\([\\d\\s.,%]+\\)|hsla?\\([\\d\\s.,%]+\\)|#[0-9a-fA-F]{3,6}|[a-zA-Z]+)`
+const colorPattern = `(?:\\$(H:)?[a-zA-Z-_][\\w-]*|rgba?\\([\\d\\s.,%]+\\)|hsla?\\([\\d\\s.,%]+\\)|#[0-9a-fA-F]{3,8}|[a-zA-Z]+)`
 const borderRegex = new RegExp(`^(b|bt|bb|bl|br)-(\\d+)-(${colorPattern})$`)
 const generateBorderStyle = (match: RegExpMatchArray, borderType: string) => {
   const size = match[2] // 边框宽度

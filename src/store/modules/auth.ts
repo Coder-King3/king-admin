@@ -56,10 +56,10 @@ const useAuthStore = defineStore('auth', () => {
       router.push(DEFAULT_HOME_PATH)
 
       if (userInfo?.realName) {
-        ElNotification.success({
+        ElNotification({
           title: $t('auth.loginSuccess'),
-          message: `${$t('auth.loginSuccessDesc')}:${userInfo?.realName}`,
-          duration: 3
+          message: `${$t('auth.loginSuccessDesc')}: ${userInfo?.realName}`,
+          type: 'success'
         })
       }
     } finally {

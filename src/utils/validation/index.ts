@@ -1,3 +1,5 @@
+import type { ZodTypeAny } from 'zod'
+
 import type {
   CallbackReturnFn,
   RuleParseFn,
@@ -20,14 +22,22 @@ const callbackReturn: CallbackReturnFn = (callback, { message, success }) => {
   callback()
 }
 
-const validation: ValidationFn = (rules) => {
-  const validator: ValidatorFn = (_, value, callback) => {
-    const { success, message } = ruleParse(rules, value)
+const validation: ValidationFn = (rules, trigger = 'change') => {
+  let validator: ValidatorFn
+  if (typeof rules === 'function') {
+    validator = rules
+  } else {
+    validator = (_, value, callback) => {
+      const { success, message } = ruleParse(rules as ZodTypeAny, value)
 
-    callbackReturn(callback, { success, message })
+      callbackReturn(callback, { success, message })
+    }
   }
 
-  return validator
+  return {
+    trigger,
+    validator
+  }
 }
 
 export { callbackReturn, ruleParse, validation }

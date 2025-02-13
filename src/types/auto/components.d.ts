@@ -7,14 +7,32 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElLink: typeof import('element-plus/es')['ElLink']
     Form: typeof import('./../../components/king-form/form-render/form.vue')['default']
     FormField: typeof import('./../../components/king-form/form-render/form-field.vue')['default']
     FormLabel: typeof import('./../../components/king-form/form-render/form-label.vue')['default']
     FormMessage: typeof import('./../../components/king-form/form-render/form-message.vue')['default']
+    KingLayout: typeof import('./../../components/king-layout/king-layout.vue')['default']
     LanguageToggle: typeof import('./../../components/toggle/language-toggle.vue')['default']
+    LayoutContent: typeof import('./../../components/king-layout/components/layout-content.vue')['default']
+    LayoutFooter: typeof import('./../../components/king-layout/components/layout-footer.vue')['default']
+    LayoutHeader: typeof import('./../../components/king-layout/components/layout-header.vue')['default']
+    LayoutSidebar: typeof import('./../../components/king-layout/components/layout-sidebar.vue')['default']
+    LayoutTabbar: typeof import('./../../components/king-layout/components/layout-tabbar.vue')['default']
+    Menu: typeof import('./../../components/king-menu/menu.vue')['default']
+    MenuContent: typeof import('./../../components/king-menu/components/menu-content.vue')['default']
+    MenuItem: typeof import('./../../components/king-menu/components/menu-item.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SidebarCollapseButton: typeof import('./../../components/king-layout/components/widgets/sidebar-collapse-button.vue')['default']
+    SidebarFixedButton: typeof import('./../../components/king-layout/components/widgets/sidebar-fixed-button.vue')['default']
+    SubMenu: typeof import('./../../components/king-menu/sub-menu.vue')['default']
     ThemeToggle: typeof import('./../../components/toggle/theme-toggle.vue')['default']
   }
 }

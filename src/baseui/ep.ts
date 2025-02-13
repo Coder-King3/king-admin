@@ -11,7 +11,10 @@ export {
   ElHeader as Header,
   ElInput as Input,
   ElMain as Main,
+  ElMenu as Menu,
+  ElMenuItem as MenuItem,
   ElOption as Option,
   ElScrollbar as Scrollbar,
-  ElSelect as Select
+  ElSelect as Select,
+  ElSubMenu as SubMenu
 } from 'element-plus'

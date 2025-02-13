@@ -10,5 +10,3 @@ defineOptions({
     <!-- <img :src="king3Jpg" alt="" /> -->
   </div>
 </template>
-
-<style lang="scss" scoped></style>

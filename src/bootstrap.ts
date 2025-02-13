@@ -1,7 +1,7 @@
 import { useTitle } from '@vueuse/core'
 import { createApp, watchEffect } from 'vue'
 
-import { registerBaseUI } from '@/baseui'
+// import { registerBaseUI } from '@/baseui'
 // import { registerComponents } from "@/components";
 // import { registerDirectives } from "@/directives";
 import '@/desgin'
@@ -32,7 +32,7 @@ async function bootstrap(namespace: string) {
   app.use(router)
 
   // 注册全局组件 [Base-ui/Components]
-  registerBaseUI(app)
+  // registerBaseUI(app)
   // registerComponents(app)
 
   // 注册全局指令 [Directives]

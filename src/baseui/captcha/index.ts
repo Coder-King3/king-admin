@@ -1,1 +1,1 @@
-export { default as SliderCaptcha } from './slider-captcha/index.vue'
+export { default as KingSliderCaptcha } from './slider-captcha/index.vue'

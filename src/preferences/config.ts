@@ -16,6 +16,19 @@ const defaultPreferences: Preferences = {
     enable: true,
     source:
       'https://i0.hdslb.com/bfs/article/4e325007b5d67b61c5b510c2a409c81e627872080.png@360w_360h_1e_1c.webp'
+  },
+  navigation: {
+    accordion: true,
+    styleType: 'rounded'
+  },
+  sidebar: {
+    collapsed: false,
+    collapsedShowTitle: true,
+    enable: true,
+    expandOnHover: true,
+    extraCollapse: true,
+    hidden: false,
+    width: 224
   }
 }
 

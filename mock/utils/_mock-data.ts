@@ -58,18 +58,8 @@ const dashboardMenus = [
     },
     name: 'Dashboard',
     path: '/',
-    redirect: '/analytics',
+    redirect: '/workspace',
     children: [
-      {
-        name: 'Analytics',
-        path: '/analytics',
-        component: '/dashboard/analytics/index',
-        meta: {
-          icon: 'lucide:area-chart',
-          title: 'page.dashboard.analytics',
-          affixTab: true
-        }
-      },
       {
         name: 'Workspace',
         path: '/workspace',
@@ -77,6 +67,15 @@ const dashboardMenus = [
         meta: {
           icon: 'carbon:workspace',
           title: 'page.dashboard.workspace'
+        }
+      },
+      {
+        name: 'Analytics',
+        path: '/analytics',
+        component: '/dashboard/analytics/index',
+        meta: {
+          icon: 'lucide:area-chart',
+          title: 'page.dashboard.analytics'
         }
       }
     ]

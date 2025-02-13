@@ -2,6 +2,8 @@
 import type { CSSProperties } from 'vue'
 import { computed, ref, useTemplateRef } from 'vue'
 
+import { KingIcon } from '@/baseui'
+
 defineOptions({ name: 'SliderCaptchaAction' })
 
 const props = defineProps<{
@@ -53,8 +55,8 @@ defineExpose({
     name="captcha-action"
   >
     <slot name="icon">
-      <SvgIcon v-if="!isPassing" icon="lucide:chevrons-right" class="size-4" />
-      <SvgIcon v-else icon="lucide:check" class="size-4" />
+      <KingIcon v-if="!isPassing" icon="lucide:chevrons-right" class="size-4" />
+      <KingIcon v-else icon="lucide:check" class="size-4" />
     </slot>
   </div>
 </template>

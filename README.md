@@ -1,39 +1,53 @@
-# king-admin
+<div align="center">
+<a href="https://github.com/anncwb/vue-vben-admin"> <img alt="VbenAdmin Logo" width="215" src="https://i0.hdslb.com/bfs/article/4e325007b5d67b61c5b510c2a409c81e627872080.png@860w_720h_1e_1c.webp"> </a> <br> <br>
 
-This template should help get you started developing with Vue 3 in Vite.
+[![license](https://img.shields.io/github/license/Coder-King3/king-admin.svg)](LICENSE)
 
-## Recommended IDE Setup
+<h1>King Admin</h1>
+</div>
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 简介
 
-## Type Support for `.vue` Imports in TS
+King Admin 是一款免费开源的中后台模板，采用最新的 Vue3、Vite、TypeScript 等主流技术开发，开箱即用，可用于中后台前端开发，也适合学习参考。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 特性
 
-## Customize configuration
+- **最新技术栈**：使用 Vue3/vite 等前端前沿技术开发
+- **TypeScript**: 应用程序级 JavaScript 的语言
+- **主题**：提供多套主题色彩，可配置自定义主题
+- **国际化**：内置完善的国际化方案
+- **权限** 内置完善的动态路由权限生成方案
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 安装使用
 
-## Project Setup
+- 获取项目代码
 
-```sh
+```shell
+git clone https://github.com/Coder-King3/king-admin.git
+```
+
+- 安装依赖
+
+```shell
+cd king-admin
+
+corepack enable
+
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+- 运行
 
-```sh
+```shell
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+- 打包
 
-```sh
+```shell
 pnpm build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 维护者
 
-```sh
-pnpm lint
-```
+[@King3](https://github.com/Coder-King3)

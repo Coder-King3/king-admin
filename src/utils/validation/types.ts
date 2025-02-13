@@ -10,7 +10,11 @@ type RuleParseFn = (rules: ZodTypeAny, value: any) => ParseResult
 
 type ValidatorFn = FormItemRule['validator']
 
-type ValidationFn = (rules: ZodTypeAny) => ValidatorFn
+type Trigger = 'blur' | 'change'
+type ValidationFn = (
+  rules: ZodTypeAny | ValidatorFn,
+  trigger?: Trigger
+) => FormItemRule
 
 type CallbackReturnFn = (
   callback: (error?: Error | string) => void,

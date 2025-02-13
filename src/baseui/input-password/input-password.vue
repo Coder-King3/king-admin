@@ -3,6 +3,7 @@ import { ref, useSlots } from 'vue'
 
 import { Input } from '@/baseui/ep'
 
+import { KingIcon } from '../icons'
 import PasswordStrength from './password-strength.vue'
 
 defineOptions({ name: 'InputPassword', inheritAttrs: false })
@@ -46,8 +47,8 @@ const show = ref(false)
       }"
       @click="show = !show"
     >
-      <SvgIcon v-if="show" icon="lucide:eye" class="size-4" />
-      <SvgIcon v-else icon="lucide:eye-off" class="size-4" />
+      <KingIcon v-if="show" icon="lucide:eye" class="size-4" />
+      <KingIcon v-else icon="lucide:eye-off" class="size-4" />
     </div>
   </div>
 </template>

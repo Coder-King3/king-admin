@@ -1,12 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.json",
-  "include": ["vite.config.ts", "env.d.ts", "src/types/env.d.ts"],
   "compilerOptions": {
     "composite": false,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "lib": ["ESNext"],
     "baseUrl": "./",
     "types": ["node"],
-    "noImplicitAny": true
-  }
+    "noImplicitAny": true,
+    "noEmit": false
+  },
+  "include": ["vite.config.ts", "env.d.ts", "src/types/env.d.ts"]
 }

@@ -1,4 +1,4 @@
-import type { MenuRecordRaw } from '@/types/menu-record'
+import type { ExRouteRecordRaw, MenuRecordRaw } from '@/types'
 
 import type { Router, RouteRecordRaw } from 'vue-router'
 
@@ -18,31 +18,17 @@ async function generateMenus(
     router.getRoutes().map(({ name, path }) => [name, path])
   )
 
-  let menus = mapTree(routes, (route: any) => {
+  let menus = mapTree<ExRouteRecordRaw, MenuRecordRaw>(routes, (route) => {
     // 路由表的路径写法有多种，这里从router获取到最终的path并赋值
     const path = finalRoutesMap[route.name as string] ?? route.path
 
     // 转换为菜单结构
-    // const path = matchRoute?.path ?? route.path;
     const { meta, name: routeName, redirect, children } = route
-    const {
-      activeIcon,
-      badge,
-      badgeType,
-      badgeVariants,
-      hideChildrenInMenu = false,
-      icon,
-      link,
-      order,
-      title = ''
-    } = meta || {}
+    const { icon, order, title = '' } = meta || {}
 
     const name = (title || routeName || '') as string
 
-    // 隐藏子菜单
-    const resultChildren = hideChildrenInMenu
-      ? []
-      : (children as MenuRecordRaw[])
+    const resultChildren = children as MenuRecordRaw[]
 
     // 将菜单的所有父级和父级菜单记录到菜单项内
     if (resultChildren && resultChildren.length > 0) {
@@ -52,12 +38,9 @@ async function generateMenus(
       })
     }
     // 隐藏子菜单
-    const resultPath = hideChildrenInMenu ? redirect || path : link || path
+    const resultPath = redirect ?? path
+
     const menu = {
-      activeIcon,
-      badge,
-      badgeType,
-      badgeVariants,
       icon,
       name,
       order,
@@ -66,10 +49,10 @@ async function generateMenus(
       path: resultPath as string,
       show: !route?.meta?.hideInMenu,
       children: resultChildren || []
-    }
+    } as MenuRecordRaw
 
     return menu
-  }) as unknown as MenuRecordRaw[]
+  })
 
   // 对菜单进行排序
   menus = menus.sort((a, b) => (a.order || 999) - (b.order || 999))

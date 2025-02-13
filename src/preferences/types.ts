@@ -1,5 +1,5 @@
 import type { SupportedLanguagesType } from '@/locales'
-import type { DeepPartial, ThemeModeType } from '@/types'
+import type { DeepPartial, NavigationStyleType, ThemeModeType } from '@/types'
 
 interface AppPreferences {
   /** 支持的语言 */
@@ -26,6 +26,30 @@ interface LogoPreferences {
   source: string
 }
 
+interface NavigationPreferences {
+  /** 导航菜单手风琴模式 */
+  accordion: boolean
+  /** 导航菜单风格 */
+  styleType: NavigationStyleType
+}
+
+interface SidebarPreferences {
+  /** 侧边栏是否折叠 */
+  collapsed: boolean
+  /** 侧边栏折叠时，是否显示title */
+  collapsedShowTitle: boolean
+  /** 侧边栏是否可见 */
+  enable: boolean
+  /** 菜单自动展开状态 */
+  expandOnHover: boolean
+  /** 侧边栏扩展区域是否折叠 */
+  extraCollapse: boolean
+  /** 侧边栏是否隐藏 - css */
+  hidden: boolean
+  /** 侧边栏宽度 */
+  width: number
+}
+
 interface Preferences {
   /** 全局配置 */
   app: AppPreferences
@@ -33,6 +57,10 @@ interface Preferences {
   theme: ThemePreferences
   /** logo配置 */
   logo: LogoPreferences
+  /** 导航配置 */
+  navigation: NavigationPreferences
+  /** 侧边栏配置 */
+  sidebar: SidebarPreferences
 }
 
 type PreferencesKeys = keyof Preferences

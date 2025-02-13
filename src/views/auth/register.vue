@@ -2,7 +2,7 @@
 import { h } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { type KingFormRuleType, useKingForm } from '@/components'
+import { useKingForm } from '@/components'
 import { AuthTitle } from '@/layouts/authentication'
 import { $t } from '@/locales'
 import { callbackReturn, ruleParse, validation } from '@/utils'
@@ -30,12 +30,7 @@ const [Form, formApi] = useKingForm({
       },
       fieldName: 'username',
       label: $t('auth.username'),
-      rules: {
-        trigger: 'change',
-        validator: validation(
-          z.string().min(1, { message: $t('auth.usernameTip') })
-        )
-      }
+      rules: validation(z.string().min(1, { message: $t('auth.usernameTip') }))
     },
     {
       component: 'InputPassword',
@@ -50,12 +45,7 @@ const [Form, formApi] = useKingForm({
           strengthText: () => $t('auth.passwordStrength')
         }
       },
-      rules: {
-        trigger: 'change',
-        validator: validation(
-          z.string().min(1, { message: $t('auth.passwordTip') })
-        )
-      }
+      rules: validation(z.string().min(1, { message: $t('auth.passwordTip') }))
     },
     {
       component: 'InputPassword',
@@ -65,26 +55,44 @@ const [Form, formApi] = useKingForm({
       fieldName: 'confirmPassword',
       label: $t('auth.confirmPassword'),
       rules: (_values, form) =>
-        ({
-          trigger: 'change',
-          validator: (_, confirmPassword, callback) => {
-            const { password } = form.getValues(['password'])
+        validation((_, confirmPassword, callback) => {
+          const { password } = form.getValues(['password'])
 
-            const { message, success } = ruleParse(
-              z
-                .string({
-                  message: $t('auth.passwordTip', { code: true })
-                })
-                .min(1, { message: $t('auth.passwordTip', { code: true }) })
-                .refine((value) => value === password, {
-                  message: $t('auth.confirmPasswordTip', { code: true })
-                }),
-              confirmPassword
-            )
+          const { message, success } = ruleParse(
+            z
+              .string({
+                message: $t('auth.passwordTip', { code: true })
+              })
+              .min(1, { message: $t('auth.passwordTip', { code: true }) })
+              .refine((value) => value === password, {
+                message: $t('auth.confirmPasswordTip', { code: true })
+              }),
+            confirmPassword
+          )
 
-            callbackReturn(callback, { message, success })
-          }
-        }) as KingFormRuleType
+          callbackReturn(callback, { message, success })
+        })
+      // rules: (_values, form) =>
+      //   ({
+      //     trigger: 'change',
+      //     validator: (_, confirmPassword, callback) => {
+      //       const { password } = form.getValues(['password'])
+
+      //       const { message, success } = ruleParse(
+      //         z
+      //           .string({
+      //             message: $t('auth.passwordTip', { code: true })
+      //           })
+      //           .min(1, { message: $t('auth.passwordTip', { code: true }) })
+      //           .refine((value) => value === password, {
+      //             message: $t('auth.confirmPasswordTip', { code: true })
+      //           }),
+      //         confirmPassword
+      //       )
+
+      //       callbackReturn(callback, { message, success })
+      //     }
+      //   }) as KingFormRuleType
     },
     {
       component: 'Checkbox',
@@ -106,14 +114,11 @@ const [Form, formApi] = useKingForm({
             )
           ])
       }),
-      rules: {
-        trigger: 'change',
-        validator: validation(
-          z.boolean().refine((value) => !!value, {
-            message: $t('auth.agreeTip', { code: true })
-          })
-        )
-      }
+      rules: validation(
+        z.boolean().refine((value) => !!value, {
+          message: $t('auth.agreeTip', { code: true })
+        })
+      )
     }
   ]
 })

@@ -4,7 +4,7 @@ import { h } from 'vue'
 import type { Router } from 'vue-router'
 
 import { getAllMenusApi } from '@/api'
-import { SvgIcon } from '@/baseui'
+import { KingIcon } from '@/baseui'
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
 import { useAccessStore } from '@/store'
 import { generateAccessible, startProgress, stopProgress } from '@/utils'
@@ -75,7 +75,7 @@ function setupAccessGuard(router: Router) {
         const loading = ElMessage({
           duration: 1500,
           message: '正在加载数据...',
-          icon: h(SvgIcon, {
+          icon: h(KingIcon, {
             icon: 'line-md:loading-loop',
             class: 'text-primary'
           }),

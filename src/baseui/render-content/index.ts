@@ -1,1 +1,1 @@
-export { default as RenderContent } from './render-content.vue'
+export { default as KingRenderContent } from './render-content.vue'
