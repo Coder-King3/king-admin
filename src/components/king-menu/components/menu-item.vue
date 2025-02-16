@@ -22,7 +22,7 @@ const router = useRouter()
 
 const indexKey = computed(() => `${path.value}`)
 
-const handleTo = (path: string = '/404') => {
+const handleToPage = (path: string = '/404') => {
   router.push(path)
 }
 </script>
@@ -32,8 +32,7 @@ const handleTo = (path: string = '/404') => {
     class="king-menu-item"
     :index="indexKey"
     :disabled="disabled"
-    :route="path"
-    @click="handleTo(path)"
+    @click="handleToPage(path)"
   >
     <MenuContent :icon="icon">
       <template #title>

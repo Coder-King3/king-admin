@@ -25,7 +25,7 @@ const buttonVariants = (type: ButtonType) => {
       'inline-flex cursor-pointer items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1',
     size: 'h-8 w-8 rounded-full px-1 text-sm',
     variant:
-      'border-none bg-transparent text-foreground/90 hover:text-foreground'
+      'border-none bg-transparent text-foreground/85 hover:text-foreground'
   }
 
   if (type === 'normal')

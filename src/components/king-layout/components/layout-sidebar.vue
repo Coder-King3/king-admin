@@ -139,12 +139,12 @@ function handleMouseleave() {
   <div
     v-if="domVisible"
     :style="hiddenSideStyle"
-    class="h-full transition-all duration-150"
+    class="h-full transition-all"
   ></div>
 
   <Aside
     :style="style"
-    class="fixed left-0 top-0 h-full bg-sidebar transition-all duration-150 br-1-$H:border"
+    class="fixed left-0 top-0 h-full bg-sidebar transition-all br-1-$H:border"
     @mouseenter="handleMouseenter"
     @mouseleave="handleMouseleave"
   >

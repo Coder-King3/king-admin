@@ -20,8 +20,17 @@ const props = withDefaults(defineProps<Props>(), {
   popperOffset: 12
 })
 
-const { rounded, mode, collapse, theme, collapseShowTitle, popperOffset } =
-  toRefs(props)
+const {
+  rounded,
+  mode,
+  collapse,
+  theme,
+  collapseShowTitle,
+  popperOffset,
+  defaultActive
+} = toRefs(props)
+
+const activePath = computed(() => defaultActive.value)
 
 const is = (name: string, condition?: boolean) => {
   return name && condition ? `is-${name}` : ''
@@ -44,7 +53,6 @@ const menuClassNames = computed(() => {
 })
 
 const menuPopperClassNames = computed(() =>
-  // cn(menuClassName, `${menuClassName}__popup`, [...menuClassNames.value])
   cn(menuClassName, `${menuClassName}__popup`, [...isStateClassNames.value])
 )
 </script>
@@ -55,10 +63,10 @@ const menuPopperClassNames = computed(() =>
     :collapse-transition="false"
     :popper-class="menuPopperClassNames"
     :popper-offset="popperOffset"
-    :mode="mode"
     :unique-opened="accordion"
+    :mode="mode"
     :collapse="collapse"
-    :default-active="defaultActive"
+    :default-active="activePath"
   >
     <slot></slot>
   </Menu>
@@ -130,6 +138,7 @@ $namespace: king;
   text-decoration: none;
   cursor: pointer;
   border-radius: var(--menu-content-radius);
+  transition: all 300ms;
 
   &:hover #{$content-selector}__icon {
     transform: scale(1.2);
@@ -151,7 +160,7 @@ $namespace: king;
       margin-right: 8px;
       text-align: center;
       vertical-align: middle;
-      transition: transform 0.25s !important;
+      transition: transform 250ms !important;
     }
   }
 }
@@ -172,6 +181,7 @@ $namespace: king;
 
   // 垂直菜单
   &.is-vertical {
+    transition: all 300ms;
     &:not(.is-collapse) > #{$sub-menu-title-selector} {
       padding-left: calc(
         var(--menu-content-indent) - var(--menu-content-margin)
@@ -193,13 +203,15 @@ $namespace: king;
     }
 
     .#{$namespace}-menu-content__title {
-      display: none; // display: inline-flex;
+      display: inline-flex;
       flex-shrink: 0;
-      margin-top: 8px;
+      height: 0 !important;
+      margin-top: 0;
       font-size: 12px;
       font-weight: 400;
       line-height: normal;
-      transition: all 0.25s ease;
+      opacity: 0 !important;
+      transition: all 250ms ease !important;
     }
 
     #{$sub-menu-title-selector},
@@ -209,7 +221,6 @@ $namespace: king;
       align-items: center;
       justify-content: center;
       padding: 0 var(--menu-content-indent) !important;
-      transition: all 0.3s;
     }
 
     .#{$namespace}-sub-menu.is-active > .el-sub-menu__title,
@@ -219,7 +230,9 @@ $namespace: king;
 
     &.is-collapse-show-title {
       .#{$namespace}-menu-content__title {
-        display: inline-flex !important;
+        height: auto !important;
+        margin-top: 8px !important;
+        opacity: 1 !important;
       }
 
       #{$sub-menu-title-selector} {

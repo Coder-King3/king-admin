@@ -157,17 +157,16 @@ function handleHeaderToggle() {
           </template>
 
           <template #toggle-button>
-            <KingIconButton
-              class="my-0 mr-1 rounded-md"
-              @click="handleHeaderToggle"
-            >
+            <KingIconButton class="mr-1 rounded-md" @click="handleHeaderToggle">
               <LucideMenu class="size-4" />
             </KingIconButton>
           </template>
 
           <slot name="header"></slot>
         </LayoutHeader>
-        <LayoutTabbar />
+        <LayoutTabbar>
+          <slot name="tabbar"></slot>
+        </LayoutTabbar>
       </div>
 
       <LayoutContent />

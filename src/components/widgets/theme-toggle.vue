@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick } from 'vue'
+import { computed, nextTick, toRefs } from 'vue'
 
 import { KingIcon, KingIconButton } from '@/baseui'
 import { preferences, updatePreferences } from '@/preferences'
@@ -14,8 +14,10 @@ interface Props {
 defineOptions({ name: 'ThemeButton' })
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'icon'
+  type: 'normal'
 })
+
+const { type } = toRefs(props)
 
 const isDark = computed({
   get() {
@@ -72,7 +74,7 @@ const toggleTheme = async (event: MouseEvent) => {
 </script>
 
 <template>
-  <KingIconButton @click.stop="toggleTheme" :type="props.type">
+  <KingIconButton @click.stop="toggleTheme" :type="type">
     <Transition
       :name="isDark ? 'moon-fade-scale' : 'sun-fade-scale'"
       mode="out-in"

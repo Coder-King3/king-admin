@@ -34,11 +34,6 @@ interface MenuProps {
   defaultActive?: string
 
   /**
-   * 默认展开的菜单
-   */
-  // defaultOpeneds?: string[]
-
-  /**
    * 菜单模式
    * @default vertical
    */

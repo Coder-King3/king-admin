@@ -37,9 +37,7 @@ async function readPackageJSON(root: string): Promise<PackageJson> {
 /**
  * Vite 注入项目信息插件
  */
-export async function viteMetadataPlugin(
-  root = process.cwd()
-): Promise<PluginOption> {
+async function viteMetadataPlugin(root = process.cwd()): Promise<PluginOption> {
   const { author, homepage, license, version } = await readPackageJSON(root)
 
   return {

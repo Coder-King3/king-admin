@@ -42,8 +42,8 @@ const hasChildren = computed(() => {
   </MenuItem>
   <SubMenuComp
     v-else
-    :key="`${menu.path}_sub`"
     :index="`${menu.path}_sub`"
+    :key="`${menu.path}_sub`"
     :icon="menu.icon"
   >
     <template #title>

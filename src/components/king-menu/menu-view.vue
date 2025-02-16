@@ -6,7 +6,7 @@ import type { MenuRecordRaw } from '@/types'
 import { computed } from 'vue'
 
 import { Menu } from './components'
-import SubMenu from './sub-menu.vue'
+import SubMenuUi from './sub-menu-ui.vue'
 
 defineOptions({ name: 'MenuView' })
 
@@ -32,7 +32,7 @@ const menuProps = computed(() => ({
 <template>
   <Menu v-bind="menuProps">
     <template v-for="menu in menus" :key="menu.path">
-      <SubMenu :menu="menu" />
+      <SubMenuUi :menu="menu" />
     </template>
   </Menu>
 </template>

@@ -58,7 +58,7 @@ function mapTree<T, V extends Record<string, any>>(
 }
 
 /**
- * @zh_CN 遍历树形结构，并返回所有节点中指定的值。
+ * 遍历树形结构，并返回所有节点中指定的值。
  * @param tree 树形结构数组
  * @param getValue 获取节点值的函数
  * @param options 作为子节点数组的可选属性名称。
@@ -94,4 +94,33 @@ function traverseTreeValues<T, V>(
   return result.filter(Boolean)
 }
 
-export { filterTree, mapTree, traverseTreeValues }
+/**
+ * 遍历树形结构，并返回所有节点中指定的值。
+ * @param tree 树形结构数组
+ * @param getValue 获取节点值的函数
+ * @param options 作为子节点数组的可选属性名称。
+ * @returns 所有节点中指定的值的数组
+ */
+function findNodeInTree<T extends Record<string, any> = Record<string, any>>(
+  tree: T[],
+  find: (node: T) => boolean, // 传入一个回调函数用于匹配节点
+  options?: TreeConfigOptions
+): T | null {
+  const { childProps } = options || { childProps: 'children' }
+
+  const _findNode = (nodes: T[]): T | null => {
+    for (const node of nodes) {
+      if (find(node)) {
+        return node // 找到匹配的节点
+      } else if (node[childProps]) {
+        const found = _findNode(node[childProps])
+        if (found) return found // 递归查找子节点
+      }
+    }
+    return null // 未找到匹配项
+  }
+
+  return _findNode(tree)
+}
+
+export { filterTree, findNodeInTree, mapTree, traverseTreeValues }

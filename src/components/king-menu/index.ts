@@ -1,3 +1,3 @@
-export { default as KingMenu } from './menu.vue'
+export { default as KingMenu } from './menu-view.vue'
 
 export * from './types'

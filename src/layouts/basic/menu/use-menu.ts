@@ -6,6 +6,7 @@ import { useAccessStore } from '@/store'
 
 function useMenu() {
   const route = useRoute()
+
   const accessStore = useAccessStore()
 
   const sidebarVisible = computed(() => {

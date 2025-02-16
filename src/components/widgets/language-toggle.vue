@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { toRefs } from 'vue'
+
 import { KingIcon, KingIconButton } from '@/baseui'
 import { SUPPORT_LANGUAGES } from '@/constants'
 import { loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
@@ -14,8 +16,10 @@ interface Props {
 defineOptions({ name: 'LanguageToggle' })
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'icon'
+  type: 'normal'
 })
+
+const { type } = toRefs(props)
 
 async function handleUpdate(value: SupportedLanguagesType) {
   const locale = value as SupportedLanguagesType
@@ -32,7 +36,7 @@ async function handleUpdate(value: SupportedLanguagesType) {
 
 <template>
   <ElDropdown trigger="click" @command="handleUpdate">
-    <KingIconButton :type="props.type">
+    <KingIconButton :type="type">
       <KingIcon icon="lucide:languages" />
     </KingIconButton>
     <template #dropdown>

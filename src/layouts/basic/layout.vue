@@ -9,6 +9,7 @@ import { $t } from '@/locales'
 import { preferences, updatePreferences, usePreferences } from '@/preferences'
 import { cloneDeep, mapTree } from '@/utils'
 
+import { LayoutHeader } from './header'
 import { LayoutMenu, useMenu } from './menu'
 
 defineOptions({
@@ -118,6 +119,10 @@ function toggleSidebar() {
         :default-active="sidebarActive"
         mode="vertical"
       />
+    </template>
+
+    <template #header>
+      <LayoutHeader />
     </template>
   </KingAdminLayout>
 </template>
