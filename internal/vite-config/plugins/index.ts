@@ -10,12 +10,10 @@ import viteVueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import viteVue from '@vitejs/plugin-vue'
 import ViteUnoCSS from 'unocss/vite'
 import ViteAutoImport from 'unplugin-auto-import/vite'
-// import ViteUnpluginIcons from 'unplugin-icons/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import ViteVueComponents from 'unplugin-vue-components/vite'
 import viteCompressPlugin from 'vite-plugin-compression'
 import { createHtmlPlugin as viteHtmlPlugin } from 'vite-plugin-html'
-// import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import { viteMockServe as viteMockServePlugin } from 'vite-plugin-mock'
 import {
   createStyleImportPlugin,
@@ -48,10 +46,13 @@ async function loadCommonPlugins(
   options: CommonPluginOptions
 ): Promise<ConditionPlugin[]> {
   const { devtools, injectMetadata, isBuild, paths = {} } = options
+
+  const currAutoPrefix = '../../../types/auto'
   const {
-    autoImportDtsUrl = getPathURL('../../../types//auto/auto-imports.d.ts'),
-    componentsDtsUrl = getPathURL('../../../types//auto/components.d.ts')
+    autoImportDtsUrl = getPathURL(`${currAutoPrefix}/auto-imports.d.t`),
+    componentsDtsUrl = getPathURL(`${currAutoPrefix}/components.d.ts`)
   } = paths
+
   return [
     {
       condition: true,
@@ -119,7 +120,10 @@ async function loadApplicationPlugins(
 ): Promise<PluginOption[]> {
   // 单独取，否则commonOptions拿不到
   const isBuild = options.isBuild
-  const { mockServeDirUrl = getPathURL('../../../mock') } = options.paths || {}
+  const currRootPrefix = '../../..'
+
+  const { mockServeDirUrl = getPathURL(`${currRootPrefix}/mock`) } =
+    options.paths || {}
 
   const {
     compress,

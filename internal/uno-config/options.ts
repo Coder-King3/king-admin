@@ -1,10 +1,12 @@
 import type { UserConfig } from 'unocss'
 
-import presetAttributify from '@unocss/preset-attributify'
-import presetTypography from '@unocss/preset-typography'
-import presetUno from '@unocss/preset-uno'
-import transformerDirectives from '@unocss/transformer-directives'
-import transformerVariantGroup from '@unocss/transformer-variant-group'
+import {
+  presetAttributify,
+  presetTypography,
+  presetUno,
+  transformerDirectives,
+  transformerVariantGroup
+} from 'unocss'
 
 const commonConfig: UserConfig = {
   // 预设
