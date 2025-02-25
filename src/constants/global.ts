@@ -1,7 +1,7 @@
 /**
  * 应用名称
  */
-const APP_NAME: string = import.meta.env.VITE_APP_NAME
+const APP_TITLE: string = import.meta.env.VITE_APP_TITLE
 
 /**
  * 项目版本
@@ -33,8 +33,8 @@ const SUPPORT_LANGUAGES: LanguageOption[] = [
 ]
 
 export {
-  APP_NAME,
   APP_NAMESPACE,
+  APP_TITLE,
   APP_VERSION,
   type LanguageOption,
   SUPPORT_LANGUAGES

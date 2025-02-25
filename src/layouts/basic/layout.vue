@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MenuRecordRaw } from '@/types'
+import type { MenuRecordRaw } from '~/types'
 
 import { computed } from 'vue'
 
@@ -61,7 +61,7 @@ const logoCollapsed = computed(() => {
   return sidebarCollapsed.value
 })
 
-const { sidebarMenus, sidebarActive, sidebarVisible } = useMenu()
+const { sidebarActive, sidebarMenus, sidebarVisible } = useMenu()
 
 /**
  * 包装菜单，翻译菜单名称

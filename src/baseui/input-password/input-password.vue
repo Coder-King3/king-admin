@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, useSlots } from 'vue'
+import { ref } from 'vue'
 
-import { Input } from '@/baseui/ep'
-
-import { KingIcon } from '../icons'
+import { KingIcon } from '../icon'
 import PasswordStrength from './password-strength.vue'
 
-defineOptions({ name: 'InputPassword', inheritAttrs: false })
+defineOptions({
+  name: 'InputPassword',
+  // eslint-disable-next-line perfectionist/sort-objects
+  inheritAttrs: false
+})
 
 interface Props {
   class?: any
@@ -20,14 +22,14 @@ const props = defineProps<Props>()
 
 const modelValue = defineModel<string>()
 
-const slots = useSlots()
+// const slots = useSlots()
 
 const show = ref(false)
 </script>
 
 <template>
   <div class="relative w-full">
-    <Input
+    <ElInput
       v-bind="$attrs"
       v-model="modelValue"
       :class="props.class"
@@ -35,7 +37,10 @@ const show = ref(false)
     />
     <template v-if="passwordStrength">
       <PasswordStrength :password="modelValue" />
-      <p v-if="slots.strengthText" class="mt-1.5 text-xs text-muted-foreground">
+      <p
+        v-if="$slots.strengthText"
+        class="mt-1.5 text-xs text-muted-foreground"
+      >
         <slot name="strengthText"> </slot>
       </p>
     </template>

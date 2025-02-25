@@ -1,4 +1,4 @@
-import type { Recordable } from '@/types'
+import type { Recordable } from '~/types'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -29,7 +29,7 @@ const useAuthStore = defineStore('auth', () => {
 
   // 异步处理登录操作
   async function authLogin(params: Recordable) {
-    let userInfo: null | BasicUserInfo = null
+    let userInfo: BasicUserInfo | null = null
 
     try {
       loginLoading.value = true
@@ -57,8 +57,8 @@ const useAuthStore = defineStore('auth', () => {
 
       if (userInfo?.realName) {
         ElNotification({
-          title: $t('auth.loginSuccess'),
           message: `${$t('auth.loginSuccessDesc')}: ${userInfo?.realName}`,
+          title: $t('auth.loginSuccess'),
           type: 'success'
         })
       }
@@ -92,7 +92,7 @@ const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | BasicUserInfo = null
+    let userInfo: BasicUserInfo | null = null
     userInfo = await getUserInfoApi()
     userStore.setUserInfo(userInfo)
     return userInfo
@@ -100,9 +100,9 @@ const useAuthStore = defineStore('auth', () => {
 
   return {
     authLogin,
-    logout,
     fetchUserInfo,
-    loginLoading
+    loginLoading,
+    logout
   }
 })
 

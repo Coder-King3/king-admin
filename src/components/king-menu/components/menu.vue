@@ -3,7 +3,6 @@ import type { MenuProps } from '../types'
 
 import { computed, toRefs } from 'vue'
 
-import { Menu } from '@/baseui/ep'
 import { cn } from '@/utils'
 
 defineOptions({ name: 'KingMenu' })
@@ -15,19 +14,19 @@ interface Props extends MenuProps {
 const props = withDefaults(defineProps<Props>(), {
   accordion: true,
   mode: 'vertical',
+  popperOffset: 12,
   rounded: true,
-  theme: 'light',
-  popperOffset: 12
+  theme: 'light'
 })
 
 const {
-  rounded,
-  mode,
   collapse,
-  theme,
   collapseShowTitle,
+  defaultActive,
+  mode,
   popperOffset,
-  defaultActive
+  rounded,
+  theme
 } = toRefs(props)
 
 const activePath = computed(() => defaultActive.value)
@@ -58,7 +57,7 @@ const menuPopperClassNames = computed(() =>
 </script>
 
 <template>
-  <Menu
+  <ElMenu
     :class="menuClassNames"
     :collapse-transition="false"
     :popper-class="menuPopperClassNames"
@@ -69,7 +68,7 @@ const menuPopperClassNames = computed(() =>
     :default-active="activePath"
   >
     <slot></slot>
-  </Menu>
+  </ElMenu>
 </template>
 
 <style lang="scss">

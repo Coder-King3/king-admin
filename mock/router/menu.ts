@@ -3,7 +3,7 @@ import type { MockMethod } from 'vite-plugin-mock'
 import {
   MOCK_MENUS,
   prependPrefix,
-  requestParams,
+  type requestParams,
   useResponseError,
   useResponseSuccess,
   verifyAccessToken
@@ -11,7 +11,6 @@ import {
 
 const routes: MockMethod[] = [
   {
-    url: prependPrefix('/menu/all'),
     method: 'get',
     response: (request: requestParams) => {
       const userinfo = verifyAccessToken(request)
@@ -24,7 +23,8 @@ const routes: MockMethod[] = [
         []
 
       return useResponseSuccess(menus)
-    }
+    },
+    url: prependPrefix('/menu/all')
   }
 ]
 

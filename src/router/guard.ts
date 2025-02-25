@@ -1,4 +1,4 @@
-import type { ComponentRecordType } from '@/types'
+import type { ComponentRecordType } from '~/types'
 
 import { h } from 'vue'
 import type { Router } from 'vue-router'
@@ -70,16 +70,15 @@ function setupAccessGuard(router: Router) {
       BasicLayout: () => import('@/layouts/basic/layout.vue')
     }
     const { accessibleMenus, accessibleRoutes } = await generateAccessible({
-      router,
       fetchMenuListAsync: async () => {
         const loading = ElMessage({
+          customClass: '[&>.el-icon]:text-xl',
           duration: 1500,
-          message: '正在加载数据...',
           icon: h(KingIcon, {
-            icon: 'line-md:loading-loop',
-            class: 'text-primary'
+            class: 'text-primary',
+            icon: 'line-md:loading-loop'
           }),
-          customClass: '[&>.el-icon]:text-xl'
+          message: '正在加载数据...'
         })
 
         const menuList = await getAllMenusApi()
@@ -88,7 +87,8 @@ function setupAccessGuard(router: Router) {
         return menuList
       },
       layoutMap,
-      pageMap
+      pageMap,
+      router
     })
     // 保存菜单信息和路由信息
     accessStore.setAccessMenus(accessibleMenus)

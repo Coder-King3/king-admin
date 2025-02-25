@@ -12,7 +12,7 @@ type ValidatorFn = FormItemRule['validator']
 
 type Trigger = 'blur' | 'change'
 type ValidationFn = (
-  rules: ZodTypeAny | ValidatorFn,
+  rules: ValidatorFn | ZodTypeAny,
   trigger?: Trigger
 ) => FormItemRule
 

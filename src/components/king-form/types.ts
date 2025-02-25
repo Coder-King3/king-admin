@@ -2,7 +2,7 @@ import type { FormItemRule } from 'element-plus'
 
 import type { FormApiInstance } from './form-api'
 
-import type { Recordable } from '@/types'
+import type { Recordable } from '~/types'
 
 import type { Component } from 'vue'
 
@@ -19,7 +19,7 @@ export type BaseFormApiFnType = (
 
 export interface FormCommonConfig {
   /** 所有组件的共用参数 */
-  componentProps?: Recordable | BaseFormApiFnType
+  componentProps?: BaseFormApiFnType | Recordable
 
   /** 隐藏所有表单项label */
   disabled?: boolean
@@ -41,7 +41,7 @@ export interface FormSchema extends FormCommonConfig {
   /** 组件 */
   component: BaseFormComponentType | Component
   /** 组件参数 */
-  componentProps?: Recordable | BaseFormApiFnType
+  componentProps?: BaseFormApiFnType | Recordable
   /** 默认值 */
   defaultValue?: any
   /** 依赖 */
@@ -55,7 +55,7 @@ export interface FormSchema extends FormCommonConfig {
   // 自定义组件内部渲染
   renderComponentContent?: RenderComponentContentType
   /** 字段规则 - (参考 element-plus 文档) */
-  rules?: FormRuleType | BaseFormApiFnType
+  rules?: BaseFormApiFnType | FormRuleType
 }
 
 export interface FormRenderProps {

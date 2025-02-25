@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MenuRecordRaw } from '@/types'
+import type { MenuRecordRaw } from '~/types'
 
 import { KingMenu, type MenuProps } from '@/components'
 

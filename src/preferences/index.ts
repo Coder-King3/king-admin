@@ -1,6 +1,6 @@
 import type { Preferences } from './types'
 
-import type { DeepPartial } from '@/types'
+import type { DeepPartial } from '~/types'
 
 import { preferencesManager } from './preferences'
 

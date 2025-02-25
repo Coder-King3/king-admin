@@ -2,11 +2,10 @@
 import type { FormApiInstance } from '../form-api'
 import type { BaseFormApiFnType } from '../types'
 
-import type { Recordable } from '@/types'
+import type { Recordable } from '~/types'
 
 import { computed, useTemplateRef } from 'vue'
 
-import { Form } from '@/baseui/ep'
 import { isFunction } from '@/utils'
 
 import FormField from './form-field.vue'
@@ -31,12 +30,12 @@ formApi?.mount?.(formRef)
 
 const formProps = computed<Recordable>(() => ({
   ...options.value.formProps,
+  inline: isHorizontal.value,
   model: state,
-  rules: options.value.rules || {},
-  inline: isHorizontal.value
+  rules: options.value.rules || {}
 }))
 
-const getSchemaItemConfig = (schemaItem?: Recordable | BaseFormApiFnType) =>
+const getSchemaItemConfig = (schemaItem?: BaseFormApiFnType | Recordable) =>
   isFunction(schemaItem)
     ? getItemApiConfig(schemaItem as BaseFormApiFnType).value
     : schemaItem || {}
@@ -68,18 +67,18 @@ const computedSchema = computed(() => {
 
     return {
       ...schema,
-      rules: resolvedItemRules,
       componentProps,
       disabled,
       formItemProps,
-      hideLabel
+      hideLabel,
+      rules: resolvedItemRules
     }
   })
 })
 </script>
 
 <template>
-  <Form ref="formRef" v-bind="formProps">
+  <ElForm ref="formRef" v-bind="formProps">
     <template v-for="cSchema in computedSchema" :key="cSchema.fieldName">
       <FormField
         v-bind="cSchema"
@@ -95,7 +94,7 @@ const computedSchema = computed(() => {
         </template>
       </FormField>
     </template>
-  </Form>
+  </ElForm>
 </template>
 
 <style lang="scss" scoped></style>

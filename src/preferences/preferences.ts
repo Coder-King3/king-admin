@@ -1,6 +1,6 @@
 import type { InitialOptions, Preferences } from './types'
 
-import type { DeepPartial } from '@/types'
+import type { DeepPartial } from '~/types'
 
 import {
   breakpointsTailwind,
@@ -36,62 +36,6 @@ class PreferenceManager {
     )
   }
 
-  /**
-   * 保存偏好设置
-   * @param {Preferences} preference - 需要保存的偏好设置
-   */
-  private _savePreferences(preference: Preferences) {
-    this.cache?.setItem(STORAGE_KEY, preference)
-    this.cache?.setItem(STORAGE_KEY_LOCALE, preference.app.locale)
-    this.cache?.setItem(STORAGE_KEY_THEME, preference.theme.mode)
-  }
-
-  /**
-   *  从缓存中加载偏好设置。如果缓存中没有找到对应的偏好设置，则返回默认偏好设置。
-   */
-  private loadCachedPreferences() {
-    return this.cache?.getItem<Preferences>(STORAGE_KEY)
-  }
-
-  /**
-   * 加载偏好设置
-   * @returns {Preferences} 加载的偏好设置
-   */
-  private loadPreferences(): Preferences {
-    return this.loadCachedPreferences() || { ...defaultPreferences }
-  }
-
-  /**
-   * 监听状态和系统偏好设置的变化。
-   */
-  private setupWatcher() {
-    if (this.isInitialized) {
-      return
-    }
-
-    // 监听断点，判断是否移动端
-    const breakpoints = useBreakpoints(breakpointsTailwind)
-    const isMobile = breakpoints.smaller('md')
-    watch(
-      () => isMobile.value,
-      (val) => {
-        this.updatePreferences({
-          app: { isMobile: val }
-        })
-      },
-      { immediate: true }
-    )
-
-    // 监听系统主题偏好设置变化
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', ({ matches: isDark }) => {
-        this.updatePreferences({
-          theme: { mode: isDark ? 'dark' : 'light' }
-        })
-      })
-  }
-
   clearCache() {
     ;[STORAGE_KEY, STORAGE_KEY_LOCALE, STORAGE_KEY_THEME].forEach((key) => {
       this.cache?.removeItem(key)
@@ -104,26 +48,6 @@ class PreferenceManager {
 
   public getPreferences() {
     return readonly(this.state)
-  }
-
-  /**
-   * 处理更新的键值
-   * 根据更新的键值执行相应的操作。
-   * @param {DeepPartial<Preferences>} updates - 部分更新的偏好设置
-   */
-  private handleUpdates(updates: DeepPartial<Preferences>) {
-    const themeUpdates = updates.theme || {}
-    // const appUpdates = updates.app || {};
-    if (themeUpdates && Object.keys(themeUpdates).length > 0) {
-      updateCSSVariables(this.state)
-    }
-
-    // if (
-    //   Reflect.has(appUpdates, 'colorGrayMode') ||
-    //   Reflect.has(appUpdates, 'colorWeakMode')
-    // ) {
-    //   this.updateColorMode(this.state);
-    // }
   }
 
   /**
@@ -182,6 +106,82 @@ class PreferenceManager {
     // 根据更新的键值执行相应的操作
     this.handleUpdates(updates)
     this.savePreferences(this.state)
+  }
+
+  /**
+   * 保存偏好设置
+   * @param {Preferences} preference - 需要保存的偏好设置
+   */
+  private _savePreferences(preference: Preferences) {
+    this.cache?.setItem(STORAGE_KEY, preference)
+    this.cache?.setItem(STORAGE_KEY_LOCALE, preference.app.locale)
+    this.cache?.setItem(STORAGE_KEY_THEME, preference.theme.mode)
+  }
+
+  /**
+   * 处理更新的键值
+   * 根据更新的键值执行相应的操作。
+   * @param {DeepPartial<Preferences>} updates - 部分更新的偏好设置
+   */
+  private handleUpdates(updates: DeepPartial<Preferences>) {
+    const themeUpdates = updates.theme || {}
+    // const appUpdates = updates.app || {};
+    if (themeUpdates && Object.keys(themeUpdates).length > 0) {
+      updateCSSVariables(this.state)
+    }
+
+    // if (
+    //   Reflect.has(appUpdates, 'colorGrayMode') ||
+    //   Reflect.has(appUpdates, 'colorWeakMode')
+    // ) {
+    //   this.updateColorMode(this.state);
+    // }
+  }
+
+  /**
+   *  从缓存中加载偏好设置。如果缓存中没有找到对应的偏好设置，则返回默认偏好设置。
+   */
+  private loadCachedPreferences() {
+    return this.cache?.getItem<Preferences>(STORAGE_KEY)
+  }
+
+  /**
+   * 加载偏好设置
+   * @returns {Preferences} 加载的偏好设置
+   */
+  private loadPreferences(): Preferences {
+    return this.loadCachedPreferences() || { ...defaultPreferences }
+  }
+
+  /**
+   * 监听状态和系统偏好设置的变化。
+   */
+  private setupWatcher() {
+    if (this.isInitialized) {
+      return
+    }
+
+    // 监听断点，判断是否移动端
+    const breakpoints = useBreakpoints(breakpointsTailwind)
+    const isMobile = breakpoints.smaller('md')
+    watch(
+      () => isMobile.value,
+      (val) => {
+        this.updatePreferences({
+          app: { isMobile: val }
+        })
+      },
+      { immediate: true }
+    )
+
+    // 监听系统主题偏好设置变化
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', ({ matches: isDark }) => {
+        this.updatePreferences({
+          theme: { mode: isDark ? 'dark' : 'light' }
+        })
+      })
   }
 }
 

@@ -2,7 +2,6 @@
 import { computed, type CSSProperties } from 'vue'
 
 import { KingScrollbar } from '@/baseui'
-import { Aside } from '@/baseui/ep'
 
 import { SidebarCollapseButton, SidebarFixedButton } from './widgets'
 
@@ -45,8 +44,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   collapseHeight: 42,
   collapseWidth: 60,
-  show: true,
   domVisible: true,
+  show: true,
   zIndex: 0
 })
 
@@ -89,7 +88,7 @@ const collapseStyle = computed((): CSSProperties => {
 })
 
 function calcMenuWidthStyle(isHiddenDom: boolean): CSSProperties {
-  const { width, show } = props
+  const { show, width } = props
 
   let widthValue = width === 0 ? '0px' : `${width}px`
 
@@ -142,7 +141,7 @@ function handleMouseleave() {
     class="h-full transition-all"
   ></div>
 
-  <Aside
+  <ElAside
     :style="style"
     class="fixed left-0 top-0 h-full bg-sidebar transition-all br-1-$H:border"
     @mouseenter="handleMouseenter"
@@ -164,7 +163,7 @@ function handleMouseleave() {
     <SidebarCollapseButton v-if="domVisible" v-model:collapsed="collapse" />
 
     <div :style="collapseStyle"></div>
-  </Aside>
+  </ElAside>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { FormSchema, RenderComponentContentType } from '../types'
 
-import type { Recordable } from '@/types'
+import type { Recordable } from '~/types'
 
 import { computed, type ComputedRef } from 'vue'
 
 import { KingRenderContent } from '@/baseui'
-import { FormItem } from '@/baseui/ep'
 import { isString } from '@/utils'
 
 import { componentMap } from '../config'
@@ -108,7 +107,7 @@ const fieldComponentAttrs = computed(() => {
 </script>
 
 <template>
-  <FormItem v-bind="fieldProps">
+  <ElFormItem v-bind="fieldProps">
     <!-- Label -->
     <template v-if="!hideLabel" #label>
       <FormLabel>
@@ -141,5 +140,5 @@ const fieldComponentAttrs = computed(() => {
         <FormMessage :error="error" />
       </Transition>
     </template>
-  </FormItem>
+  </ElFormItem>
 </template>

@@ -20,8 +20,9 @@ export function useKingForm(options: KingFormProps): [
       return () => h(KingForm, { ...props, ...attrs, formApi }, slots)
     },
     {
-      inheritAttrs: false,
-      name: 'KingUseForm'
+      name: 'KingUseForm',
+      // eslint-disable-next-line perfectionist/sort-objects
+      inheritAttrs: false
     }
   )
   // Add reactivity support

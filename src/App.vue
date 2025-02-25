@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-import { APP_NAME, APP_VERSION } from '@/constants'
+import { APP_TITLE, APP_VERSION } from '@/constants'
+
+import { elementLocale } from './locales'
 
 /*
 declare global {
@@ -23,7 +25,7 @@ const printProjectInfo = async () => {
 
   // eslint-disable-next-line no-console
   console.log(
-    `%c ${APP_NAME} %c V${APP_VERSION} `,
+    `%c ${APP_TITLE} %c V${APP_VERSION} `,
     createInfoStyle('3px 0 0 3px', '#6169FF'),
     createInfoStyle('0 3px 3px 0', '#42c02e')
   )
@@ -35,7 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ElConfigProvider>
+  <ElConfigProvider :locale="elementLocale">
     <RouterView />
   </ElConfigProvider>
 </template>

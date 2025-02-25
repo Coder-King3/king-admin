@@ -1,5 +1,5 @@
 export * from './captcha'
-export * from './icons'
+export * from './icon'
 export * from './input-password'
 export * from './logo'
 export * from './logo'

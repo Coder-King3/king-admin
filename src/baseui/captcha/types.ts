@@ -1,4 +1,4 @@
-import type { ClassType } from '@/types'
+import type { ClassType } from '~/types'
 
 import type { CSSProperties } from 'vue'
 

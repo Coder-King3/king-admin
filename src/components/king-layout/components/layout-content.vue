@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 
-import { Main } from '@/baseui/ep'
-
 // 页面切换动画
 function getTransitionName(_route: RouteLocationNormalizedLoaded) {
   // 如果偏好设置未设置，则不使用动画
@@ -23,7 +21,7 @@ function getTransitionName(_route: RouteLocationNormalizedLoaded) {
 </script>
 
 <template>
-  <Main class="relative bg-background-deep p-0">
+  <ElMain class="relative bg-background-deep p-0">
     <!-- content -->
     <div class="relative h-full">
       <!-- <IFrameRouterView /> -->
@@ -50,7 +48,7 @@ function getTransitionName(_route: RouteLocationNormalizedLoaded) {
         </Transition>
       </RouterView>
     </div>
-  </Main>
+  </ElMain>
 </template>
 
 <style lang="scss" scoped></style>

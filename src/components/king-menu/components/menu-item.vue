@@ -4,8 +4,6 @@ import type { MenuItemProps } from '../types'
 import { computed, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { MenuItem } from '@/baseui/ep'
-
 import MenuContent from './menu-content.vue'
 
 interface Props extends MenuItemProps {}
@@ -28,7 +26,7 @@ const handleToPage = (path: string = '/404') => {
 </script>
 
 <template>
-  <MenuItem
+  <ElMenuItem
     class="king-menu-item"
     :index="indexKey"
     :disabled="disabled"
@@ -39,5 +37,5 @@ const handleToPage = (path: string = '/404') => {
         <slot name="title"></slot>
       </template>
     </MenuContent>
-  </MenuItem>
+  </ElMenuItem>
 </template>

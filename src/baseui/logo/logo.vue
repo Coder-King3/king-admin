@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from '@/utils'
 
-import { KingIcon } from '../icons'
+import { KingIcon } from '../icon'
 
 interface Props {
   /**
@@ -30,8 +30,8 @@ defineOptions({ name: 'KingLogo' })
 
 withDefaults(defineProps<Props>(), {
   collapsed: false,
-  logoSize: 32,
   href: 'javascript:void 0',
+  logoSize: 32,
   src: ''
 })
 </script>

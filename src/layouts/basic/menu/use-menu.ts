@@ -25,8 +25,8 @@ function useMenu() {
   })
 
   return {
-    sidebarMenus,
     sidebarActive,
+    sidebarMenus,
     sidebarVisible
   }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 // import type { ElMenu } from 'element-plus'
 
-import type { ThemeModeType } from '@/types'
+import type { ThemeModeType } from '~/types'
 
 import type {
   Component
@@ -37,7 +37,7 @@ interface MenuProps {
    * 菜单模式
    * @default vertical
    */
-  mode?: 'vertical' | 'horizontal'
+  mode?: 'horizontal' | 'vertical'
 
   /**
    * 是否圆润风格

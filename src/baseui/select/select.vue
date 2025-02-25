@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Option, Select } from '@/baseui/ep'
-
 defineOptions({ name: 'Select' })
 
 interface Props {
@@ -19,12 +17,12 @@ const getLabelValue = (value: any) => {
 </script>
 
 <template>
-  <Select :placeholder="placeholder" :class="props.class">
+  <ElSelect :placeholder="placeholder" :class="props.class">
     <template #label="{ value }">
       <span>{{ props.showLabel ? getLabelValue(value) : value }}</span>
     </template>
-    <Option v-for="item in options" :key="item.value" :value="item.value">
+    <ElOption v-for="item in options" :key="item.value" :value="item.value">
       {{ item.label }}
-    </Option>
-  </Select>
+    </ElOption>
+  </ElSelect>
 </template>

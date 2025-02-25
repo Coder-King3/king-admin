@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BasicOption } from '@/types'
+import type { BasicOption } from '~/types'
 
 import { computed, markRaw, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'

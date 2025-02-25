@@ -1,13 +1,8 @@
-import { i18n, loadLocaleMessages, setupI18n } from './i18n'
+import type { TranslationFn } from './types'
 
-type TranslationType = typeof i18n.global.t
-const translation: TranslationType = i18n.global.t
+import { i18n } from './i18n'
 
-interface TranslationOptions {
-  code?: boolean
-  params?: any[]
-}
-type TranslationFn = (message: string, options?: TranslationOptions) => string
+const translation: typeof i18n.global.t = i18n.global.t
 
 const $t: TranslationFn = (message, { code = false, params = [] } = {}) => {
   if (!code) return translation(message, params)
@@ -18,5 +13,8 @@ const $t: TranslationFn = (message, { code = false, params = [] } = {}) => {
   return localMsg
 }
 
-export { $t, i18n, loadLocaleMessages, setupI18n, translation }
+export { $t, translation }
+
+export * from './i18n'
 export type { SupportedLanguagesType } from './types'
+export * from './utils'

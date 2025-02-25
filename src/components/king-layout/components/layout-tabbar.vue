@@ -2,8 +2,6 @@
 import type { CSSProperties } from 'vue'
 import { computed } from 'vue'
 
-import { Container } from '@/baseui/ep'
-
 interface Props {
   /**
    * 高度
@@ -24,12 +22,12 @@ const style = computed((): CSSProperties => {
 </script>
 
 <template>
-  <Container
+  <ElContainer
     :style="style"
     class="w-full flex bg-background transition-all bb-1-$H:border"
   >
     <span>tabbar</span>
-  </Container>
+  </ElContainer>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,4 +1,4 @@
-import type { ThemeModeType } from '@/types'
+import type { ThemeModeType } from '~/types'
 
 interface LayoutProps {
   // /**
@@ -72,17 +72,17 @@ interface LayoutProps {
    * footer 是否可见
    * @default false
    */
-  //  footerEnable?: boolean;
+  footerEnable?: boolean
   /**
    * footer 是否固定
    * @default true
    */
-  //  footerFixed?: boolean;
+  footerFixed?: boolean
   /**
    * footer 高度
    * @default 32
    */
-  //  footerHeight?: number;
+  footerHeight?: number
 
   /**
    * header高度
@@ -138,11 +138,12 @@ interface LayoutProps {
    * @default true
    */
   sidebarCollapseShowTitle?: boolean
+
   /**
-   * 侧边栏是否可见
-   * @default true
+   * 折叠标题侧边栏宽度
+   * @default 80
    */
-  //  sidebarEnable?: boolean;
+  sidebarCollapseTitleWidth?: number
   /**
    * 侧边菜单折叠额外宽度
    * @default 48
@@ -153,11 +154,6 @@ interface LayoutProps {
    * @default false
    */
   sidebarHidden?: boolean
-  /**
-   * 折叠标题侧边栏宽度
-   * @default 80
-   */
-  sidebarCollapseTitleWidth?: number
   /**
    * 侧边栏
    * @default dark

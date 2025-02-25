@@ -10,8 +10,8 @@ export default {
   ],
   overrides: [
     {
-      files: ['**/*.{html,vue}'],
       customSyntax: 'postcss-html',
+      files: ['**/*.{html,vue}'],
       rules: {
         'selector-pseudo-class-no-unknown': [
           true,
@@ -28,12 +28,12 @@ export default {
       }
     },
     {
-      files: ['**/*.{scss,css}'],
       customSyntax: 'postcss-scss',
       extends: [
         'stylelint-config-recommended-scss',
         'stylelint-config-recommended-vue/scss'
-      ]
+      ],
+      files: ['**/*.{scss,css}']
     }
   ],
   plugins: [
@@ -43,6 +43,7 @@ export default {
     'stylelint-scss'
   ],
   rules: {
+    'at-rule-empty-line-before': null,
     'at-rule-no-unknown': [
       true,
       {
@@ -67,7 +68,6 @@ export default {
         ]
       }
     ],
-    'at-rule-empty-line-before': null,
     'font-family-no-missing-generic-family-keyword': null,
     'function-no-unknown': null,
     'import-notation': null,

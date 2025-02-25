@@ -14,13 +14,13 @@ interface AccessState {
    */
   accessMenus: any[]
   /**
-   * 登录 Token
-   */
-  accessToken: AccessToken
-  /**
    * 可访问的路由列表
    */
   accessRoutes: RouteRecordRaw[]
+  /**
+   * 登录 Token
+   */
+  accessToken: AccessToken
   /**
    * 是否已经检查过权限
    */
@@ -28,17 +28,6 @@ interface AccessState {
 }
 
 const useAccessStore = defineStore('access', {
-  persist: {
-    // 持久化
-    pick: ['accessToken', 'accessCodes']
-  },
-  state: (): AccessState => ({
-    accessToken: null,
-    accessCodes: [],
-    accessRoutes: [],
-    accessMenus: [],
-    isAccessChecked: false
-  }),
   actions: {
     setAccessCodes(codes: string[]) {
       this.accessCodes = codes
@@ -46,16 +35,27 @@ const useAccessStore = defineStore('access', {
     setAccessMenus(menus: any[]) {
       this.accessMenus = menus
     },
-    setAccessToken(token: AccessToken) {
-      this.accessToken = token
-    },
     setAccessRoutes(routes: RouteRecordRaw[]) {
       this.accessRoutes = routes
+    },
+    setAccessToken(token: AccessToken) {
+      this.accessToken = token
     },
     setIsAccessChecked(isAccessChecked: boolean) {
       this.isAccessChecked = isAccessChecked
     }
-  }
+  },
+  persist: {
+    // 持久化
+    pick: ['accessToken', 'accessCodes']
+  },
+  state: (): AccessState => ({
+    accessCodes: [],
+    accessMenus: [],
+    accessRoutes: [],
+    accessToken: null,
+    isAccessChecked: false
+  })
 })
 
 export { useAccessStore }

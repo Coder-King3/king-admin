@@ -3,8 +3,7 @@ import type { SubMenuProps } from '../types'
 
 import { computed } from 'vue'
 
-import { LucideChevronDown } from '@/assets/icons'
-import { SubMenu } from '@/baseui/ep'
+import { LucideChevronDown } from '@/components'
 
 interface Props extends SubMenuProps {}
 
@@ -18,7 +17,7 @@ const indexKey = computed(() => `${props.path}`)
 </script>
 
 <template>
-  <SubMenu
+  <ElSubMenu
     class="king-sub-menu"
     :index="indexKey"
     :expand-open-icon="LucideChevronDown"
@@ -34,5 +33,5 @@ const indexKey = computed(() => `${props.path}`)
 
     <!-- 默认插槽 -->
     <slot></slot>
-  </SubMenu>
+  </ElSubMenu>
 </template>

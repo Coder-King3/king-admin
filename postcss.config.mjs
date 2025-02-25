@@ -1,10 +1,10 @@
 export default {
   plugins: {
     ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
+    '@unocss/postcss': {},
     autoprefixer: {},
     'postcss-import': {},
-    'postcss-preset-env': {},
     'postcss-nested': {},
-    '@unocss/postcss': {}
+    'postcss-preset-env': {}
   }
 }

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 import { KingIcon } from '@/baseui'
-import { APP_NAME } from '@/constants'
 import { $t } from '@/locales'
 import { preferences } from '@/preferences'
 
@@ -11,10 +10,10 @@ import Toolbar from './toolbar.vue'
 
 defineOptions({ name: 'Authentication' })
 
-const appName = ref(APP_NAME)
+const appTitle = computed(() => preferences.app.name)
 const logo = computed(() => preferences.logo.source)
 const pageTitle = computed(() =>
-  $t('auth.systemWelcome', { params: [APP_NAME] })
+  $t('auth.systemWelcome', { params: [appTitle.value] })
 )
 const pageDescribe = computed(() => $t('auth.description'))
 </script>
@@ -27,7 +26,7 @@ const pageDescribe = computed(() => $t('auth.description'))
       <div class="ml-4 mt-3.5 flex items-center text-foreground">
         <KingIcon :icon="logo" class="mr-2 size-42px" />
         <!-- <SvgLogo class="mr-2 size-42px" /> -->
-        <p class="text-xl font-medium">{{ appName }}</p>
+        <p class="text-xl font-medium">{{ appTitle }}</p>
       </div>
     </div>
 

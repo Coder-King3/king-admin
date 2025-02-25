@@ -1,14 +1,14 @@
 import { useTitle } from '@vueuse/core'
 import { createApp, watchEffect } from 'vue'
 
-// import { registerBaseUI } from '@/baseui'
-// import { registerComponents } from "@/components";
-// import { registerDirectives } from "@/directives";
-import '@/desgin'
 import { $t, setupI18n } from '@/locales'
 import { preferences } from '@/preferences'
 import { router } from '@/router'
 import { initStores } from '@/store'
+// import { registerBaseUI } from '@/baseui'
+// import { registerComponents } from "@/components";
+// import { registerDirectives } from "@/directives";
+import '@/styles'
 
 import App from './App.vue'
 

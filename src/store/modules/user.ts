@@ -21,14 +21,6 @@ interface AccessState {
 }
 
 const useUserStore = defineStore('user', {
-  persist: {
-    pick: ['userInfo', 'userRoles'],
-    storage: sessionStorage
-  },
-  state: (): AccessState => ({
-    userInfo: null,
-    userRoles: []
-  }),
   actions: {
     setUserInfo(userInfo: BasicUserInfo | null) {
       // 设置用户信息
@@ -40,7 +32,15 @@ const useUserStore = defineStore('user', {
     setUserRoles(roles: string[]) {
       this.userRoles = roles
     }
-  }
+  },
+  persist: {
+    pick: ['userInfo', 'userRoles'],
+    storage: sessionStorage
+  },
+  state: (): AccessState => ({
+    userInfo: null,
+    userRoles: []
+  })
 })
 
 export { type BasicUserInfo, useUserStore }

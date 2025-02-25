@@ -1,32 +1,32 @@
 export interface UserInfo {
   id: number
-  username: string
   password: string
   realName: string
   roles: string[]
+  username: string
 }
 
 export const MOCK_USERS: UserInfo[] = [
   {
     id: 0,
-    username: 'king',
     password: '123456',
     realName: 'King',
-    roles: ['super']
+    roles: ['super'],
+    username: 'king'
   },
   {
     id: 1,
-    username: 'admin',
     password: '123456',
     realName: 'Admin',
-    roles: ['admin']
+    roles: ['admin'],
+    username: 'admin'
   },
   {
     id: 2,
-    username: 'ck',
     password: '123456',
     realName: 'Ck',
-    roles: ['user']
+    roles: ['user'],
+    username: 'ck'
   }
 ]
 
@@ -115,12 +115,12 @@ const createDemosAccessMenus = (role: 'admin' | 'super' | 'user') => {
 
   return [
     {
-      name: 'AccessDemos',
-      path: '/demosaccess',
       meta: {
         icon: 'mdi:cloud-key-outline',
         title: 'demos.access.backendPermissions'
       },
+      name: 'AccessDemos',
+      path: '/demosaccess',
       redirect: '/demos/access/page-control',
       children: [
         {

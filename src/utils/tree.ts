@@ -105,10 +105,10 @@ function findNodeInTree<T extends Record<string, any> = Record<string, any>>(
   tree: T[],
   find: (node: T) => boolean, // 传入一个回调函数用于匹配节点
   options?: TreeConfigOptions
-): T | null {
+): null | T {
   const { childProps } = options || { childProps: 'children' }
 
-  const _findNode = (nodes: T[]): T | null => {
+  const _findNode = (nodes: T[]): null | T => {
     for (const node of nodes) {
       if (find(node)) {
         return node // 找到匹配的节点

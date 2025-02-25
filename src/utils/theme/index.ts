@@ -1,4 +1,4 @@
-import type { ThemeModeType } from '@/types'
+import type { ThemeModeType } from '~/types'
 
 const THEME_MODE = [
   {

@@ -1,4 +1,4 @@
-import type { Recordable } from '@/types'
+import type { Recordable } from '~/types'
 
 export function bindMethods<T extends object>(instance: T): void {
   const prototype = Object.getPrototypeOf(instance)

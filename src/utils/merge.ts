@@ -1,4 +1,4 @@
-import type { ClassType, Recordable } from '@/types'
+import type { ClassType, Recordable } from '~/types'
 
 import { isObject, isString } from './inference'
 

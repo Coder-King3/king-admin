@@ -3,8 +3,8 @@ import type { LayoutProps } from './king-layout'
 
 import { computed, type CSSProperties, ref, watch } from 'vue'
 
-import { LucideMenu } from '@/assets/icons'
 import { KingIconButton } from '@/baseui'
+import { LucideMenu } from '@/components'
 
 import {
   LayoutContent,
@@ -21,21 +21,31 @@ defineOptions({
 interface Props extends LayoutProps {}
 
 const props = withDefaults(defineProps<Props>(), {
+  footerEnable: false,
+  footerFixed: true,
+  footerHeight: 32,
   headerHeight: 50,
   headerHidden: false,
-  sidebarWidth: 224,
-  sidebarHidden: false,
-  sideCollapseWidth: 60,
+  isMobile: false,
   sidebarCollapseShowTitle: false,
   sidebarCollapseTitleWidth: 80,
+  sidebarHidden: false,
   sidebarTheme: 'dark',
-  isMobile: false,
+  sidebarWidth: 224,
+  sideCollapseWidth: 60,
+  tabbarEnable: true,
+  tabbarHeight: 40,
   zIndex: 200
 })
 
 const emit = defineEmits<{ toggleSidebar: [] }>()
 const sidebarCollapse = defineModel<boolean>('sidebarCollapse')
 const sidebarExpandOnHover = defineModel<boolean>('sidebarExpandOnHover')
+
+/**
+ * 侧边栏是否可见
+ * @default true
+ */
 const sidebarEnable = defineModel<boolean>('sidebarEnable', { default: true })
 
 // side是否处于hover状态展开菜单中
@@ -149,8 +159,8 @@ function handleHeaderToggle() {
         <slot name="menu"></slot>
       </template>
     </LayoutSidebar>
-    <div class="flex flex-1 flex-col transition-all duration-300 ease-in">
-      <div class="overflow-hidden transition-all duration-200">
+    <div class="flex flex-1 flex-col transition-all ease-in">
+      <div class="overflow-hidden transition-all">
         <LayoutHeader :height="headerHeight" :is-mobile="isMobile">
           <template v-if="showHeaderLogo" #logo>
             <slot name="logo"></slot>
@@ -170,7 +180,19 @@ function handleHeaderToggle() {
       </div>
 
       <LayoutContent />
-      <LayoutFooter />
+
+      <LayoutFooter
+        v-if="footerEnable"
+        :fixed="footerFixed"
+        :height="footerHeight"
+        :show="true"
+        width="100%"
+        :z-index="zIndex"
+      >
+        <!-- :show="!isFullContent"
+        :width="footerWidth" -->
+        <slot name="footer"></slot>
+      </LayoutFooter>
     </div>
     <div
       v-if="maskVisible"

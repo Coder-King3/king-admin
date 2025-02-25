@@ -8,11 +8,11 @@ import type {
 } from './types'
 
 const ruleParse: RuleParseFn = (rules, value) => {
-  const { success, error } = rules.safeParse(value)
+  const { error, success } = rules.safeParse(value)
 
   return {
-    success,
-    message: error?.errors?.[0]?.message || ''
+    message: error?.errors?.[0]?.message || '',
+    success
   }
 }
 
@@ -28,9 +28,9 @@ const validation: ValidationFn = (rules, trigger = 'change') => {
     validator = rules
   } else {
     validator = (_, value, callback) => {
-      const { success, message } = ruleParse(rules as ZodTypeAny, value)
+      const { message, success } = ruleParse(rules as ZodTypeAny, value)
 
-      callbackReturn(callback, { success, message })
+      callbackReturn(callback, { message, success })
     }
   }
 

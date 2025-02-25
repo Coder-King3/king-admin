@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Scrollbar } from '../ep'
-
 // interface Props {}
 
 defineOptions({ name: 'KingScrollbar' })
@@ -9,9 +7,9 @@ defineOptions({ name: 'KingScrollbar' })
 </script>
 
 <template>
-  <Scrollbar>
+  <ElScrollbar>
     <template #default>
       <slot></slot>
     </template>
-  </Scrollbar>
+  </ElScrollbar>
 </template>

@@ -8,7 +8,7 @@ import { defineOverridesPreferences } from '@/preferences'
 export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
-    name: import.meta.env.VITE_APP_NAME
+    name: import.meta.env.VITE_APP_TITLE
   },
   logo: {
     source: 'svg:logo'

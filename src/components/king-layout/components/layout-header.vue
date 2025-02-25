@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed, type CSSProperties, useSlots } from 'vue'
-
-import { Header } from '@/baseui/ep'
+import { computed, type CSSProperties } from 'vue'
 
 interface Props {
   // /**
@@ -40,8 +38,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const slots = useSlots()
-
 const style = computed((): CSSProperties => {
   const { height } = props
   // const { fullWidth, height, show } = props;
@@ -63,18 +59,18 @@ const logoStyle = computed((): CSSProperties => {
 
 <template>
   <!--   top-0   transition-[margin-top] duration-200 -->
-  <Header
+  <ElHeader
     :style="style"
     class="w-full flex flex-[0_0_auto] items-center bg-header p-0 pl-2 bb-1-$H:border"
   >
-    <div v-if="slots.logo" :style="logoStyle">
+    <div v-if="$slots.logo" :style="logoStyle">
       <slot name="logo"></slot>
     </div>
 
     <slot name="toggle-button"> </slot>
 
     <slot></slot>
-  </Header>
+  </ElHeader>
 </template>
 
 <style lang="scss" scoped></style>

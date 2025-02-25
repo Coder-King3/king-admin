@@ -1,6 +1,6 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
-import type { BasicOption } from '@/types'
+import type { BasicOption } from '~/types'
 
 import { computed, markRaw, ref } from 'vue'
 
@@ -147,10 +147,10 @@ const cnTest = () => {
 
 /* preferences-doms */
 const {
-  locale,
-  isMobile,
-  preferences,
   isDark: pIsDark,
+  isMobile,
+  locale,
+  preferences,
   theme
 } = usePreferences()
 

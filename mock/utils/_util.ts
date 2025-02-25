@@ -2,9 +2,9 @@ import crypto from 'crypto'
 
 /* Request Params */
 export interface requestParams {
-  method: string
   body: any
   headers?: { authorization?: string }
+  method: string
   query: any
 }
 
@@ -46,7 +46,7 @@ class SimpleJWT {
   /**
    * 验证 JWT
    */
-  verify(token: string, secretKey: string): TokenPayload | Error {
+  verify(token: string, secretKey: string): Error | TokenPayload {
     const [headerBase64, payloadBase64, signature] = token.split('.')
     if (!headerBase64 || !payloadBase64 || !signature) {
       return new Error('Invalid token structure')
@@ -79,10 +79,10 @@ class SimpleJWT {
     const timeUnit = expiresIn.replace(/\d+/g, '').toLowerCase()
 
     const unitSecondsMap: Record<string, number> = {
-      s: 1, // 秒
-      m: 60, // 分钟
+      d: 24 * 60 * 60, // 天
       h: 60 * 60, // 小时
-      d: 24 * 60 * 60 // 天
+      m: 60, // 分钟
+      s: 1 // 秒
     }
 
     const seconds = unitSecondsMap[timeUnit]
@@ -94,19 +94,19 @@ class SimpleJWT {
   }
 
   /**
+   * Base64 解码
+   */
+  private decodeBase64(base64: string): object {
+    return JSON.parse(Buffer.from(base64, 'base64').toString('utf-8'))
+  }
+
+  /**
    * Base64 编码
    */
   private encodeBase64(data: object): string {
     return Buffer.from(JSON.stringify(data))
       .toString('base64')
       .replace(/=+$/, '')
-  }
-
-  /**
-   * Base64 解码
-   */
-  private decodeBase64(base64: string): object {
-    return JSON.parse(Buffer.from(base64, 'base64').toString('utf-8'))
   }
 
   /**

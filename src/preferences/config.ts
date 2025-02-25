@@ -2,15 +2,28 @@ import type { Preferences } from './types'
 
 const defaultPreferences: Preferences = {
   app: {
-    locale: 'zh-CN',
     defaultAvatar:
       'https://article.biliimg.com/bfs/article/88558ca13036274ab3714dca1bdb5680627872080.jpg@300w_300h_1e_1c.webp',
     dynamicTitle: true,
     isMobile: false,
+    locale: 'zh-CN',
     name: 'King Admin System'
   },
-  theme: {
-    mode: 'light'
+  breadcrumb: {
+    enable: true,
+    hideOnlyOne: false,
+    showHome: false,
+    showIcon: true,
+    styleType: 'normal'
+  },
+  footer: {
+    enable: false,
+    fixed: false
+  },
+  header: {
+    enable: true,
+    hidden: false,
+    mode: 'fixed'
   },
   logo: {
     enable: true,
@@ -28,6 +41,20 @@ const defaultPreferences: Preferences = {
     expandOnHover: true,
     hidden: false,
     width: 224
+  },
+  tabbar: {
+    draggable: true,
+    enable: true,
+    height: 38,
+    keepAlive: true,
+    persist: true,
+    showIcon: true,
+    showMaximize: true,
+    showMore: true,
+    styleType: 'chrome'
+  },
+  theme: {
+    mode: 'light'
   }
 }
 
