@@ -1,18 +1,21 @@
+/* eslint-disable perfectionist/sort-objects */
 import type { MockMethod } from 'vite-plugin-mock'
+
+import type { requestParams } from '../utils'
 
 import {
   generateAccessToken,
   MOCK_CODES,
   MOCK_USERS,
   prependPrefix,
-  type requestParams,
   useResponseError,
   useResponseSuccess,
   verifyAccessToken
-} from '../utils/_index'
+} from '../utils'
 
 const routes: MockMethod[] = [
   {
+    url: prependPrefix('/auth/login'),
     method: 'post',
     response: (request: requestParams) => {
       const { password, username } = request.body
@@ -35,20 +38,20 @@ const routes: MockMethod[] = [
         ...userinfo,
         accessToken
       })
-    },
-    url: prependPrefix('/auth/login')
+    }
   },
   {
+    url: prependPrefix('/auth/logout'),
     method: 'get',
     response: (request: requestParams) => {
       const verify = verifyAccessToken(request)
       if (!verify) return useResponseError('Invalid token')
 
       return useResponseError('Token has been destroyed')
-    },
-    url: prependPrefix('/auth/logout')
+    }
   },
   {
+    url: prependPrefix('/auth/codes'),
     method: 'get',
     response: (request: requestParams) => {
       const userinfo = verifyAccessToken(request)
@@ -61,8 +64,7 @@ const routes: MockMethod[] = [
         []
 
       return useResponseSuccess(codes)
-    },
-    url: prependPrefix('/auth/codes')
+    }
   }
 ]
 

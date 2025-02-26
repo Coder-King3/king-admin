@@ -1,16 +1,20 @@
+/* eslint-disable perfectionist/sort-objects */
+
 import type { MockMethod } from 'vite-plugin-mock'
+
+import type { requestParams } from '../utils'
 
 import {
   MOCK_MENUS,
   prependPrefix,
-  type requestParams,
   useResponseError,
   useResponseSuccess,
   verifyAccessToken
-} from '../utils/_index'
+} from '../utils'
 
 const routes: MockMethod[] = [
   {
+    url: prependPrefix('/menu/all'),
     method: 'get',
     response: (request: requestParams) => {
       const userinfo = verifyAccessToken(request)
@@ -23,8 +27,7 @@ const routes: MockMethod[] = [
         []
 
       return useResponseSuccess(menus)
-    },
-    url: prependPrefix('/menu/all')
+    }
   }
 ]
 
