@@ -10,6 +10,8 @@ const scopes = readdirSync(resolve(process.cwd(), 'src'), {
   .filter((dirent) => dirent.isDirectory())
   .map((dirent) => dirent.name.replace(/s$/, ''))
 
+const rootScopes = ['internal', 'mock', 'types']
+
 /** @type {import('cz-git').UserConfig} */
 const userConfig = {
   extends: ['@commitlint/config-conventional'],
@@ -31,7 +33,7 @@ const userConfig = {
       subject: '填写简短精炼的变更描述 :\n',
       type: '选择你要提交的类型 :'
     },
-    scopes: [...scopes],
+    scopes: [...scopes, ...rootScopes],
 
     types: [
       { emoji: '🚀', name: 'feat:   🚀 新增功能', value: 'feat' },

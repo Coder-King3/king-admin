@@ -1,10 +1,19 @@
 import { fileURLToPath, URL } from 'url'
 
-import { defineConfig } from './internal/vite-config'
+import {
+  defineConfig,
+  getConfFiles,
+  type ImportMetaEnv,
+  loadEnv
+} from './internal/vite-config'
 
 export default defineConfig(async () => {
-  // const envConfig: ImportMetaEnv = await loadEnv('VITE_', getConfFiles())
-  // const { VITE_BASE_API_URL } = envConfig
+  const envConfig: ImportMetaEnv = await loadEnv('VITE_', getConfFiles())
+  const { VITE_BASE_API_URL: proxyApi, VITE_PORT: port = 3060 } = envConfig
+
+  const createAlias = (alias: string, path: string) => ({
+    [alias]: fileURLToPath(new URL(path, import.meta.url))
+  })
 
   return {
     application: {},
@@ -13,7 +22,7 @@ export default defineConfig(async () => {
         preprocessorOptions: {
           scss: {
             additionalData: '@use "@/styles/components/vars/index.scss" as *;',
-            api: 'modern' // modern | modern-compiler
+            api: 'modern-compiler' // modern | modern-compiler
           }
         }
       },
@@ -32,18 +41,18 @@ export default defineConfig(async () => {
       },
       resolve: {
         alias: {
-          '@': fileURLToPath(new URL('./src', import.meta.url)),
-          '~': fileURLToPath(new URL('./', import.meta.url))
+          ...createAlias('@', './src'),
+          ...createAlias('~', './')
         }
       },
       server: {
         hmr: true,
         proxy: {
-          ['/dev-api']: {
+          [proxyApi]: {
             changeOrigin: true,
-            rewrite: (path) => path.replace(new RegExp(`^${'dev-api'}`), ''),
+            rewrite: (path) => path.replace(new RegExp(`^${proxyApi}`), ''),
             // mock代理目标地址
-            target: 'http://localhost:3060/dev-api',
+            target: `http://localhost:${port}/${proxyApi}`,
             ws: true
           }
         }
