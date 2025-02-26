@@ -46,13 +46,10 @@ async function loadCommonPlugins(
   options: CommonPluginOptions
 ): Promise<ConditionPlugin[]> {
   const { devtools, injectMetadata, isBuild, paths = {} } = options
-
-  const currAutoPrefix = '../../../types/auto'
   const {
-    autoImportDtsUrl = getPathURL(`${currAutoPrefix}/auto-imports.d.t`),
-    componentsDtsUrl = getPathURL(`${currAutoPrefix}/components.d.ts`)
+    autoImportDtsUrl = getPathURL('../../../types/auto/auto-imports.d.ts'),
+    componentsDtsUrl = getPathURL('../../../types/auto/components.d.ts')
   } = paths
-
   return [
     {
       condition: true,
@@ -120,10 +117,7 @@ async function loadApplicationPlugins(
 ): Promise<PluginOption[]> {
   // 单独取，否则commonOptions拿不到
   const isBuild = options.isBuild
-  const currRootPrefix = '../../..'
-
-  const { mockServeDirUrl = getPathURL(`${currRootPrefix}/mock`) } =
-    options.paths || {}
+  const { mockServeDirUrl = getPathURL('../../../mock') } = options.paths || {}
 
   const {
     compress,
