@@ -1,4 +1,4 @@
-import { defineOverridesPreferences } from '@/preferences'
+import { defineOverridesPreferences } from '@preferences'
 
 /**
  * @description 项目配置文件

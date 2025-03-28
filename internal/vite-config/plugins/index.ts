@@ -14,7 +14,6 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import ViteVueComponents from 'unplugin-vue-components/vite'
 import viteCompressPlugin from 'vite-plugin-compression'
 import { createHtmlPlugin as viteHtmlPlugin } from 'vite-plugin-html'
-import { viteMockServe as viteMockServePlugin } from 'vite-plugin-mock'
 import {
   createStyleImportPlugin,
   ElementPlusResolve
@@ -22,6 +21,7 @@ import {
 import viteVueDevTools from 'vite-plugin-vue-devtools'
 
 import { getPathURL } from '../utils'
+import { viteH3MockPlugin } from './h3-mock'
 import { viteMetadataPlugin } from './inject-metadata'
 
 /**
@@ -47,8 +47,8 @@ async function loadCommonPlugins(
 ): Promise<ConditionPlugin[]> {
   const { devtools, injectMetadata, isBuild, paths = {} } = options
   const {
-    autoImportDtsUrl = getPathURL('../../../types/auto/auto-imports.d.ts'),
-    componentsDtsUrl = getPathURL('../../../types/auto/components.d.ts')
+    autoImportDtsUrl = getPathURL('../../../src/auto-imports.d.ts'),
+    componentsDtsUrl = getPathURL('../../../src/components.d.ts')
   } = paths
   return [
     {
@@ -117,19 +117,16 @@ async function loadApplicationPlugins(
 ): Promise<PluginOption[]> {
   // 单独取，否则commonOptions拿不到
   const isBuild = options.isBuild
-  const { mockServeDirUrl = getPathURL('../../../mock') } = options.paths || {}
 
   const {
     compress,
     compressTypes,
+    h3Mock,
+    h3MockOptions,
     html,
     i18n,
-    // license: true,
-    // injectAppLoading,
-    mockServe,
     ...commonOptions
   } = options
-
   const commonPlugins = await loadCommonPlugins(commonOptions)
 
   return await loadConditionPlugins([
@@ -147,17 +144,9 @@ async function loadApplicationPlugins(
       }
     },
     {
-      condition: mockServe,
+      condition: h3Mock,
       plugins: async () => {
-        return [
-          viteMockServePlugin({
-            enable: !isBuild,
-            ignore: /^_/,
-            logger: !isBuild,
-            mockPath: mockServeDirUrl,
-            watchFiles: !isBuild
-          })
-        ]
+        return [await viteH3MockPlugin(h3MockOptions)]
       }
     },
     {
@@ -185,12 +174,6 @@ async function loadApplicationPlugins(
       condition: !!html,
       plugins: () => [viteHtmlPlugin({ minify: true })]
     }
-    // {
-    //   condition: isBuild && extraAppConfig,
-    //   plugins: async () => [
-    //     await viteExtraAppConfigPlugin({ isBuild: true, root: process.cwd() })
-    //   ]
-    // },
   ])
 }
 

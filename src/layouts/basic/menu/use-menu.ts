@@ -1,7 +1,8 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { preferences } from '@/preferences'
+import { preferences } from '@preferences'
+
 import { useAccessStore } from '@/store'
 
 function useMenu() {

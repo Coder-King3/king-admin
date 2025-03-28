@@ -5,7 +5,7 @@ import type { SupportedLanguagesType } from './types'
 import { type App, ref, unref } from 'vue'
 import { createI18n, type Locale } from 'vue-i18n'
 
-import { preferences } from '@/preferences'
+import { preferences } from '@preferences'
 
 import dayjs from 'dayjs'
 import enLocale from 'element-plus/es/locale/lang/en'

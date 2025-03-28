@@ -83,7 +83,7 @@ async function loadAndConvertEnv(
     VITE_BASE,
     VITE_COMPRESS,
     VITE_DEVTOOLS,
-    VITE_MOCK_SERVER,
+    VITE_MOCK_SERVE,
     VITE_PORT
   } = envConfig
 
@@ -99,7 +99,7 @@ async function loadAndConvertEnv(
     compress: compressTypes.length > 0,
     compressTypes,
     devtools: getBoolean(VITE_DEVTOOLS),
-    mockServe: getBoolean(VITE_MOCK_SERVER),
+    h3Mock: getBoolean(VITE_MOCK_SERVE),
     port: getNumber(VITE_PORT, 5173)
   }
 }

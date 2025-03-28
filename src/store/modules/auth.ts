@@ -1,4 +1,4 @@
-import type { Recordable } from '~/types'
+import type { Recordable, UserInfo } from '@types'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -6,19 +6,10 @@ import { useRouter } from 'vue-router'
 import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '@/api'
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
 import { $t } from '@/locales'
-import {
-  type BasicUserInfo,
-  resetAllStores,
-  useAccessStore,
-  useUserStore
-} from '@/store'
+import { resetAllStores, useAccessStore, useUserStore } from '@/store'
 
 import { ElNotification } from 'element-plus'
 import { defineStore } from 'pinia'
-
-// import { useAccessStore } from './access'
-// import { useUserStore, type BasicUserInfo } from './user'
-// import { useRouter } from 'vue-router'
 
 const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore()
@@ -27,9 +18,17 @@ const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false)
 
-  // 异步处理登录操作
-  async function authLogin(params: Recordable) {
-    let userInfo: BasicUserInfo | null = null
+  /**
+   * 异步处理登录操作
+   * Asynchronously handle the login process
+   * @param params 登录表单数据
+   * @param onSuccess 成功之后的回调函数
+   */
+  async function authLogin(
+    params: Recordable,
+    onSuccess?: () => Promise<void> | void
+  ) {
+    let userInfo: null | UserInfo = null
 
     try {
       loginLoading.value = true
@@ -52,8 +51,13 @@ const useAuthStore = defineStore('auth', () => {
       userStore.setUserInfo(userInfo)
       accessStore.setAccessCodes(accessCodes)
 
-      // 跳转到首页
-      router.push(DEFAULT_HOME_PATH)
+      if (accessStore.loginExpired) {
+        accessStore.setLoginExpired(false)
+      } else {
+        onSuccess
+          ? await onSuccess?.()
+          : await router.push(userInfo?.homePath || DEFAULT_HOME_PATH)
+      }
 
       if (userInfo?.realName) {
         ElNotification({
@@ -78,7 +82,7 @@ const useAuthStore = defineStore('auth', () => {
       // 不做任何处理
     }
     resetAllStores()
-    // accessStore.setLoginExpired(false);
+    accessStore.setLoginExpired(false)
 
     // 回登录页带上当前路由地址
     await router.replace({
@@ -92,7 +96,7 @@ const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: BasicUserInfo | null = null
+    let userInfo: null | UserInfo = null
     userInfo = await getUserInfoApi()
     userStore.setUserInfo(userInfo)
     return userInfo

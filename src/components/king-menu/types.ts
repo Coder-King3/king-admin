@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 // import type { ElMenu } from 'element-plus'
 
-import type { ThemeModeType } from '~/types'
+import type { ThemeModeType } from '@types'
 
 import type {
   Component

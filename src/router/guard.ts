@@ -1,28 +1,18 @@
-import type { ComponentRecordType } from '~/types'
+import type { ComponentRecordType } from '@types'
 
 import { h } from 'vue'
 import type { Router } from 'vue-router'
 
 import { getAllMenusApi } from '@/api'
-import { KingIcon } from '@/baseui'
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@/constants'
 import { useAccessStore } from '@/store'
 import { generateAccessible, startProgress, stopProgress } from '@/utils'
 
 import { ElMessage } from 'element-plus'
 
-import { basicRouteNames } from './routes'
+import { KingIcon } from '~/common/baseui'
 
-/**
- * 项目守卫配置
- * @param router
- */
-function createRouterGuard(router: Router) {
-  /** 通用 */
-  setupCommonGuard(router)
-  /** 权限访问 */
-  setupAccessGuard(router)
-}
+import { basicRouteNames } from './routes'
 
 /**
  * 权限访问守卫配置
@@ -108,25 +98,36 @@ function setupAccessGuard(router: Router) {
  */
 function setupCommonGuard(router: Router) {
   // 记录已经加载的页面
-  // const loadedPaths = new Set<string>()
+  const loadedPaths = new Set<string>()
 
-  router.beforeEach(async (_to) => {
-    // to.meta.loaded = loadedPaths.has(to.path)
+  router.beforeEach(async (to) => {
+    to.meta.loaded = loadedPaths.has(to.path)
 
     // 页面加载进度条
-    // if (!to.meta.loaded) {
-    startProgress()
-    // }
+    if (!to.meta.loaded) {
+      startProgress()
+    }
     return true
   })
 
-  router.afterEach((_to) => {
+  router.afterEach((to) => {
     // 记录页面是否加载,如果已经加载，后续的页面切换动画等效果不在重复执行
-    // loadedPaths.add(to.path)
+    loadedPaths.add(to.path)
 
     // 关闭页面加载进度条
     stopProgress()
   })
+}
+
+/**
+ * 项目守卫配置
+ * @param router
+ */
+function createRouterGuard(router: Router) {
+  /** 通用 */
+  setupCommonGuard(router)
+  /** 权限访问 */
+  setupAccessGuard(router)
 }
 
 export { createRouterGuard }

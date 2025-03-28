@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { MenuRecordRaw } from '~/types'
+import type { MenuRecordRaw } from '@types'
 
 import { computed } from 'vue'
 
-import { KingLogo } from '@/baseui'
+import { KingLogo } from '@baseui'
+import { preferences, updatePreferences, usePreferences } from '@preferences'
+
 import { KingAdminLayout } from '@/components/king-layout'
 import { $t } from '@/locales'
-import { preferences, updatePreferences, usePreferences } from '@/preferences'
 import { cloneDeep, mapTree } from '@/utils'
 
 import { LayoutHeader } from './header'
@@ -21,6 +22,10 @@ const {
   isMobile
   //   theme,
 } = usePreferences()
+
+// const userStore = useUserStore()
+// const authStore = useAuthStore()
+// const accessStore = useAccessStore()
 
 const sidebarCollapsed = computed({
   get: () => preferences.sidebar.collapsed,
@@ -107,6 +112,18 @@ function toggleSidebar() {
         :text="preferences.app.name"
       />
     </template>
+    <!-- 头部区域 -->
+    <template #header>
+      <LayoutHeader />
+    </template>
+    <template #extra>
+      <!-- <AuthenticationLoginExpiredModal
+        v-model:open="accessStore.loginExpired"
+        :avatar
+      >
+        <LoginForm />
+      </AuthenticationLoginExpiredModal> -->
+    </template>
     <!-- 侧边菜单区域 -->
     <template #menu>
       <LayoutMenu
@@ -119,10 +136,6 @@ function toggleSidebar() {
         :default-active="sidebarActive"
         mode="vertical"
       />
-    </template>
-
-    <template #header>
-      <LayoutHeader />
     </template>
   </KingAdminLayout>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type Component } from 'vue'
 
-import { KingIcon } from '@/baseui'
+import { KingIcon } from '@baseui'
 
 interface Props {
   icon?: Component | string

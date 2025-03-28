@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { KingIcon } from '@/baseui'
+import { KingIcon } from '@baseui'
+import { preferences } from '@preferences'
+
 import { $t } from '@/locales'
-import { preferences } from '@/preferences'
 
 import AuthenticationFormView from './form-view.vue'
 import Toolbar from './toolbar.vue'

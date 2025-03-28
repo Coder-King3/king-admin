@@ -24,12 +24,12 @@ export function perfectionist() {
           {
             customGroups: {
               type: {
-                root: 'root',
+                common: 'common',
                 src: 'src',
                 vue: 'vue'
               },
               value: {
-                root: ['^~/'],
+                common: ['^@baseui', '^@icons', '^@preferences', '^@types'],
                 src: ['^@/'],
                 vue: ['^vue', '^vue-*', '^@vue*']
               }
@@ -40,7 +40,7 @@ export function perfectionist() {
               ['internal-type'],
               'builtin',
               'vue',
-              'root',
+              'common',
               'src',
               'external',
               'internal',
@@ -52,7 +52,8 @@ export function perfectionist() {
               'unknown'
             ],
             internalPattern: ['^~/.*'],
-            newlinesBetween: 'always'
+            newlinesBetween: 'always',
+            partitionByComment: ['^Part:.*$']
             // order: 'asc',
             // type: 'natural',
           }

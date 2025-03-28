@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo Start running pre-commit hook...
 
 # Format and submit code according to lintstagedrc.config.cjs configuration

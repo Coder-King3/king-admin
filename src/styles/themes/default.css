@@ -1,8 +1,9 @@
 :root {
   /* 基本字体 */
-  --font-family: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto,
-    'Helvetica Neue', arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family:
+    -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, 'Helvetica Neue',
+    arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* 基本文字大小 */
   --font-size-base: 16px;

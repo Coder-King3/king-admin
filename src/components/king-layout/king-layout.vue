@@ -3,8 +3,8 @@ import type { LayoutProps } from './king-layout'
 
 import { computed, type CSSProperties, ref, watch } from 'vue'
 
-import { KingIconButton } from '@/baseui'
-import { LucideMenu } from '@/components'
+import { KingIconButton } from '@baseui'
+import { LucideMenu } from '@icons'
 
 import {
   LayoutContent,
@@ -194,6 +194,7 @@ function handleHeaderToggle() {
         <slot name="footer"></slot>
       </LayoutFooter>
     </div>
+    <slot name="extra"></slot>
     <div
       v-if="maskVisible"
       :style="maskStyle"

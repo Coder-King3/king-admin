@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { KingIcon } from '@/baseui'
+import { KingIcon } from '@baseui'
 
 defineOptions({ name: 'SidebarCollapseButton' })
 const collapsed = defineModel<boolean>('collapsed')

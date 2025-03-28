@@ -1,11 +1,12 @@
 import { useTitle } from '@vueuse/core'
 import { createApp, watchEffect } from 'vue'
 
+import { preferences } from '@preferences'
+
 import { $t, setupI18n } from '@/locales'
-import { preferences } from '@/preferences'
 import { router } from '@/router'
 import { initStores } from '@/store'
-// import { registerBaseUI } from '@/baseui'
+// import { registerBaseUI } from '@baseui'
 // import { registerComponents } from "@/components";
 // import { registerDirectives } from "@/directives";
 import '@/styles'
@@ -17,7 +18,6 @@ import 'default-passive-events'
 import '@unocss/reset/sanitize/assets.css'
 import '@unocss/reset/sanitize/sanitize.css'
 import 'nprogress/nprogress.css'
-import 'virtual:uno.css'
 
 async function bootstrap(namespace: string) {
   const app = createApp(App)

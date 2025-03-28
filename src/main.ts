@@ -1,7 +1,9 @@
-import { initPreferences } from '@/preferences'
+import { initPreferences } from '@preferences'
 
 import { APP_NAMESPACE, APP_VERSION } from './constants'
 import { overridesPreferences } from './settings'
+
+import 'virtual:uno.css'
 
 /**
  * 应用初始化完成之后再进行页面加载渲染

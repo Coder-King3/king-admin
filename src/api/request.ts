@@ -1,43 +1,89 @@
-import type { HttpResponse } from '@/utils'
+import type { RequestClientOptions } from '@/utils/request'
 
-import { useAccessStore } from '@/store'
-import { errorMessageResponseInterceptor, RequestClient } from '@/utils'
+import { preferences } from '@preferences'
+
+import { refreshTokenApi } from '@/api'
+import { useAccessStore, useAuthStore } from '@/store'
+import {
+  authenticateResponseInterceptor,
+  defaultResponseInterceptor,
+  errorMessageResponseInterceptor,
+  RequestClient
+} from '@/utils/request'
 
 import { ElMessage } from 'element-plus'
 
-function createRequestClient(baseURL: string) {
+const apiURL = import.meta.env.VITE_BASE_API_URL
+
+function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   const client = new RequestClient({
+    ...options,
     baseURL
   })
+
+  /**
+   * 重新认证逻辑
+   */
+  async function doReAuthenticate() {
+    console.warn('Access token or refresh token is invalid or expired. ')
+    const accessStore = useAccessStore()
+    const authStore = useAuthStore()
+    accessStore.setAccessToken(null)
+    if (
+      preferences.app.loginExpiredMode === 'modal' &&
+      accessStore.isAccessChecked
+    ) {
+      accessStore.setLoginExpired(true)
+    } else {
+      await authStore.logout()
+    }
+  }
+
+  /**
+   * 刷新token逻辑
+   */
+  async function doRefreshToken() {
+    const accessStore = useAccessStore()
+    const resp = await refreshTokenApi()
+    const newToken = resp.data
+    accessStore.setAccessToken(newToken)
+    return newToken
+  }
 
   function formatToken(token: null | string) {
     return token ? `Bearer ${token}` : null
   }
 
-  // request 请求头处理
+  // 请求头处理
   client.addRequestInterceptor({
     fulfilled: async (config) => {
       const accessStore = useAccessStore()
 
       config.headers.Authorization = formatToken(accessStore.accessToken)
-      // config.headers['Accept-Language'] = preferences.app.locale;
+      config.headers['Accept-Language'] = preferences.app.locale
       return config
     }
   })
 
-  // response 数据解构
-  client.addResponseInterceptor<HttpResponse>({
-    fulfilled: (response) => {
-      const { data: responseData, status } = response
+  // 处理返回的响应数据格式
+  client.addResponseInterceptor(
+    defaultResponseInterceptor({
+      codeField: 'code',
+      dataField: 'data',
+      successCode: 0
+    })
+  )
 
-      const { code, data } = responseData
-
-      if (status >= 200 && status < 400 && code === 0) {
-        return data
-      }
-      throw Object.assign({}, response, { response })
-    }
-  })
+  // token过期的处理
+  client.addResponseInterceptor(
+    authenticateResponseInterceptor({
+      client,
+      doReAuthenticate,
+      doRefreshToken,
+      enableRefreshToken: preferences.app.enableRefreshToken,
+      formatToken
+    })
+  )
 
   // 通用的错误处理,如果没有进入上面的错误处理逻辑，就会进入这里
   client.addResponseInterceptor(
@@ -56,6 +102,8 @@ function createRequestClient(baseURL: string) {
   return client
 }
 
-const apiURL = import.meta.env.VITE_BASE_API_URL
+export const requestClient = createRequestClient(apiURL, {
+  responseReturn: 'data'
+})
 
-export const requestClient = createRequestClient(apiURL)
+export const baseRequestClient = new RequestClient({ baseURL: apiURL })

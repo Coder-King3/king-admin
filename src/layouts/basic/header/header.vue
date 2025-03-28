@@ -2,9 +2,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { KingIcon, KingIconButton } from '@/baseui'
-import { LanguageToggle, LucideRotateCw, ThemeToggle } from '@/components'
-import { preferences, updatePreferences } from '@/preferences'
+import { KingIcon, KingIconButton } from '@baseui'
+import { LucideRotateCw } from '@icons'
+import { preferences, updatePreferences } from '@preferences'
+
+import { LanguageToggle, ThemeToggle } from '@/components'
 
 defineOptions({ name: 'LayoutHeader' })
 

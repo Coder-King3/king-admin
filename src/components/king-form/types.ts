@@ -1,8 +1,7 @@
+import type { Recordable } from '@types'
 import type { FormItemRule } from 'element-plus'
 
 import type { FormApiInstance } from './form-api'
-
-import type { Recordable } from '~/types'
 
 import type { Component } from 'vue'
 

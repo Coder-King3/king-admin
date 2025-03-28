@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
 
-import { KingIcon, KingIconButton } from '@/baseui'
+import { KingIcon, KingIconButton } from '@baseui'
+import { preferences, updatePreferences } from '@preferences'
+
 import { SUPPORT_LANGUAGES } from '@/constants'
 import { loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
-import { preferences, updatePreferences } from '@/preferences'
 
 interface Props {
   /**

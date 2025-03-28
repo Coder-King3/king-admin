@@ -21,6 +21,10 @@
     "internal/**/*.js",
     "internal/**/*.cjs",
     "internal/**/*.mjs",
-    "internal/**/*.ts"
+    "internal/**/*.ts",
+
+    // mock-serve
+    "mock/**/*.ts",
+    "mock/**/*.js"
   ]
 }

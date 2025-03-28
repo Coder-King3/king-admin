@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { FormSchema, RenderComponentContentType } from '../types'
+import type { Recordable } from '@types'
 
-import type { Recordable } from '~/types'
+import type { FormSchema, RenderComponentContentType } from '../types'
 
 import { computed, type ComputedRef } from 'vue'
 
-import { KingRenderContent } from '@/baseui'
+import { KingRenderContent } from '@baseui'
+
 import { isString } from '@/utils'
 
 import { componentMap } from '../config'

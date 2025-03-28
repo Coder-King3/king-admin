@@ -16,6 +16,7 @@ function defineApplicationConfig(userConfigPromise?: DefineApplicationOptions) {
     const { application = {}, vite = {} } = options || {}
     const root = process.cwd()
     const isBuild = command === 'build'
+
     const env = loadEnv(mode, root)
 
     const plugins = await loadApplicationPlugins({
@@ -23,11 +24,13 @@ function defineApplicationConfig(userConfigPromise?: DefineApplicationOptions) {
       compressTypes: ['brotli', 'gzip'],
       devtools: true,
       env,
+      h3Mock: !isBuild,
+      h3MockOptions: {},
       html: true,
       i18n: true,
       injectMetadata: true,
       isBuild,
-      mockServe: !isBuild,
+      // mockServe: !isBuild,
       mode,
       ...envConfig,
       ...application

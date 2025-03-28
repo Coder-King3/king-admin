@@ -3,7 +3,7 @@ import type { SubMenuProps } from '../types'
 
 import { computed } from 'vue'
 
-import { LucideChevronDown } from '@/components'
+import { LucideChevronDown } from '@icons'
 
 interface Props extends SubMenuProps {}
 

@@ -10,7 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_BASE_API_URL: string
   readonly VITE_COMPRESS: 'brotli' | 'gzip' | 'none'
   readonly VITE_DEVTOOLS: 'false' | 'true'
-  readonly VITE_MOCK_SERVER: 'false' | 'true'
+  readonly VITE_MOCK_SERVE: 'false' | 'true'
   readonly VITE_PORT: string
   readonly VITE_ROUTER_MODE: 'hash' | 'history'
 }
@@ -25,6 +25,23 @@ interface ConditionPlugin {
   plugins: () => PluginOption[] | PromiseLike<PluginOption[]>
 }
 
+interface H3MockPluginOptions {
+  /**
+   * mock server 入口
+   */
+  mockServerEntry?: string
+
+  /**
+   * mock 服务端口
+   */
+  port?: number
+
+  /**
+   * mock 日志是否打印
+   */
+  verbose?: boolean
+}
+
 /**
  * 用于配置插件所需的一些路径
  */
@@ -33,8 +50,8 @@ interface PathsOptions {
   autoImportDtsUrl?: string
   /** unplugin-vue-components dts 声明文件路径  */
   componentsDtsUrl?: string
-  /** vite-plugin-mock mock文件夹路径 */
-  mockServeDirUrl?: string
+  // /** vite-plugin-mock mock文件夹路径 */
+  // mockServeDirUrl?: string
 }
 
 interface CommonPluginOptions {
@@ -57,12 +74,17 @@ interface ApplicationPluginOptions extends CommonPluginOptions {
   compress?: boolean
   /** 压缩类型 */
   compressTypes?: ('brotli' | 'gzip')[]
+  /** 是否开启 h3 mock */
+  h3Mock?: boolean
+  /** h3 mock 插件配置 */
+  h3MockOptions?: H3MockPluginOptions
+  // /** 是否开启 mock plugin*/
+  // mockServe?: boolean
+
   /** 是否开启html插件  */
   html?: boolean
   /** 是否开启i18n */
   i18n?: boolean
-  /** 是否开启 mock plugin*/
-  mockServe?: boolean
   /** 是否注入app loading */
   // injectAppLoading?: boolean
   /** 是否注入版权信息 */
@@ -87,5 +109,6 @@ export type {
   ConditionPlugin,
   DefineApplicationOptions,
   DefineConfig,
+  H3MockPluginOptions,
   ImportMetaEnv
 }

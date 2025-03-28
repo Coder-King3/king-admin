@@ -1,8 +1,7 @@
+import type { Recordable } from '@types'
 import type { ElForm } from 'element-plus'
 
 import type { FormSchema, KingFormProps } from './types'
-
-import type { Recordable } from '~/types'
 
 import {
   computed,

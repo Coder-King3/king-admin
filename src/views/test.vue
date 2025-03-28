@@ -1,17 +1,19 @@
-<!-- eslint-disable no-console -->
 <script setup lang="ts">
-import type { BasicOption } from '~/types'
+import type { BasicOption } from '@types'
 
 import { computed, markRaw, ref } from 'vue'
 
+import { KingIcon, KingSliderCaptcha } from '@baseui'
+import { updatePreferences, usePreferences } from '@preferences'
+
 import { loginApi, logoutApi } from '@/api'
-import { KingIcon, KingSliderCaptcha } from '@/baseui'
 import { type KingFormProps, ThemeToggle, useKingForm } from '@/components'
 import { $t } from '@/locales'
-import { updatePreferences, usePreferences } from '@/preferences'
 import { cn } from '@/utils'
 
 import { ElMessage, ElNotification, ElRate as Rate } from 'element-plus'
+
+import { requestClient } from '../api/request'
 
 defineOptions({ name: 'Test' })
 
@@ -30,6 +32,11 @@ const loginTest = async () => {
 }
 const logoutTest = async () => {
   const result = await logoutApi()
+  console.log(`result:`, result)
+}
+
+const apiTest = async () => {
+  const result = await requestClient.get('/user')
   console.log(`result:`, result)
 }
 
@@ -216,6 +223,7 @@ function testPreferences() {
       <div class="mb-6 flex gap-2">
         <ElButton type="primary" @click="loginTest">loginSubmitTest</ElButton>
         <ElButton type="primary" @click="logoutTest">logoutSubmitTest</ElButton>
+        <ElButton type="primary" @click="apiTest">apiTest</ElButton>
         <ElButton
           class="flex items-center rounded rounded-2xl rounded-3xl rounded-full rounded-lg rounded-md rounded-none rounded-sm rounded-xl !b-1-#000"
           type="primary"
@@ -272,6 +280,29 @@ function testPreferences() {
           test preferences
         </ElButton>
       </div>
+    </div>
+
+    <div class="apis-box">
+      <h3 class="apis-title">Mock Serve Apis</h3>
+
+      <ul class="apis-list">
+        <li>
+          <div>/auth/login</div>
+          <div>post</div>
+        </li>
+        <li>
+          <div>/auth/logout</div>
+          <div>get</div>
+        </li>
+        <li>
+          <div>/user</div>
+          <div>get</div>
+        </li>
+        <li>
+          <div>/menu</div>
+          <div>get</div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

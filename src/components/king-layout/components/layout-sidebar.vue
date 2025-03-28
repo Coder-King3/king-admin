@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from 'vue'
 
-import { KingScrollbar } from '@/baseui'
+import { KingScrollbar } from '@baseui'
 
 import { SidebarCollapseButton, SidebarFixedButton } from './widgets'
 

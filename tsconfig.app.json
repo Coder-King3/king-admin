@@ -6,8 +6,16 @@
 
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+
+      "@baseui": ["./common/baseui/index.ts"],
+      "@icons": ["./common/icons/index.ts"],
+      "@preferences": ["./common/preferences/index.ts"],
+      "@types": ["./common/types/index.ts"],
+      "@baseui/*": ["./common/baseui/*"],
+      "@icons/*": ["./common/icons/*"],
+      "@preferences/*": ["./common/preferences/*"],
+      "@types/*": ["./common/types/*"]
     }
   },
   "include": [
@@ -18,10 +26,8 @@
     "src/**/*.ts",
     "src/**/*.vue",
 
-    // types
-    "types/**/*.ts",
-
-    // mock
-    "mock/**/*.ts"
+    // common
+    "common/**/*.ts",
+    "common/**/*.vue"
   ]
 }

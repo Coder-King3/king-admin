@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { BasicOption } from '~/types'
+import type { BasicOption } from '@types'
 
 import { computed, markRaw, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { KingSliderCaptcha } from '@/baseui'
+import { KingSliderCaptcha } from '@baseui'
+
 import { type KingFormSchema, useKingForm } from '@/components'
 import { AuthTitle } from '@/layouts'
 import { $t } from '@/locales'

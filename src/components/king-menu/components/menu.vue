@@ -41,7 +41,7 @@ const isStateClassNames = computed(() => [
 ])
 const menuClassName = 'king-menu'
 const menuClassNames = computed(() => {
-  const classNames = cn(menuClassName, 'b-0', [
+  const classNames = cn(menuClassName, '!b-0', [
     is('vertical', mode.value === 'vertical'),
     is('collapse', collapse.value),
     is('collapse-show-title', collapseShowTitle.value),

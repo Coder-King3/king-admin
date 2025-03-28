@@ -1,4 +1,4 @@
-import type { GenerateMenuAndRoutesOptions } from '~/types'
+import type { GenerateMenuAndRoutesOptions } from '@types'
 
 import { generateMenus } from './generate-menus'
 import { generateRoutes } from './generate-routes'

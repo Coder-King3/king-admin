@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { Recordable } from '@types'
+
 import type { FormApiInstance } from '../form-api'
 import type { BaseFormApiFnType } from '../types'
-
-import type { Recordable } from '~/types'
 
 import { computed, useTemplateRef } from 'vue'
 

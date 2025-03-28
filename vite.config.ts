@@ -1,22 +1,23 @@
 import { fileURLToPath, URL } from 'url'
 
-import {
-  defineConfig,
-  getConfFiles,
-  type ImportMetaEnv,
-  loadEnv
-} from './internal/vite-config'
+import { defineConfig } from './internal/vite-config'
 
 export default defineConfig(async () => {
-  const envConfig: ImportMetaEnv = await loadEnv('VITE_', getConfFiles())
-  const { VITE_BASE_API_URL: proxyApi, VITE_PORT: port = 3060 } = envConfig
-
   const createAlias = (alias: string, path: string) => ({
     [alias]: fileURLToPath(new URL(path, import.meta.url))
   })
 
   return {
-    application: {},
+    application: {
+      paths: {
+        autoImportDtsUrl: fileURLToPath(
+          new URL('./common/types/auto/auto-imports.d.ts', import.meta.url)
+        ),
+        componentsDtsUrl: fileURLToPath(
+          new URL('./common/types/auto/components.d.ts', import.meta.url)
+        )
+      }
+    },
     vite: {
       css: {
         preprocessorOptions: {
@@ -41,18 +42,24 @@ export default defineConfig(async () => {
       },
       resolve: {
         alias: {
+          ...createAlias('~', './'),
           ...createAlias('@', './src'),
-          ...createAlias('~', './')
+
+          // common package
+          ...createAlias('@baseui', './common/baseui'),
+          ...createAlias('@icons', './common/icons'),
+          ...createAlias('@preferences', './common/preferences'),
+          ...createAlias('@types', './common/types')
         }
       },
       server: {
         hmr: true,
         proxy: {
-          [proxyApi]: {
+          '/api': {
             changeOrigin: true,
-            rewrite: (path) => path.replace(new RegExp(`^${proxyApi}`), ''),
+            rewrite: (path) => path.replace(/^\/api/, ''),
             // mock代理目标地址
-            target: `http://localhost:${port}/${proxyApi}`,
+            target: `http://localhost:3065/api`,
             ws: true
           }
         }

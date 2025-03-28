@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, toRefs } from 'vue'
 
-import { KingIcon, KingIconButton } from '@/baseui'
-import { preferences, updatePreferences } from '@/preferences'
+import { KingIcon, KingIconButton } from '@baseui'
+import { preferences, updatePreferences } from '@preferences'
 
 interface Props {
   /**

@@ -3,7 +3,7 @@ import type {
   GenerateMenuAndRoutesOptions,
   RouteRecordRaw,
   RouteRecordStringComponent
-} from '~/types'
+} from '@types'
 
 import { mapTree } from '../tree'
 

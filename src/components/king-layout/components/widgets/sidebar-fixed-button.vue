@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { KingIcon } from '@/baseui'
+import { KingIcon } from '@baseui'
 
 defineOptions({ name: 'SidebarFixedButton' })
 
