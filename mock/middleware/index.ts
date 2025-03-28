@@ -1,4 +1,3 @@
-export * from './cors'
 export * from './header'
 
 const middlewares = []

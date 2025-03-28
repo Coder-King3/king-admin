@@ -2,16 +2,27 @@ import type { App } from 'h3'
 
 import type { Middleware, MiddlewareOptions } from '../types'
 
-import { corsMiddleware, headerMiddleware } from '../middleware'
+import { headerMiddleware } from '../middleware'
 import { isObject } from '../utils/inference'
 
 function setupMiddleware(app: App, options: MiddlewareOptions) {
-  const { cors = false, headers = {}, middlewares = [] } = options
+  const { cors = false, middlewares = [] } = options
+  console.log(` cors:`, cors)
 
-  // 如果开启 CORS，注册对应的中间件
+  let { headers = {} } = options
+
+  // CORS
   if (cors) {
-    app.use(corsMiddleware())
+    headers = {
+      'access-control-allow-headers': '*',
+      'access-control-allow-methods': '*',
+      'access-control-allow-origin': '*',
+      'access-control-max-age': '0',
+      ...headers
+    }
   }
+
+  console.log(` headers:`, headers)
 
   // 只有 headers 对象非空时才注册 header 中间件
   if (isObject(headers) && Object.keys(headers).length > 0) {
