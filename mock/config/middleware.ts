@@ -1,13 +1,33 @@
-import type { App } from 'h3'
-
 import type { Middleware, MiddlewareOptions } from '../types'
 
-import { headerMiddleware } from '../middleware'
-import { isObject } from '../utils/inference'
+import { type App, defineEventHandler, setHeaders } from 'h3'
+
+// common middlewares
+function lowerCaseKeys<T extends Record<string, any>>(
+  headers: T
+): { [K in keyof T as Lowercase<K & string>]: T[K] } {
+  const newHeaders: Record<string, any> = {} // 临时 mutable 对象
+  Object.keys(headers).forEach((key) => {
+    newHeaders[key.toLowerCase()] = headers[key]
+  })
+  return newHeaders as { [K in keyof T as Lowercase<K & string>]: T[K] }
+}
+
+const headerMiddleware = (headers: Record<string, string>) => {
+  return defineEventHandler((event) => {
+    setHeaders(event, headers)
+  })
+}
+
+// register middlewares
+function registerMiddlewares(app: App, middlewares: Middleware[]) {
+  middlewares.forEach((middleware) => {
+    app.use(middleware)
+  })
+}
 
 function setupMiddleware(app: App, options: MiddlewareOptions) {
   const { cors = false, middlewares = [] } = options
-  console.log(` cors:`, cors)
 
   let { headers = {} } = options
 
@@ -18,25 +38,20 @@ function setupMiddleware(app: App, options: MiddlewareOptions) {
       'access-control-allow-methods': '*',
       'access-control-allow-origin': '*',
       'access-control-max-age': '0',
-      ...headers
+      ...lowerCaseKeys(headers)
     }
   }
 
-  console.log(` headers:`, headers)
-
-  // 只有 headers 对象非空时才注册 header 中间件
-  if (isObject(headers) && Object.keys(headers).length > 0) {
+  // Headers
+  if (headers) {
     app.use(headerMiddleware(headers))
   }
 
   registerMiddlewares(app, middlewares)
 }
 
-// 注册自定义中间件
-function registerMiddlewares(app: App, middlewares: Middleware[]) {
-  middlewares.forEach((middleware) => {
-    app.use(middleware())
-  })
+function createMiddleware(middleware: Middleware) {
+  return defineEventHandler(middleware)
 }
 
-export { setupMiddleware }
+export { createMiddleware, setupMiddleware }

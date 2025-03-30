@@ -21,15 +21,15 @@ function defineApplication(config: applicationConfig) {
     routes
   })
 
-  // use router
-  setupRouter(h3App, router)
-
   // use middleware
   setupMiddleware(h3App, {
     cors,
     headers,
     middlewares
   })
+
+  // use router
+  setupRouter(h3App, router)
 
   return h3App
 }

@@ -22,4 +22,20 @@ interface RouterOptions {
   routes: RouteConfig[] // 全部路由
 }
 
-export type { HTTPMethod, RouteConfig, RouterOptions, RoutesGroup }
+interface RoutesBuilder {
+  add: (url: string, method: HTTPMethod, handler: EventHandler) => void
+  delete: (url: string, handler: EventHandler) => void
+  get: (url: string, handler: EventHandler) => void
+  patch: (url: string, handler: EventHandler) => void
+  post: (url: string, handler: EventHandler) => void
+  put: (url: string, handler: EventHandler) => void
+  values: RouteConfig[]
+}
+
+export type {
+  HTTPMethod,
+  RouteConfig,
+  RouterOptions,
+  RoutesBuilder,
+  RoutesGroup
+}

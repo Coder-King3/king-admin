@@ -1,26 +1,19 @@
-import type { RouteConfig } from '../types'
-
+import { createRoutes } from '../config'
 import { verifyAccessToken } from '../utils/jwt-util'
 import { MOCK_MENUS } from '../utils/mock-data'
 import { unAuthorizedResponse, useResponseSuccess } from '../utils/response'
 
-const routes: RouteConfig[] = [
-  {
-    handler: (event) => {
-      const userinfo = verifyAccessToken(event)
-      if (!userinfo) {
-        return unAuthorizedResponse(event)
-      }
+const routes = createRoutes()
 
-      const menus =
-        MOCK_MENUS.find((item) => item.username === userinfo.username)?.menus ??
-        []
-
-      return useResponseSuccess(menus)
-    },
-    method: 'get',
-    url: '/all'
+routes.get('/all', (event) => {
+  const userinfo = verifyAccessToken(event)
+  if (!userinfo) {
+    return unAuthorizedResponse(event)
   }
-]
 
-export { routes as menu }
+  const menus =
+    MOCK_MENUS.find((item) => item.username === userinfo.username)?.menus ?? []
+  return useResponseSuccess(menus)
+})
+
+export default routes.values

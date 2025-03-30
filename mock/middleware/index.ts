@@ -1,5 +1,9 @@
-export * from './header'
+import type { Middleware } from '../types'
 
-const middlewares = []
+import { defaultMiddleware } from './default'
+
+export * from './default'
+
+const middlewares: Middleware[] = [defaultMiddleware]
 
 export { middlewares }

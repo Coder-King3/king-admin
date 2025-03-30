@@ -1,11 +1,78 @@
-import type { App, Router } from 'h3'
+import type { App, EventHandler, Router } from 'h3'
 
-import type { RouteConfig, RouterOptions, RoutesGroup } from '../types'
+import type {
+  HTTPMethod,
+  RouteConfig,
+  RouterOptions,
+  RoutesBuilder,
+  RoutesGroup
+} from '../types'
 
 import { createRouter as createH3Router, defineEventHandler, useBase } from 'h3'
 
 import { isEmpty } from '../utils/inference'
 
+/* Router */
+// 创建router
+function createRouter(config: RouterOptions) {
+  const { prefix, routes } = config
+
+  const h3Router = createH3Router()
+
+  registerRoutes(h3Router, routes)
+
+  return configureRouter(h3Router, routes, prefix)
+}
+// 注册routes
+function registerRoutes(router: Router, routes: RouteConfig[]) {
+  routes.forEach(({ handler, method = 'get', url }) => {
+    if (!router[method]) {
+      console.warn(`Unsupported HTTP method: ${method}`)
+      return
+    }
+    router[method](url, defineEventHandler(handler))
+  })
+}
+// 挂载router
+const setupRouter = (app: App, router: Router) => {
+  app.use(router)
+}
+
+// 初始化 router
+function configureRouter(
+  router: Router,
+  routes: RouteConfig[],
+  prefix?: string
+) {
+  const basePaths = prefix ? ['/', prefix] : ['/']
+
+  const targetRouter = prefix ? wrapWithPrefix(router, prefix) : router
+
+  configureHomeTemplate(targetRouter, routes, basePaths)
+
+  return targetRouter
+}
+function wrapWithPrefix(router: Router, prefix: string) {
+  const baseRouter = createH3Router()
+
+  baseRouter.use(`${prefix}/**`, useBase(prefix, router.handler))
+
+  return baseRouter
+}
+function configureHomeTemplate(
+  router: Router,
+  routes: RouteConfig[],
+  paths: string[]
+) {
+  paths
+    .filter((path) => !isEmpty(path))
+    .forEach((path) => {
+      router.get(
+        path,
+        defineEventHandler(() => generateHomeApis(routes))
+      )
+    })
+}
 function generateHomeApis(routes: RouteConfig[]) {
   const routePaths = getRoutePaths(routes)
 
@@ -60,74 +127,47 @@ function generateHomeApis(routes: RouteConfig[]) {
   `
 }
 
-// 辅助函数：注册路由到 h3 实例
-const registerRoutes = (router: Router, routes: RouteConfig[]) => {
-  routes.forEach(({ handler, method = 'get', url }) => {
-    if (!router[method]) {
-      console.warn(`Unsupported HTTP method: ${method}`)
-      return
-    }
-    router[method](url, defineEventHandler(handler))
-  })
-}
-
-function createRouter(config: RouterOptions) {
-  const { prefix, routes } = config
-
-  const h3Router = createH3Router()
-
-  registerRoutes(h3Router, routes)
-
-  return configureRouter(h3Router, routes, prefix)
-}
-
-const setupRouter = (app: App, router: Router) => {
-  app.use(router)
-}
-
-function configureRouter(
-  router: Router,
-  routes: RouteConfig[],
-  prefix?: string
-) {
-  const basePaths = prefix ? ['/', prefix] : ['/']
-
-  const targetRouter = prefix ? wrapWithPrefix(router, prefix) : router
-
-  configureHomeTemplate(targetRouter, routes, basePaths)
-
-  return targetRouter
-}
-
-function wrapWithPrefix(router: Router, prefix: string) {
-  const baseRouter = createH3Router()
-
-  baseRouter.use(`${prefix}/**`, useBase(prefix, router.handler))
-
-  return baseRouter
-}
-
-function configureHomeTemplate(
-  router: Router,
-  routes: RouteConfig[],
-  paths: string[]
-) {
-  paths
-    .filter((path) => !isEmpty(path))
-    .forEach((path) => {
-      router.get(
-        path,
-        defineEventHandler(() => generateHomeApis(routes))
-      )
-    })
-}
-
-function createRoutes(options: RoutesGroup[]) {
+/* Routes */
+// 创建 routes group
+function createRoutesGroup(options: RoutesGroup[]) {
   return options.flatMap(({ prefix, routes }) =>
     addRoutesPrefix(routes, prefix)
   )
 }
+// 创建 routes
+function createRoutes(options: RouteConfig[] = []): RoutesBuilder {
+  // 核心方法映射表
+  const methods: HTTPMethod[] = ['get', 'patch', 'post', 'put', 'delete']
 
+  const routes: RoutesBuilder = {
+    add(url, method, handler) {
+      this.values.push({ handler, method, url })
+    },
+    values: options,
+
+    // Part: 初始空函数占位
+    delete: () => {},
+    get: () => {},
+    patch: () => {},
+    post: () => {},
+    put: () => {}
+  }
+
+  // 动态生成快捷方法
+  methods.forEach((method) => {
+    routes[method] = function (
+      this: RoutesBuilder,
+      url: string,
+      handler: EventHandler
+    ) {
+      this.add(url, method, handler)
+    }
+  })
+
+  return routes
+}
+
+/* utils */
 function addRoutesPrefix(routes: RouteConfig[], prefix: string) {
   if (isEmpty(prefix)) return routes
 
@@ -154,6 +194,7 @@ export {
   addRoutesPrefix,
   createRouter,
   createRoutes,
+  createRoutesGroup,
   getRoutePaths,
   setupRouter
 }
